@@ -9,7 +9,7 @@ database, caching, WebSocket, an auto-generated admin dashboard, and more.
 Everything a modern web app needs, designed to work together from your first
 `moon new`.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) · [English](README.mbt.md) | [简体中文](README.zh-CN.md)
+[![CI](https://github.com/daqing/moonway/actions/workflows/ci.yml/badge.svg)](https://github.com/daqing/moonway/actions/workflows/ci.yml) · [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) · [English](README.mbt.md) | [简体中文](README.zh-CN.md)
 
 </div>
 

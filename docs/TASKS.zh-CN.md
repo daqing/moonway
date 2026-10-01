@@ -24,7 +24,7 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 
 - [x] **T1.1** 补全 `moon.mod` 元信息——description（"A full-stack web
   framework for MoonBit"）、keywords；确认 `readme` 仍指向 `README.mbt.md`。
-- [ ] **T1.2** 添加 GitHub Actions CI——ubuntu-latest 上跑 `moon check` +
+- [x] **T1.2** 添加 GitHub Actions CI——ubuntu-latest 上跑 `moon check` +
   `moon test`（native target）；两份 README 加 CI 徽章。
 - [ ] **T1.3** 检查 `.githooks`——pre-commit 执行 `moon fmt` 和 `moon test`；
   文档写明钩子安装方式（`git config core.hooksPath .githooks`）。

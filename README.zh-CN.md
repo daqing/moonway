@@ -8,7 +8,7 @@
 缓存、WebSocket、自动生成的 admin 管理后台，一应俱全。现代 Web 应用需要的组件，
 从你第一次 `moon new` 起就为彼此设计、协同工作。
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) · [English](README.mbt.md) | [简体中文](README.zh-CN.md)
+[![CI](https://github.com/daqing/moonway/actions/workflows/ci.yml/badge.svg)](https://github.com/daqing/moonway/actions/workflows/ci.yml) · [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) · [English](README.mbt.md) | [简体中文](README.zh-CN.md)
 
 </div>
 
