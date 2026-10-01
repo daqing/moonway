@@ -143,6 +143,12 @@ moonway 正在为 2026 年 10 月的 MoonBit 黑客松公开开发（最终提�
 
 欢迎贡献！先开一个 issue 聊聊你想做什么，也可以直接提交 pull request。
 
+提交前请安装 git 钩子（每次提交都会自动执行格式化与测试）：
+
+```bash
+git config core.hooksPath .githooks
+```
+
 ## 许可证
 
 [MIT](LICENSE) © 2026 David Zhang

@@ -1,3 +1,15 @@
 #!/bin/sh
+set -e
+
+# moon may not be on PATH in non-interactive shells
+export PATH="$HOME/.moon/bin:$PATH"
+
+moon fmt
+
+if ! git diff --quiet -- .; then
+  echo "pre-commit: moon fmt modified files, stage them and commit again" >&2
+  exit 1
+fi
 
 moon check
+moon test

@@ -30,7 +30,7 @@ M5: Oct 29–31 (final submission: **Oct 31, 2026**).
   `README.mbt.md`.
 - [x] **T1.2** Add GitHub Actions CI — `moon check` + `moon test` on
   ubuntu-latest (native target); add the CI badge to both READMEs.
-- [ ] **T1.3** Review `.githooks` — pre-commit runs `moon fmt` and `moon test`;
+- [x] **T1.3** Review `.githooks` — pre-commit runs `moon fmt` and `moon test`;
   document hook installation (`git config core.hooksPath .githooks`).
 - [ ] **T1.4** Decide the target policy for user projects — the framework runs
   on the native backend; make sure a freshly generated app compiles native on

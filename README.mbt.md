@@ -157,6 +157,13 @@ moonway is being built in the open for the October 2026 MoonBit hackathon
 Contributions are welcome! Open an issue to talk about what you'd like to
 build, or submit a pull request directly.
 
+Before committing, install the git hooks (formatting and tests run on every
+commit):
+
+```bash
+git config core.hooksPath .githooks
+```
+
 ## License
 
 [MIT](LICENSE) © 2026 David Zhang
