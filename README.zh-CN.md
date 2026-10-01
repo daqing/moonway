@@ -43,7 +43,7 @@ moon add daqing/moonway
 
 给你的应用加一条路由：
 
-```moonbit
+```moonbit nocheck
 ///|
 fn main {
   let app = @moonway.new()
@@ -62,12 +62,12 @@ moon run cmd/main
 
 ## 一个文件里的全栈
 
-```moonbit
+```moonbit nocheck
 ///|
 struct Post {
-  id: Int
-  title: String
-  body: String
+  id : Int
+  title : String
+  body : String
 }
 
 ///|

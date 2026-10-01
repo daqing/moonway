@@ -53,7 +53,7 @@ moon add daqing/moonway
 
 Give your app a route:
 
-```moonbit
+```moonbit nocheck
 ///|
 fn main {
   let app = @moonway.new()
@@ -72,12 +72,12 @@ Open <http://localhost:3000>. You're on the road. 🌙
 
 ## The full stack, in one file
 
-```moonbit
+```moonbit nocheck
 ///|
 struct Post {
-  id: Int
-  title: String
-  body: String
+  id : Int
+  title : String
+  body : String
 }
 
 ///|
