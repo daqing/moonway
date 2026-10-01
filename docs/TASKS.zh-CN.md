@@ -22,13 +22,13 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 
 ## T1 — 项目基建与 CI `M1 · P0`
 
-- [ ] **T1.1** 补全 `moon.mod` 元信息——description（"A full-stack web
+- [x] **T1.1** 补全 `moon.mod` 元信息——description（"A full-stack web
   framework for MoonBit"）、keywords；确认 `readme` 仍指向 `README.mbt.md`。
-- [ ] **T1.2** 添加 GitHub Actions CI——ubuntu-latest 上跑 `moon check` +
+- [x] **T1.2** 添加 GitHub Actions CI——ubuntu-latest 上跑 `moon check` +
   `moon test`（native target）；两份 README 加 CI 徽章。
-- [ ] **T1.3** 检查 `.githooks`——pre-commit 执行 `moon fmt` 和 `moon test`；
+- [x] **T1.3** 检查 `.githooks`——pre-commit 执行 `moon fmt` 和 `moon test`；
   文档写明钩子安装方式（`git config core.hooksPath .githooks`）。
-- [ ] **T1.4** 确定用户项目的 target 策略——框架运行在 native 后端；确保
+- [x] **T1.4** 确定用户项目的 target 策略——框架运行在 native 后端；确保
   新生成的项目第一次编译就能通过（生成的项目里设置 `preferred_target`，
   并在快速开始文档中写明 `moon new` 用户需要的手动步骤）。阻塞 T6.2 与
   T12.3。

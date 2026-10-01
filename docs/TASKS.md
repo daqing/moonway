@@ -25,14 +25,14 @@ M5: Oct 29–31 (final submission: **Oct 31, 2026**).
 
 ## T1 — Project foundation & CI `M1 · P0`
 
-- [ ] **T1.1** Fill in `moon.mod` metadata — description ("A full-stack web
+- [x] **T1.1** Fill in `moon.mod` metadata — description ("A full-stack web
   framework for MoonBit"), keywords; confirm `readme` still points at
   `README.mbt.md`.
-- [ ] **T1.2** Add GitHub Actions CI — `moon check` + `moon test` on
+- [x] **T1.2** Add GitHub Actions CI — `moon check` + `moon test` on
   ubuntu-latest (native target); add the CI badge to both READMEs.
-- [ ] **T1.3** Review `.githooks` — pre-commit runs `moon fmt` and `moon test`;
+- [x] **T1.3** Review `.githooks` — pre-commit runs `moon fmt` and `moon test`;
   document hook installation (`git config core.hooksPath .githooks`).
-- [ ] **T1.4** Decide the target policy for user projects — the framework runs
+- [x] **T1.4** Decide the target policy for user projects — the framework runs
   on the native backend; make sure a freshly generated app compiles native on
   the first try (set `preferred_target` in generated projects, and document
   the manual step for `moon new` users in the quick start). Blocks T6.2 and

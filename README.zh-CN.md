@@ -8,7 +8,7 @@
 缓存、WebSocket、自动生成的 admin 管理后台，一应俱全。现代 Web 应用需要的组件，
 从你第一次 `moon new` 起就为彼此设计、协同工作。
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) · [English](README.mbt.md) | [简体中文](README.zh-CN.md)
+[![CI](https://github.com/daqing/moonway/actions/workflows/ci.yml/badge.svg)](https://github.com/daqing/moonway/actions/workflows/ci.yml) · [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) · [English](README.mbt.md) | [简体中文](README.zh-CN.md)
 
 </div>
 
@@ -38,12 +38,14 @@ MoonBit 快、类型安全，写起来也舒服——但今天想搭一个真正
 ```bash
 moon new hello-moonway
 cd hello-moonway
+# moonway 是服务端框架：把项目切换到 native 后端
+awk '{sub(/preferred_target = "wasm"/, "preferred_target = \"native\"")} 1' moon.mod > moon.mod.tmp && mv moon.mod.tmp moon.mod
 moon add daqing/moonway
 ```
 
 给你的应用加一条路由：
 
-```moonbit
+```moonbit nocheck
 ///|
 fn main {
   let app = @moonway.new()
@@ -62,12 +64,12 @@ moon run cmd/main
 
 ## 一个文件里的全栈
 
-```moonbit
+```moonbit nocheck
 ///|
 struct Post {
-  id: Int
-  title: String
-  body: String
+  id : Int
+  title : String
+  body : String
 }
 
 ///|
@@ -142,6 +144,12 @@ moonway 正在为 2026 年 10 月的 MoonBit 黑客松公开开发（最终提�
 ## 参与贡献
 
 欢迎贡献！先开一个 issue 聊聊你想做什么，也可以直接提交 pull request。
+
+提交前请安装 git 钩子（每次提交都会自动执行格式化与测试）：
+
+```bash
+git config core.hooksPath .githooks
+```
 
 ## 许可证
 

@@ -9,7 +9,7 @@ database, caching, WebSocket, an auto-generated admin dashboard, and more.
 Everything a modern web app needs, designed to work together from your first
 `moon new`.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) · [English](README.mbt.md) | [简体中文](README.zh-CN.md)
+[![CI](https://github.com/daqing/moonway/actions/workflows/ci.yml/badge.svg)](https://github.com/daqing/moonway/actions/workflows/ci.yml) · [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) · [English](README.mbt.md) | [简体中文](README.zh-CN.md)
 
 </div>
 
@@ -48,12 +48,14 @@ Install the [MoonBit toolchain](https://docs.moonbitlang.com), then:
 ```bash
 moon new hello-moonway
 cd hello-moonway
+# moonway is a server-side framework: switch the project to the native backend
+awk '{sub(/preferred_target = "wasm"/, "preferred_target = \"native\"")} 1' moon.mod > moon.mod.tmp && mv moon.mod.tmp moon.mod
 moon add daqing/moonway
 ```
 
 Give your app a route:
 
-```moonbit
+```moonbit nocheck
 ///|
 fn main {
   let app = @moonway.new()
@@ -72,12 +74,12 @@ Open <http://localhost:3000>. You're on the road. 🌙
 
 ## The full stack, in one file
 
-```moonbit
+```moonbit nocheck
 ///|
 struct Post {
-  id: Int
-  title: String
-  body: String
+  id : Int
+  title : String
+  body : String
 }
 
 ///|
@@ -156,6 +158,13 @@ moonway is being built in the open for the October 2026 MoonBit hackathon
 
 Contributions are welcome! Open an issue to talk about what you'd like to
 build, or submit a pull request directly.
+
+Before committing, install the git hooks (formatting and tests run on every
+commit):
+
+```bash
+git config core.hooksPath .githooks
+```
 
 ## License
 

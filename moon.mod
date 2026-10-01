@@ -19,8 +19,8 @@ repository = "https://github.com/daqing/moonway"
 
 license = "MIT"
 
-keywords = []
+keywords = [ "web", "framework", "fullstack" ]
 
 preferred_target = "native"
 
-description = ""
+description = "A full-stack web framework for MoonBit"
