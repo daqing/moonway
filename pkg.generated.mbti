@@ -1,11 +1,38 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "daqing/moonway"
 
+import {
+  "daqing/moonway/http",
+}
+
 // Values
+pub fn new() -> App
 
 // Errors
 
 // Types and methods
+pub struct App {
+  routes : Array[Route]
+  middlewares : Array[(Context) -> Context]
+}
+pub fn App::delete(Self, String, (Context) -> Context) -> Unit
+pub fn App::get(Self, String, (Context) -> Context) -> Unit
+pub fn App::patch(Self, String, (Context) -> Context) -> Unit
+pub fn App::post(Self, String, (Context) -> Context) -> Unit
+pub fn App::put(Self, String, (Context) -> Context) -> Unit
+pub fn App::use(Self, (Context) -> Context) -> Unit
+
+pub struct Context {
+  request : @http.Request
+  params : Map[String, String]
+  response : @http.Response
+}
+
+pub struct Route {
+  verb : String
+  path : String
+  handler : (Context) -> Context
+}
 
 // Type aliases
 

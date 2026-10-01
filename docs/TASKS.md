@@ -40,7 +40,7 @@ M5: Oct 29–31 (final submission: **Oct 31, 2026**).
 
 ## T2 — Core App & Context API (root package) `M1 · P0`
 
-- [ ] **T2.1** Define `App` — route table, middleware stack, server config;
+- [x] **T2.1** Define `App` — route table, middleware stack, server config;
   `@moonway.new()` constructor.
 - [ ] **T2.2** Define `Context` (`ctx`) — request access, path params, parsed
   body, response builders (`ctx.text()`, `ctx.json()`, `ctx.status()`).
