@@ -32,7 +32,7 @@ M5: Oct 29–31 (final submission: **Oct 31, 2026**).
   ubuntu-latest (native target); add the CI badge to both READMEs.
 - [x] **T1.3** Review `.githooks` — pre-commit runs `moon fmt` and `moon test`;
   document hook installation (`git config core.hooksPath .githooks`).
-- [ ] **T1.4** Decide the target policy for user projects — the framework runs
+- [x] **T1.4** Decide the target policy for user projects — the framework runs
   on the native backend; make sure a freshly generated app compiles native on
   the first try (set `preferred_target` in generated projects, and document
   the manual step for `moon new` users in the quick start). Blocks T6.2 and

@@ -48,6 +48,8 @@ Install the [MoonBit toolchain](https://docs.moonbitlang.com), then:
 ```bash
 moon new hello-moonway
 cd hello-moonway
+# moonway is a server-side framework: switch the project to the native backend
+awk '{sub(/preferred_target = "wasm"/, "preferred_target = \"native\"")} 1' moon.mod > moon.mod.tmp && mv moon.mod.tmp moon.mod
 moon add daqing/moonway
 ```
 

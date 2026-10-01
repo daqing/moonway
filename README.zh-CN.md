@@ -38,6 +38,8 @@ MoonBit 快、类型安全，写起来也舒服——但今天想搭一个真正
 ```bash
 moon new hello-moonway
 cd hello-moonway
+# moonway 是服务端框架：把项目切换到 native 后端
+awk '{sub(/preferred_target = "wasm"/, "preferred_target = \"native\"")} 1' moon.mod > moon.mod.tmp && mv moon.mod.tmp moon.mod
 moon add daqing/moonway
 ```
 
