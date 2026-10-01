@@ -16,7 +16,10 @@ pub struct App {
   middlewares : Array[(Context) -> Context]
 }
 pub fn App::delete(Self, String, (Context) -> Context) -> Unit
+pub fn App::dispatch(Self, @http.Request) -> @http.Response
 pub fn App::get(Self, String, (Context) -> Context) -> Unit
+pub fn App::handle(Self, String, String, body? : String) -> @http.Response
+pub fn App::listen(Self, Int) -> Unit
 pub fn App::patch(Self, String, (Context) -> Context) -> Unit
 pub fn App::post(Self, String, (Context) -> Context) -> Unit
 pub fn App::put(Self, String, (Context) -> Context) -> Unit

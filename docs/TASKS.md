@@ -44,7 +44,7 @@ M5: Oct 29–31 (final submission: **Oct 31, 2026**).
   `@moonway.new()` constructor.
 - [x] **T2.2** Define `Context` (`ctx`) — request access, path params, parsed
   body, response builders (`ctx.text()`, `ctx.json()`, `ctx.status()`).
-- [ ] **T2.3** `app.listen(port)` — wire `App` to the HTTP server (T3) and
+- [x] **T2.3** `app.listen(port)` — wire `App` to the HTTP server (T3) and
   serve until interrupted.
 - [ ] **T2.4** Replace the scaffold test files with real unit tests for `App`
   and `Context`.

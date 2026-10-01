@@ -39,7 +39,7 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
   `@moonway.new()` 构造函数。
 - [x] **T2.2** 定义 `Context`（`ctx`）——请求访问、路径参数、解析后的请求体、
   响应构造器（`ctx.text()`、`ctx.json()`、`ctx.status()`）。
-- [ ] **T2.3** `app.listen(port)`——把 `App` 接到 HTTP 服务器（T3）上，
+- [x] **T2.3** `app.listen(port)`——把 `App` 接到 HTTP 服务器（T3）上，
   持续服务直到中断。
 - [ ] **T2.4** 用真实的 `App` / `Context` 单元测试替换脚手架测试文件。
 

@@ -2,6 +2,7 @@
 package "daqing/moonway/http"
 
 // Values
+pub fn serve(Int, (Request) -> Response) -> Unit
 
 // Errors
 
