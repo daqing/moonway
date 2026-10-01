@@ -1,11 +1,51 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "daqing/moonway"
 
+import {
+  "daqing/moonway/http",
+}
+
 // Values
+pub fn new() -> App
 
 // Errors
 
 // Types and methods
+pub struct App {
+  routes : Array[Route]
+  middlewares : Array[(Context) -> Context]
+}
+pub fn App::delete(Self, String, (Context) -> Context) -> Unit
+pub fn App::dispatch(Self, @http.Request) -> @http.Response
+pub fn App::get(Self, String, (Context) -> Context) -> Unit
+pub fn App::handle(Self, String, String, body? : String) -> @http.Response
+pub fn App::listen(Self, Int) -> Unit
+pub fn App::patch(Self, String, (Context) -> Context) -> Unit
+pub fn App::post(Self, String, (Context) -> Context) -> Unit
+pub fn App::put(Self, String, (Context) -> Context) -> Unit
+pub fn App::use(Self, (Context) -> Context) -> Unit
+
+pub struct Context {
+  request : @http.Request
+  params : Map[String, String]
+  response : @http.Response
+}
+pub fn Context::body(Self) -> String
+pub fn Context::header(Self, String, String) -> Self
+pub fn Context::html(Self, String) -> Self
+pub fn[T : ToJson] Context::json(Self, T) -> Self
+pub fn Context::param(Self, String) -> String?
+pub fn Context::path(Self) -> String
+pub fn Context::request_header(Self, String) -> String?
+pub fn Context::status(Self, Int) -> Self
+pub fn Context::text(Self, String) -> Self
+pub fn Context::verb(Self) -> String
+
+pub struct Route {
+  verb : String
+  path : String
+  handler : (Context) -> Context
+}
 
 // Type aliases
 

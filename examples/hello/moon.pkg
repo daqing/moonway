@@ -1,0 +1,5 @@
+import {
+  "daqing/moonway",
+}
+
+pkgtype(kind: "executable")

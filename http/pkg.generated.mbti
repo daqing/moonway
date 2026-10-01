@@ -1,0 +1,35 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "daqing/moonway/http"
+
+// Values
+pub fn serve(Int, (Request) -> Response) -> Unit
+
+// Errors
+
+// Types and methods
+pub(all) struct Request {
+  verb : String
+  path : String
+  headers : Array[(String, String)]
+  body : String
+}
+pub fn Request::header(Self, String) -> String?
+pub fn Request::new(String, String) -> Self
+
+pub struct Response {
+  mut status_code : Int
+  resp_headers : Array[(String, String)]
+  mut resp_body : String
+}
+pub fn Response::body(Self) -> String
+pub fn Response::header(Self, String) -> String?
+pub fn Response::headers(Self) -> Array[(String, String)]
+pub fn Response::new() -> Self
+pub fn Response::set_body(Self, String) -> Unit
+pub fn Response::set_header(Self, String, String) -> Unit
+pub fn Response::set_status(Self, Int) -> Unit
+pub fn Response::status(Self) -> Int
+
+// Type aliases
+
+// Traits

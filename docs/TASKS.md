@@ -40,13 +40,13 @@ M5: Oct 29–31 (final submission: **Oct 31, 2026**).
 
 ## T2 — Core App & Context API (root package) `M1 · P0`
 
-- [ ] **T2.1** Define `App` — route table, middleware stack, server config;
+- [x] **T2.1** Define `App` — route table, middleware stack, server config;
   `@moonway.new()` constructor.
-- [ ] **T2.2** Define `Context` (`ctx`) — request access, path params, parsed
+- [x] **T2.2** Define `Context` (`ctx`) — request access, path params, parsed
   body, response builders (`ctx.text()`, `ctx.json()`, `ctx.status()`).
-- [ ] **T2.3** `app.listen(port)` — wire `App` to the HTTP server (T3) and
+- [x] **T2.3** `app.listen(port)` — wire `App` to the HTTP server (T3) and
   serve until interrupted.
-- [ ] **T2.4** Replace the scaffold test files with real unit tests for `App`
+- [x] **T2.4** Replace the scaffold test files with real unit tests for `App`
   and `Context`.
 
 > **Done when**: the README hello-world example compiles and runs against an
