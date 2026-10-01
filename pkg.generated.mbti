@@ -27,6 +27,16 @@ pub struct Context {
   params : Map[String, String]
   response : @http.Response
 }
+pub fn Context::body(Self) -> String
+pub fn Context::header(Self, String, String) -> Self
+pub fn Context::html(Self, String) -> Self
+pub fn[T : ToJson] Context::json(Self, T) -> Self
+pub fn Context::param(Self, String) -> String?
+pub fn Context::path(Self) -> String
+pub fn Context::request_header(Self, String) -> String?
+pub fn Context::status(Self, Int) -> Self
+pub fn Context::text(Self, String) -> Self
+pub fn Context::verb(Self) -> String
 
 pub struct Route {
   verb : String

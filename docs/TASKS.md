@@ -42,7 +42,7 @@ M5: Oct 29–31 (final submission: **Oct 31, 2026**).
 
 - [x] **T2.1** Define `App` — route table, middleware stack, server config;
   `@moonway.new()` constructor.
-- [ ] **T2.2** Define `Context` (`ctx`) — request access, path params, parsed
+- [x] **T2.2** Define `Context` (`ctx`) — request access, path params, parsed
   body, response builders (`ctx.text()`, `ctx.json()`, `ctx.status()`).
 - [ ] **T2.3** `app.listen(port)` — wire `App` to the HTTP server (T3) and
   serve until interrupted.
