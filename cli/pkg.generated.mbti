@@ -18,7 +18,7 @@ pub fn version() -> String
 
 // Types and methods
 pub(all) enum Command {
-  New(String)
+  New(String, String?)
   GenerateScaffold(String, Array[String])
   Help
   Version

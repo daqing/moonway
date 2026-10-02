@@ -1,7 +1,7 @@
 ///|
 /// A parsed moonway CLI invocation.
 pub(all) enum Command {
-  New(String)
+  New(String, String?)
   GenerateScaffold(String, Array[String])
   Help
   Version
@@ -29,9 +29,16 @@ pub fn parse(argv : Array[String]) -> Command {
   }
   if command == "new" {
     if argv.length() < 3 {
-      return Invalid("usage: moonway new <name>")
+      return Invalid("usage: moonway new <name> [--dir <dir>]")
     }
-    return New(argv[2])
+    let name = argv[2]
+    let mut dir : String? = None
+    for i in 3..<argv.length() {
+      if argv[i] == "--dir" && i + 1 < argv.length() {
+        dir = Some(argv[i + 1])
+      }
+    }
+    return New(name, dir)
   }
   if command == "generate" {
     return parse_generate(argv)

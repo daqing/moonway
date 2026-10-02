@@ -104,9 +104,11 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
   `moon install daqing/moonway` 分发。解析逻辑在 `cli/` 包（纯函数
   `parse` → `Command`），`cmd/moonway` 是读 `@env.args()` 的薄入口；
   `moon run cmd/moonway -- <args>` 透传参数。
-- [ ] **T6.2** `moonway new <name>`——生成应用骨架：native `preferred_target`
+- [x] **T6.2** `moonway new <name>`——生成应用骨架：native `preferred_target`
   （按 T1.4 的决策）、`models/` `handlers/` `migrations/` `web/` 目录、
-  预先接好 moonway 依赖。
+  预先接好 moonway 依赖。已实测：生成的项目第一次 `moon check` 即通过，
+  运行即在 :3000 提供服务且 SQLite 已迁移（moonway 未发布前的本地验证用
+  `moon.work` members 映射；发布后的用户从 registry 拉取）。
 - [ ] **T6.3** `moonway generate scaffold <Model> field:type …`——生成模型
   文件、handlers、migration，并注册到 admin。生成的模型必须声明
   `pub extend <Model> with ToJson::{to_json}`（FromJson 同理）——derive 实现的

@@ -124,9 +124,12 @@ synchronous dispatch built in T2.
   is distributed via `moon install daqing/moonway`. Lives in `cli/`
   (pure `parse` → `Command`) with a thin `cmd/moonway` wrapper reading
   `@env.args()`; `moon run cmd/moonway -- <args>` passes flags through.
-- [ ] **T6.2** `moonway new <name>` — generate an app skeleton: native
+- [x] **T6.2** `moonway new <name>` — generate an app skeleton: native
   `preferred_target` (per T1.4), `models/` `handlers/` `migrations/` `web/`
-  folders, moonway dependency wired in.
+  folders, moonway dependency wired in. Verified hands-on: the generated app
+  passes `moon check` first try and serves on :3000 with its SQLite database
+  migrated (local verification maps the unpublished moonway via a
+  `moon.work` members entry; published users get it from the registry).
 - [ ] **T6.3** `moonway generate scaffold <Model> field:type …` — model file,
   handlers, migration, admin registration. Generated models must declare
   `pub extend <Model> with ToJson::{to_json}` (and the same for FromJson) —

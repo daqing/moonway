@@ -38,13 +38,12 @@ fn join_lines(lines : Array[String]) -> String {
 }
 
 ///|
-/// Execute a parsed command. File-writing commands (new, generate) land
-/// with their generator tasks.
+/// Execute a parsed command.
 pub fn run(argv : Array[String]) -> Unit {
   match parse(argv) {
     Help => println(help_text())
     Version => println(version())
-    New(_) => eprintln("moonway: not implemented yet")
+    New(name, dir) => execute_new(name, dir.unwrap_or("."))
     GenerateScaffold(_, _) => eprintln("moonway: not implemented yet")
     Invalid(message) => eprintln("moonway: \{message}")
   }
