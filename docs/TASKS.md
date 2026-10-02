@@ -262,14 +262,22 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
 
 ## T12 — Release, example & acceptance `M3 (T12.1) · M5`
 
-- [ ] **T12.1** Publish `daqing/moonway@0.1.0` to mooncakes.io **early (M3)** —
-  verify `moon add daqing/moonway` and `moon install daqing/moonway` from a
-  clean project.
-- [ ] **T12.2** `examples/blog` — the reference app covering models, routes,
+- [x] **T12.1** Publish `daqing/moonway@0.11.3` to mooncakes.io — done
+  (`moon publish`, Server 200 OK); `moon add daqing/moonway` verified from a
+  clean project (acceptance run pulled 0.11.3 from the registry). ⚠️
+  `moon install` is **blocked by a toolchain limitation**: it requires a
+  package declared `is-main`, which the moon.pkg DSL cannot express and the
+  moon.pkg.json form is force-migrated (and dropped) by `moon fmt` — report
+  upstream; until fixed, the CLI installs from a source checkout.
+- [x] **T12.2** `examples/blog` — the reference app covering models, routes,
   cache, WebSocket chat, and admin.
-- [ ] **T12.3** README acceptance run — execute every command in both READMEs
-  verbatim in a clean directory; fix code or amend docs until 100% pass.
-- [ ] **T12.4** README screenshots — admin dashboard (and an optional demo
-  GIF); remove the `<!-- TODO -->` placeholders.
-- [ ] **T12.5** Final release — version bump if needed, annotated tag,
-  changelog; tick the roadmap checkboxes in both READMEs.
+- [x] **T12.3** README acceptance run — executed every command in both
+  READMEs verbatim in a clean directory against the published 0.11.3;
+  caught and fixed three real gaps (package-level import step, db/json
+  imports for the full-stack example, sqlite link flags + system dep).
+- [x] **T12.4** README screenshots — admin dashboard captured at
+  `docs/images/admin.png` and embedded in both READMEs; TODO placeholders
+  removed.
+- [x] **T12.5** Final release — version 0.11.4 (bump for the is-main fix
+  attempt), roadmap checkboxes ticked in both READMEs; annotated tag on the
+  final commit.
