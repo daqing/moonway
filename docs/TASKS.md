@@ -262,14 +262,16 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
 
 ## T12 — Release, example & acceptance `M3 (T12.1) · M5`
 
-- [x] **T12.1** Publish `daqing/moonway@0.11.3` to mooncakes.io — done
-  (`moon publish`, Server 200 OK); `moon add daqing/moonway` verified from a
-  clean project (acceptance run pulled 0.11.3 from the registry). ⚠️
-  `moon install daqing/moonway` still fails with "not a main package
-  (is-main: true required)" even though the package uses
-  `pkgtype(kind: "executable")` and `moon fmt` normalizes any explicit
-  `options("is-main": true)` back to pkgtype — the install-vs-pkgtype
-  relationship needs upstream clarification (moon 0.1.20260920).
+- [x] **T12.1** Publish `daqing/moonway` to mooncakes.io — done: 0.11.3 and
+  0.11.5 published (Server 200 OK); `moon add daqing/moonway` verified from
+  a clean project (acceptance pulled 0.11.5 from the registry). ⚠️
+  `moon install daqing/moonway` is **blocked by an upstream moon bug**
+  (0.1.20260920): it requires `is-main`, which cannot be expressed in the
+  moon.pkg DSL, and a moon.pkg.json carrying it is force-migrated by
+  `moon fmt` (dropping the flag); the DSL `options("is-main": true)` form
+  publishes but install still does not recognize it. Reproduction lives in
+  this repo's history (cmd/moonway → cmd/main experiments). Until upstream
+  fixes it, the CLI runs from a source checkout via `moon run cmd/main`.
 - [x] **T12.2** `examples/blog` — the reference app covering models, routes,
   cache, WebSocket chat, and admin.
 - [x] **T12.3** README acceptance run — executed every command in both
@@ -279,6 +281,5 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
 - [x] **T12.4** README screenshots — admin dashboard captured at
   `docs/images/admin.png` and embedded in both READMEs; TODO placeholders
   removed.
-- [x] **T12.5** Final release — version 0.11.4 (bump for the is-main fix
-  attempt), roadmap checkboxes ticked in both READMEs; annotated tag on the
-  final commit.
+- [x] **T12.5** Final release — 0.11.5 published, roadmap checkboxes ticked
+  in both READMEs; annotated tags on the release commits.
