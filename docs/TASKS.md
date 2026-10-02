@@ -106,7 +106,7 @@ synchronous dispatch built in T2.
   nothing. CI installs libsqlite3-dev.
 - [x] **T5.3** Migration runner — ordered migration files, schema version
   table; up-only migrations (keep the scope tight).
-- [ ] **T5.4** Query API — `db.insert`, `db.all(Model)`, `db.find(Model, id)`,
+- [x] **T5.4** Query API — `db.insert`, `db.all(Model)`, `db.find(Model, id)`,
   `where` filters, `count`.
 - [ ] **T5.5** Tests — query API and migrations against a temporary SQLite
   database file.

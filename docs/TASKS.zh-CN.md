@@ -89,7 +89,7 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
   未使用的导入会被死代码消除，无需任何配置。CI 安装 libsqlite3-dev。
 - [x] **T5.3** 迁移执行器——有序迁移文件、schema 版本表；只做 up 迁移
   （控制范围）。
-- [ ] **T5.4** 查询 API——`db.insert`、`db.all(Model)`、`db.find(Model, id)`、
+- [x] **T5.4** 查询 API——`db.insert`、`db.all(Model)`、`db.find(Model, id)`、
   `where` 过滤、`count`。
 - [ ] **T5.5** 测试——对临时 SQLite 数据库文件跑查询 API 与迁移测试。
 

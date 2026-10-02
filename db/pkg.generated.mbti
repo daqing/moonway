@@ -3,6 +3,7 @@ package "daqing/moonway/db"
 
 import {
   "mizchi/sqlite",
+  "moonbitlang/core/json",
 }
 
 // Values
@@ -37,11 +38,16 @@ pub(all) enum ColumnType {
 pub struct Database {
   inner : @sqlite.Database
 }
+pub fn[T : @json.FromJson] Database::all(Self, Table) -> Array[T]
 pub fn Database::changes(Self) -> Int
 pub fn Database::close(Self) -> Unit
+pub fn Database::count(Self, Table) -> Int
 pub fn Database::exec(Self, String) -> Bool
+pub fn[T : @json.FromJson] Database::find(Self, Table, Int) -> T?
+pub fn[T : ToJson] Database::insert(Self, Table, T) -> Bool
 pub fn Database::last_insert_rowid(Self) -> Int64
 pub fn Database::migrate(Self, Array[Migration]) -> Bool
+pub fn[T : @json.FromJson] Database::query(Self, Table, String, Array[@sqlite.SqlValue]) -> Array[T]
 
 pub(all) struct Migration {
   version : Int
