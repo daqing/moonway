@@ -24,3 +24,7 @@ keywords = [ "web", "framework", "fullstack" ]
 preferred_target = "native"
 
 description = "A full-stack web framework for MoonBit"
+
+import {
+  "moonbitlang/async@0.22.4",
+}

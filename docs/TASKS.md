@@ -58,7 +58,7 @@ Based on `moonbitlang/async@0.22.4` (decision of 2026-10-02, verified
 hands-on): the runtime provides the protocol layer; moonway bridges it to the
 synchronous dispatch built in T2.
 
-- [ ] **T3.1** Add the `moonbitlang/async` dependency and replace the
+- [x] **T3.1** Add the `moonbitlang/async` dependency and replace the
   `http.serve` stub with `@http.Server(...).run_forever(...)` bridged to
   `App::dispatch`.
 - [ ] **T3.2** Request mapping — runtime `Request` (method enum, headers,

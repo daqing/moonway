@@ -50,7 +50,7 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 基于 `moonbitlang/async@0.22.4`（2026-10-02 决策，已实测验证）：协议层由运行时
 提供，moonway 把它桥接到 T2 构建的同步 dispatch 上。
 
-- [ ] **T3.1** 添加 `moonbitlang/async` 依赖，把 `http.serve` 桩替换为
+- [x] **T3.1** 添加 `moonbitlang/async` 依赖，把 `http.serve` 桩替换为
   `@http.Server(...).run_forever(...)`，桥接到 `App::dispatch`。
 - [ ] **T3.2** 请求映射——运行时 `Request`（method 枚举、请求头、body
   reader）→ moonway `Request`（`verb`、headers、body）；单元测试。
