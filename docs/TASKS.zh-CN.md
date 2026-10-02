@@ -200,8 +200,11 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 
 ## T11 — Preact 前端集成（preact/） `M4 · P2`
 
-- [ ] **T11.1** 生成项目中的前端脚手架——Preact + esbuild，`npm run build`
-  产物输出到静态目录；文档写明需要 Node.js 环境。
+- [x] **T11.1** 生成项目中的前端脚手架——`moonway new` 产出
+  `static/index.html` + `static/app.js`（vanilla、零构建、已接 posts API）
+  以及 `web/` 的 Preact + esbuild 脚手架，`npm run build` 会重新生成
+  `static/app.js`。Node.js 前置条件写在生成的 README 里；已用真实
+  `npm install && npm run build` 验证（15.9 kB Preact 包）。
 - [ ] **T11.2** 静态文件服务——Content-Type、`index.html` 回退。
 - [ ] **T11.3** 接入 posts API 的示例页面。
 

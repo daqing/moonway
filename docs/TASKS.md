@@ -237,9 +237,12 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
 
 ## T11 — Preact frontend integration (preact/) `M4 · P2`
 
-- [ ] **T11.1** Frontend scaffold in generated projects — Preact + esbuild,
-  `npm run build` outputs to a static directory; document the Node.js
-  prerequisite.
+- [x] **T11.1** Frontend scaffold in generated projects — `moonway new`
+  emits `static/index.html` + `static/app.js` (vanilla, zero-build, wired
+  to the posts API) plus a `web/` Preact + esbuild scaffold whose
+  `npm run build` regenerates `static/app.js`. Node.js prerequisite
+  documented in the generated README; verified with a real
+  `npm install && npm run build` (15.9 kB Preact bundle).
 - [ ] **T11.2** Static file serving — content types, `index.html` fallback.
 - [ ] **T11.3** Example page wired to the posts API.
 
