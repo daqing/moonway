@@ -24,6 +24,7 @@ pub struct Response {
 pub fn Response::body(Self) -> String
 pub fn Response::header(Self, String) -> String?
 pub fn Response::headers(Self) -> Array[(String, String)]
+pub fn Response::internal_error() -> Self
 pub fn Response::new() -> Self
 pub fn Response::set_body(Self, String) -> Unit
 pub fn Response::set_header(Self, String, String) -> Unit

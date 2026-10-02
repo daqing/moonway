@@ -10,3 +10,10 @@ test "reason_of maps standard status codes" {
   assert_eq(reason_of(503), "Service Unavailable")
   assert_eq(reason_of(599), "Unknown")
 }
+
+///|
+test "internal_error presets status 500 and a body" {
+  let resp = Response::internal_error()
+  assert_eq(resp.status(), 500)
+  assert_eq(resp.body(), "Internal Server Error")
+}

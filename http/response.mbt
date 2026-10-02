@@ -11,6 +11,14 @@ pub fn Response::new() -> Response {
 }
 
 ///|
+pub fn Response::internal_error() -> Response {
+  let resp = Response::new()
+  resp.set_status(500)
+  resp.set_body("Internal Server Error")
+  resp
+}
+
+///|
 pub fn Response::set_status(self : Response, status : Int) -> Unit {
   self.status_code = status
 }

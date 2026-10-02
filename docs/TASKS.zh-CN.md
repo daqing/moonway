@@ -57,7 +57,7 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 - [x] **T3.3** 响应映射——moonway `Response`（status、headers、body）→
   `conn..send_response(code, reason).write(body)`；保留构造器设置的
   Content-Type 默认值。
-- [ ] **T3.4** 错误处理——handler 出错时以 500 响应返回且不拖垮服务器；
+- [x] **T3.4** 错误处理——handler 出错时以 500 响应返回且不拖垮服务器；
   文档写明运行时对格式非法请求的处理行为。
 - [ ] **T3.5** 端到端——从普通 `fn main`（同步桥接）真实启动
   `examples/hello`，用 curl 验证；keep-alive 由运行时提供。

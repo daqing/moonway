@@ -66,7 +66,7 @@ synchronous dispatch built in T2.
 - [x] **T3.3** Response mapping — moonway `Response` (status, headers, body)
   → `conn..send_response(code, reason).write(body)`; keep the Content-Type
   defaults set by the builders.
-- [ ] **T3.4** Error handling — handler errors surface as 500 responses
+- [x] **T3.4** Error handling — handler errors surface as 500 responses
   without killing the server; document library behavior for malformed
   requests.
 - [ ] **T3.5** End-to-end — real serving of `examples/hello` from a plain
