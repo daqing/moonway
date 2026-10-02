@@ -181,9 +181,12 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
   `Conn::from_http_server` (passthrough mode) and never reach dispatch.
   Verified with a live echo upgrade test using the runtime's websocket
   client.
-- [ ] **T8.2** `app.ws(path, handler)` — bridge websocket connections into
+- [x] **T8.2** `app.ws(path, handler)` — bridge websocket connections into
   moonway routing; connection events (`on_message`, `on_close`) and a
-  broadcast helper.
+  broadcast helper. `WsConn` wraps send/recv as text, the framework runs
+  the receive loop and fires `on_close` exactly once, and `WsHub` offers
+  join/leave/broadcast (no locking needed inside the single-threaded event
+  loop). Verified with a two-client cross-broadcast e2e test.
 - [ ] **T8.3** Chat example under `examples/`.
 
 ## T9 — Admin dashboard (admin/) `M4 · P1`

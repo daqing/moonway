@@ -3,11 +3,12 @@ pub struct App {
   routes : Array[Route]
   middlewares : Array[(Context) -> Context]
   mut cache_policy : @http.CachePolicy[@cache.RedisClient]?
+  ws_routes : Array[@http.WsRoute]
 }
 
 ///|
 pub fn new() -> App {
-  { routes: [], middlewares: [], cache_policy: None, }
+  { routes: [], middlewares: [], cache_policy: None, ws_routes: [], }
 }
 
 ///|
