@@ -3,6 +3,7 @@ package "daqing/moonway/db"
 
 import {
   "mizchi/sqlite",
+  "moonbitlang/core/debug",
   "moonbitlang/core/json",
 }
 
@@ -33,7 +34,10 @@ pub(all) enum ColumnType {
   RealT
   TextT
   BoolT
-}
+} derive(Eq, @debug.Debug)
+pub fn ColumnType::equal(Self, Self) -> Bool
+pub fn ColumnType::not_equal(Self, Self) -> Bool
+pub fn ColumnType::to_repr(Self) -> @debug.Repr
 
 pub struct Database {
   inner : @sqlite.Database
@@ -49,9 +53,11 @@ pub fn Database::find_raw(Self, Table, Int) -> Json?
 pub fn[T : ToJson] Database::insert(Self, Table, T) -> Bool
 pub fn Database::insert_raw(Self, Table, Map[String, Json]) -> Bool
 pub fn Database::last_insert_rowid(Self) -> Int64
+pub fn Database::list_tables(Self) -> Array[String]
 pub fn Database::migrate(Self, Array[Migration]) -> Bool
 pub fn[T : @json.FromJson] Database::query(Self, Table, String, Array[@sqlite.SqlValue]) -> Array[T]
 pub fn Database::select_raw(Self, Table, String, Array[@sqlite.SqlValue], limit? : Int, offset? : Int) -> Array[Json]
+pub fn Database::table_schema(Self, String) -> Table?
 pub fn Database::update_raw(Self, Table, Int, Map[String, Json]) -> Bool
 
 pub(all) struct Migration {

@@ -85,3 +85,24 @@ test "console help mentions the connection" {
   assert_true(help.contains("sqlite://app.db"))
   assert_true(help.contains(".quit"))
 }
+
+///|
+test "parse_console_line edge cases" {
+  assert_eq(
+    parse_console_line("Post.find()"),
+    Invalid("find() takes an integer id"),
+  )
+  assert_eq(
+    parse_console_line("Post.insert([1, 2])"),
+    Invalid("insert() takes a JSON object"),
+  )
+  assert_eq(
+    parse_console_line("Post.insert(oops)"),
+    Invalid("insert() takes a JSON object"),
+  )
+  assert_eq(
+    parse_console_line("Post.all() extra"),
+    Invalid("unsupported call all() extra"),
+  )
+  assert_eq(parse_console_line("\t\r\nPost.all()\r\n"), TableAll("Post"))
+}

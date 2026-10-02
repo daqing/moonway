@@ -188,9 +188,10 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
   stdin/stdout 循环。表从 SQLite 自身的目录发现（经 sqlite_master 与
   PRAGMA table_info 的 `list_tables`/`table_schema`），控制台无需编译期
   模型。
-- [ ] **T10.2** 查询解释器子集——解析 `<Model>.all()`、`<Model>.find(id)`、
-  `<Model>.count()`、`insert`；这是方法调用式 DSL，**不是**通用语言求值器
-  （有意为之的范围收缩）。
+- [x] **T10.2** 查询解释器子集——有意设计的方法调用 DSL，**不是**通用语言
+  求值器：`<Table>.all()`（最多 200 行 JSON）、`<Table>.count()`、
+  `<Table>.find(<id>)`、`<Table>.insert({...})`（JSON 对象）。解析器与
+  执行器在内存数据库上有单元测试，含各种畸形输入。
 - [ ] **T10.3** 点命令——`.help`、`.tables`、`.quit`；提示符显示连接信息
   （`moonway 0.1.0 · connected to sqlite://app.db`）。
 

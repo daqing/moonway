@@ -223,9 +223,11 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
   stdin/stdout loop inside the async runtime. Tables are discovered from
   SQLite's own catalog (`list_tables`/`table_schema` via sqlite_master and
   PRAGMA table_info), so the console needs no compiled-in models.
-- [ ] **T10.2** Query interpreter subset — parse `<Model>.all()`,
-  `<Model>.find(id)`, `<Model>.count()`, `insert`; a method-call DSL, **not**
-  a general language evaluator (deliberate scope cut).
+- [x] **T10.2** Query interpreter subset — a deliberate method-call DSL,
+  not a general language evaluator: `<Table>.all()` (up to 200 rows as
+  JSON), `<Table>.count()`, `<Table>.find(<id>)` and
+  `<Table>.insert({...})` (JSON object). Parser and executor are unit-
+  tested against an in-memory database, including malformed lines.
 - [ ] **T10.3** Dot-commands — `.help`, `.tables`, `.quit`; prompt shows the
   connection info (`moonway 0.1.0 · connected to sqlite://app.db`).
 
