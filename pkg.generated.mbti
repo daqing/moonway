@@ -29,8 +29,10 @@ pub struct Context {
   request : @http.Request
   params : Map[String, String]
   response : @http.Response
+  mut halted : Bool
 }
 pub fn Context::body(Self) -> String
+pub fn Context::halt(Self) -> Self
 pub fn Context::header(Self, String, String) -> Self
 pub fn Context::html(Self, String) -> Self
 pub fn[T : ToJson] Context::json(Self, T) -> Self

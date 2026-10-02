@@ -75,13 +75,14 @@ synchronous dispatch built in T2.
 
 ## T4 — Router & middleware (http/) `M1 · P0`
 
-- [ ] **T4.1** Route registration — `app.get/post/put/patch/delete(path, handler)`.
-- [ ] **T4.2** Path parameters — `/posts/:id` matched to `ctx.param("id")`;
+- [x] **T4.1** Route registration — `app.get/post/put/patch/delete(path, handler)`.
+  Landed with T2.1; routing now lives in `router.mbt`.
+- [x] **T4.2** Path parameters — `/posts/:id` matched to `ctx.param("id")`;
   longest match wins; integration tests.
-- [ ] **T4.3** Middleware pipeline — `app.use(fn)`, well-defined ordering
-  (document the chosen model: registration order / onion), short-circuit
-  support.
-- [ ] **T4.4** 405 responses with an `Allow` header on method mismatch.
+- [x] **T4.3** Middleware pipeline — `app.use(fn)`, well-defined ordering
+  (linear registration order, documented on `App::use`), short-circuit
+  support (`ctx.halt()`).
+- [x] **T4.4** 405 responses with an `Allow` header on method mismatch.
 
 > **Done when**: the routing part of the README "full stack in one file"
 > example behaves exactly as documented.
