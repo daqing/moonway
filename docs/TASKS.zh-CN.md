@@ -123,12 +123,24 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 
 ## T7 — Redis 缓存（cache/） `M3 · P1`
 
-- [ ] **T7.1** RESP 协议编码器/解码器——纯 MoonBit 实现，充分的单元测试。
-- [ ] **T7.2** 基于 `moonbitlang/async` TCP 的 Redis 客户端——`GET` / `SET` /
+- [x] **T7.1** RESP 协议编码器/解码器——纯 MoonBit 实现，充分的单元测试。
+  bulk 长度按字节精确计算（UTF-8）、半帧检测（`Incomplete`）、嵌套数组、
+  管线化流的首条回复消费。
+- [x] **T7.2** 基于 `moonbitlang/async` TCP 的 Redis 客户端——`GET` / `SET` /
   `DEL` / `EXPIRE` / `PING`；服务端错误回复以 MoonBit error 形式抛出。
-- [ ] **T7.3** 缓存中间件——响应缓存，TTL 与缓存键可配置，通过
-  `app.use(...)` 接入。
-- [ ] **T7.4** 优雅降级——Redis 不可达时直接放行并记录警告；文档写明该行为。
+  对真实 redis-server 的集成测试覆盖全部命令，包括 WRONGTYPE 回复抛出
+  `Failure`。
+- [x] **T7.3** 缓存中间件——响应缓存，TTL 与缓存键可配置。架构说明：线性
+  中间件模型（T4.3）没有 handler 后阶段，且 dispatch 是同步而 Redis 是
+  async，所以缓存通过 `app.cache(client, ttl~, prefix~)` 挂载并放在 async
+  服务层——http 定义 `CacheStore` trait 和泛型 `CachePolicy[S]`，cache 为
+  `RedisClient` 实现该接口（无依赖环），`serve_cached_async` 在 dispatch
+  前应答 GET 命中（`X-Cache: HIT`）并在返回途中存储 200 响应
+  （`X-Cache: MISS`）。已对真实 Redis 走 HTTP 端到端验证。
+- [x] **T7.4** 优雅降级——Redis 不可达时请求照常处理并在 stderr 记录警告
+  （`cache unavailable, serving without cache`）；缓存写入失败绝不导致请求
+  失败，并抑制 X-Cache 头。行为已在服务函数文档与 README 功能列表中说明，
+  并有断连场景的端到端测试覆盖。
 
 ## T8 — WebSocket（ws/） `M3 · P1`
 

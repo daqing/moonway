@@ -1,0 +1,10 @@
+import {
+  "moonbitlang/x/encoding",
+  "moonbitlang/core/debug",
+  "moonbitlang/async",
+  "moonbitlang/async/socket" @async_socket,
+  "moonbitlang/async/http" @async_http,
+  "daqing/moonway/http",
+}
+
+supported_targets = "native"

@@ -29,7 +29,9 @@ The name is the mission: **moon + way — the road to the moon.**
   middleware pipeline.
 - **Database layer** — a typed data abstraction with migrations and a fluent
   query API. SQLite works out of the box.
-- **Caching** — Redis-backed caching as a drop-in middleware.
+- **Caching** — Redis-backed response caching with a configurable TTL
+  (`app.cache(...)`); requests are served untouched when Redis is
+  unavailable.
 - **WebSocket** — first-class support for realtime features like chat and live
   updates.
 - **Admin dashboard** — a CRUD admin UI generated from your models. Zero

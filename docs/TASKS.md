@@ -147,14 +147,28 @@ synchronous dispatch built in T2.
 
 ## T7 — Redis cache (cache/) `M3 · P1`
 
-- [ ] **T7.1** RESP protocol encoder/decoder — pure MoonBit implementation,
-  thorough unit tests.
-- [ ] **T7.2** Redis client over `moonbitlang/async` TCP — `GET` / `SET` /
+- [x] **T7.1** RESP protocol encoder/decoder — pure MoonBit implementation,
+  thorough unit tests. Byte-accurate bulk lengths (UTF-8 counted in bytes),
+  partial-frame detection (`Incomplete`), nested arrays, and first-reply
+  consumption for pipelined streams.
+- [x] **T7.2** Redis client over `moonbitlang/async` TCP — `GET` / `SET` /
   `DEL` / `EXPIRE` / `PING`; server error replies surfaced as MoonBit errors.
-- [ ] **T7.3** Cache middleware — response caching with configurable TTL and
-  cache keys, attached via `app.use(...)`.
-- [ ] **T7.4** Graceful degradation — when Redis is unreachable, pass through
-  and log a warning; document this behavior.
+  Live integration test against a real redis-server covers the full set
+  including WRONGTYPE replies raising `Failure`.
+- [x] **T7.3** Cache middleware — response caching with configurable TTL and
+  cache keys. Architecture note: the linear middleware model (T4.3) has no
+  post-handler phase and dispatch is synchronous while Redis is async, so
+  caching attaches via `app.cache(client, ttl~, prefix~)` and lives in the
+  async serving layer — http defines a `CacheStore` trait plus generic
+  `CachePolicy[S]`, cache implements it for `RedisClient` (no dependency
+  cycle), and `serve_cached_async` answers GET hits (`X-Cache: HIT`) before
+  dispatch and stores 200s on the way out (`X-Cache: MISS`). Verified
+  end-to-end against live Redis over HTTP.
+- [x] **T7.4** Graceful degradation — when Redis is unreachable, requests are
+  served untouched with a warning on stderr (`cache unavailable, serving
+  without cache`); failed cache writes never fail the request and suppress
+  the X-Cache header. Documented on the serving functions and in the README
+  feature list; covered by a dead-connection end-to-end test.
 
 ## T8 — WebSocket (ws/) `M3 · P1`
 

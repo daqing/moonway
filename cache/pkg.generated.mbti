@@ -1,0 +1,55 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "daqing/moonway/cache"
+
+import {
+  "daqing/moonway/http",
+  "moonbitlang/async/socket",
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn decode(Bytes) -> Decoded
+
+pub fn encode_command(Array[String]) -> Bytes
+
+// Errors
+
+// Types and methods
+pub(all) enum Decoded {
+  Complete(RespValue, Int)
+  Incomplete
+  Malformed(String)
+} derive(Eq, @debug.Debug)
+pub fn Decoded::equal(Self, Self) -> Bool
+pub fn Decoded::not_equal(Self, Self) -> Bool
+pub fn Decoded::to_repr(Self) -> @debug.Repr
+
+pub struct RedisClient {
+  conn : @socket.Tcp
+  mut buffer : Bytes
+}
+pub fn RedisClient::close(Self) -> Unit
+pub async fn RedisClient::command(Self, Array[String]) -> RespValue
+pub async fn RedisClient::connect(String) -> Self
+pub async fn RedisClient::del(Self, String) -> Int
+pub async fn RedisClient::expire(Self, String, Int) -> Bool
+pub async fn RedisClient::get(Self, String) -> String?
+pub async fn RedisClient::ping(Self) -> Bool
+pub async fn RedisClient::set(Self, String, String) -> Bool
+pub async fn RedisClient::set_ex(Self, String, String, Int) -> Bool
+pub impl @http.CacheStore for RedisClient
+
+pub(all) enum RespValue {
+  Simple(String)
+  Error(String)
+  Integer(Int64)
+  Bulk(String?)
+  Array(Array[RespValue])
+} derive(Eq, @debug.Debug)
+pub fn RespValue::equal(Self, Self) -> Bool
+pub fn RespValue::not_equal(Self, Self) -> Bool
+pub fn RespValue::to_repr(Self) -> @debug.Repr
+
+// Type aliases
+
+// Traits
