@@ -17,6 +17,7 @@ pub fn help_text() -> String {
     "  moonway new <name>                          create a new moonway app",
     "  moonway generate scaffold <Model> f:type    scaffold a model, handlers",
     "                                              and migration",
+    "  moonway console [--db <path>]               interactive database console",
     "  moonway --version                           print the version",
     "  moonway --help                              print this help",
     "",
@@ -45,6 +46,7 @@ pub fn run(argv : Array[String]) -> Unit {
     Version => println(version())
     New(name, dir) => execute_new(name, dir.unwrap_or("."))
     GenerateScaffold(model, fields) => execute_scaffold(model, fields)
+    Console(db_path) => run_console(db_path)
     Invalid(message) => eprintln("moonway: \{message}")
   }
 }

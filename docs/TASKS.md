@@ -218,8 +218,11 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
 
 ## T10 — REPL console (cli/) `M4 · P2`
 
-- [ ] **T10.1** `moonway console` — loads app config and the database
-  connection.
+- [x] **T10.1** `moonway console` — loads the database connection
+  (`console [--db <path>]`, default app.db) and runs an interactive
+  stdin/stdout loop inside the async runtime. Tables are discovered from
+  SQLite's own catalog (`list_tables`/`table_schema` via sqlite_master and
+  PRAGMA table_info), so the console needs no compiled-in models.
 - [ ] **T10.2** Query interpreter subset — parse `<Model>.all()`,
   `<Model>.find(id)`, `<Model>.count()`, `insert`; a method-call DSL, **not**
   a general language evaluator (deliberate scope cut).

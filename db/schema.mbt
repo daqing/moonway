@@ -5,7 +5,13 @@ pub(all) enum ColumnType {
   RealT
   TextT
   BoolT
-}
+} derive(Eq, Debug)
+
+///|
+pub extend ColumnType with Eq::{equal, not_equal}
+
+///|
+pub extend ColumnType with @debug.Debug::{to_repr}
 
 ///|
 fn ColumnType::sql(self : ColumnType) -> String {
