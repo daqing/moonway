@@ -1,14 +1,20 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "daqing/moonway/http"
 
+import {
+  "moonbitlang/async/websocket",
+}
+
 // Values
-pub fn serve(Int, (Request) -> Response) -> Unit
+pub fn serve(Int, (Request) -> Response, ws_routes? : Array[WsRoute]) -> Unit
 
-pub async fn serve_async(Int, (Request) -> Response) -> Unit
+pub async fn serve_async(Int, (Request) -> Response, ws_routes? : Array[WsRoute]) -> Unit
 
-pub fn[S : CacheStore] serve_cached(CachePolicy[S], Int, (Request) -> Response) -> Unit
+pub fn[S : CacheStore] serve_cached(CachePolicy[S], Int, (Request) -> Response, ws_routes? : Array[WsRoute]) -> Unit
 
-pub async fn[S : CacheStore] serve_cached_async(CachePolicy[S], Int, (Request) -> Response) -> Unit
+pub async fn[S : CacheStore] serve_cached_async(CachePolicy[S], Int, (Request) -> Response, ws_routes? : Array[WsRoute]) -> Unit
+
+pub async fn serve_websocket(Array[WsRoute], @moonbitlang/async/http.Request, @moonbitlang/async/http.ServerConnection) -> Bool
 
 // Errors
 
@@ -50,6 +56,11 @@ pub fn Response::set_body(Self, String) -> Unit
 pub fn Response::set_header(Self, String, String) -> Unit
 pub fn Response::set_status(Self, Int) -> Unit
 pub fn Response::status(Self) -> Int
+
+pub(all) struct WsRoute {
+  path : String
+  handler : async (@websocket.Conn) -> Unit
+}
 
 // Type aliases
 

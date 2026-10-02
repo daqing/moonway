@@ -146,7 +146,10 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 
 基于 `moonbitlang/async` 的 websocket 包——握手与 RFC 6455 帧由运行时提供。
 
-- [ ] **T8.1** 把运行时的 websocket 包接入 moonway 的 HTTP 服务。
+- [x] **T8.1** 把运行时的 websocket 包接入 moonway 的 HTTP 服务。
+  `WsRoute`（精确路径匹配）传给 `serve`/`serve_cached_async`；匹配的 GET
+  请求经运行时的 `Conn::from_http_server` 升级（passthrough 模式），不再
+  进入 dispatch。已用运行时 websocket 客户端的实时回显升级测试验证。
 - [ ] **T8.2** `app.ws(path, handler)`——把 websocket 连接桥接进 moonway
   路由；连接事件（`on_message`、`on_close`）与广播辅助函数。
 - [ ] **T8.3** `examples/` 下的聊天示例。

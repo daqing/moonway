@@ -175,8 +175,12 @@ synchronous dispatch built in T2.
 Based on the `moonbitlang/async` websocket package — the handshake and RFC
 6455 frames are provided by the runtime.
 
-- [ ] **T8.1** Wire the runtime websocket package into moonway's HTTP
-  serving.
+- [x] **T8.1** Wire the runtime websocket package into moonway's HTTP
+  serving. `WsRoute` (exact-path) entries are passed to `serve`/`serve_cached_async`;
+  matching GET requests are upgraded via the runtime's
+  `Conn::from_http_server` (passthrough mode) and never reach dispatch.
+  Verified with a live echo upgrade test using the runtime's websocket
+  client.
 - [ ] **T8.2** `app.ws(path, handler)` — bridge websocket connections into
   moonway routing; connection events (`on_message`, `on_close`) and a
   broadcast helper.
