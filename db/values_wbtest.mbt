@@ -7,6 +7,18 @@ struct ProbePost {
 } derive(ToJson, FromJson, Eq, Debug)
 
 ///|
+extend ProbePost with ToJson::{to_json}
+
+///|
+extend ProbePost with @json.FromJson::{from_json}
+
+///|
+extend ProbePost with Eq::{equal, not_equal}
+
+///|
+extend ProbePost with @debug.Debug::{to_repr}
+
+///|
 let probe_table : Table = table("probe_posts", [
   column("id", IntT, primary=true),
   column("title", TextT),
