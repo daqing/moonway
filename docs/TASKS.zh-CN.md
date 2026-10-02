@@ -64,7 +64,8 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 
 ## T4 — 路由与中间件（http/） `M1 · P0`
 
-- [ ] **T4.1** 路由注册——`app.get/post/put/patch/delete(path, handler)`。
+- [x] **T4.1** 路由注册——`app.get/post/put/patch/delete(path, handler)`。
+  随 T2.1 落地；路由逻辑现集中在 `router.mbt`。
 - [ ] **T4.2** 路径参数——`/posts/:id` 映射到 `ctx.param("id")`；最长匹配
   优先；集成测试。
 - [ ] **T4.3** 中间件管线——`app.use(fn)`，明确的执行顺序（确定并文档化所

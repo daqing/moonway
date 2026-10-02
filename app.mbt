@@ -1,11 +1,4 @@
 ///|
-pub struct Route {
-  verb : String
-  path : String
-  handler : (Context) -> Context
-}
-
-///|
 pub struct App {
   routes : Array[Route]
   middlewares : Array[(Context) -> Context]

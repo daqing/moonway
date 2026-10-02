@@ -75,7 +75,8 @@ synchronous dispatch built in T2.
 
 ## T4 — Router & middleware (http/) `M1 · P0`
 
-- [ ] **T4.1** Route registration — `app.get/post/put/patch/delete(path, handler)`.
+- [x] **T4.1** Route registration — `app.get/post/put/patch/delete(path, handler)`.
+  Landed with T2.1; routing now lives in `router.mbt`.
 - [ ] **T4.2** Path parameters — `/posts/:id` matched to `ctx.param("id")`;
   longest match wins; integration tests.
 - [ ] **T4.3** Middleware pipeline — `app.use(fn)`, well-defined ordering
