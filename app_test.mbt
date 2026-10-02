@@ -29,8 +29,8 @@ test "unknown path returns 404 with a body" {
 ///|
 test "middlewares run in registration order before the handler" {
   let app = @moonway.new()
-  app.use(ctx => ctx.header("X-Order", "first"))
-  app.use(ctx => ctx.header("X-Order", "second"))
+  app.middleware(ctx => ctx.header("X-Order", "first"))
+  app.middleware(ctx => ctx.header("X-Order", "second"))
   app.get("/", ctx => ctx.text("ok"))
   let resp = app.handle("GET", "/")
   assert_eq(resp.header("X-Order"), Some("second"))
@@ -39,8 +39,8 @@ test "middlewares run in registration order before the handler" {
 ///|
 test "halt short-circuits later middlewares and the handler" {
   let app = @moonway.new()
-  app.use(ctx => ctx.text("blocked").halt())
-  app.use(ctx => ctx.header("X-Later", "no"))
+  app.middleware(ctx => ctx.text("blocked").halt())
+  app.middleware(ctx => ctx.header("X-Later", "no"))
   app.get("/", ctx => ctx.text("handler"))
   let resp = app.handle("GET", "/")
   assert_eq(resp.status(), 200)
@@ -51,7 +51,7 @@ test "halt short-circuits later middlewares and the handler" {
 ///|
 test "halt prevents the 404 fallback" {
   let app = @moonway.new()
-  app.use(ctx => ctx.status(401).text("auth required").halt())
+  app.middleware(ctx => ctx.status(401).text("auth required").halt())
   let resp = app.handle("GET", "/anything")
   assert_eq(resp.status(), 401)
   assert_eq(resp.body(), "auth required")

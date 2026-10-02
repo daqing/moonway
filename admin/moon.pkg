@@ -1,7 +1,6 @@
 import {
   "daqing/moonway/db",
   "daqing/moonway/http",
-  "moonbitlang/core/json",
 }
 
 supported_targets = "native"

@@ -32,11 +32,11 @@ pub fn App::dispatch(Self, @http.Request) -> @http.Response
 pub fn App::get(Self, String, (Context) -> Context) -> Unit
 pub fn App::handle(Self, String, String, body? : String) -> @http.Response
 pub fn App::listen(Self, Int) -> Unit
+pub fn App::middleware(Self, (Context) -> Context) -> Unit
 pub fn App::patch(Self, String, (Context) -> Context) -> Unit
 pub fn App::post(Self, String, (Context) -> Context) -> Unit
 pub fn App::put(Self, String, (Context) -> Context) -> Unit
 pub fn App::static_files(Self, String) -> Unit
-pub fn App::use(Self, (Context) -> Context) -> Unit
 pub fn App::ws(Self, String, WsHandler) -> Unit
 
 pub struct Context {

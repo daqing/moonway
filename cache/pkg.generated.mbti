@@ -28,6 +28,8 @@ pub struct RedisClient {
   conn : @socket.Tcp
   mut buffer : Bytes
 }
+pub async fn RedisClient::cache_get(Self, String) -> String?
+pub async fn RedisClient::cache_set_ex(Self, String, String, Int) -> Bool
 pub fn RedisClient::close(Self) -> Unit
 pub async fn RedisClient::command(Self, Array[String]) -> RespValue
 pub async fn RedisClient::connect(String) -> Self

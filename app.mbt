@@ -45,7 +45,7 @@ pub fn App::cache(
 /// matched route handler; each receives and returns the context. A
 /// middleware may short-circuit the pipeline with `ctx.halt()`: later
 /// middlewares and the route handler are skipped.
-pub fn App::use(self : App, middleware : (Context) -> Context) -> Unit {
+pub fn App::middleware(self : App, middleware : (Context) -> Context) -> Unit {
   self.middlewares.push(middleware)
 }
 

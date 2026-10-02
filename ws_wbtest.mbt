@@ -7,7 +7,7 @@ async test "app.ws serves events and the hub broadcasts" {
       hub.join(conn)
       hub.broadcast("got: \{text}")
     },
-    on_close: async fn(conn) { hub.leave(conn) },
+    on_close: fn(conn) { hub.leave(conn) },
   })
   @async.with_task_group(async fn(group) {
     group.spawn_bg(

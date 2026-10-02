@@ -36,7 +36,7 @@ async fn main {
   let hub = @moonway.WsHub::new()
   app.ws("/chat", {
     on_message: async fn(_conn, text) { hub.broadcast(text) },
-    on_close: async fn(conn) { hub.leave(conn) },
+    on_close: fn(conn) { hub.leave(conn) },
   })
   // Static page
   app.get("/", ctx => ctx.html(home_page()))

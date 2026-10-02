@@ -8,6 +8,8 @@ import {
   "moonbitlang/x/fs",
 }
 
+warnings = "-29-35"
+
 supported_targets = "native"
 
 options(

@@ -8,7 +8,7 @@ fn main {
       hub.join(conn)
       hub.broadcast("someone said: \{text}")
     },
-    on_close: async fn(conn) { hub.leave(conn) },
+    on_close: fn(conn) { hub.leave(conn) },
   })
   app.listen(3000)
 }

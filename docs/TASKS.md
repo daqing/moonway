@@ -83,7 +83,7 @@ synchronous dispatch built in T2.
   Landed with T2.1; routing now lives in `router.mbt`.
 - [x] **T4.2** Path parameters — `/posts/:id` matched to `ctx.param("id")`;
   longest match wins; integration tests.
-- [x] **T4.3** Middleware pipeline — `app.use(fn)`, well-defined ordering
+- [x] **T4.3** Middleware pipeline — `app.middleware(fn)`, well-defined ordering
   (linear registration order, documented on `App::use`), short-circuit
   support (`ctx.halt()`).
 - [x] **T4.4** 405 responses with an `Allow` header on method mismatch.
