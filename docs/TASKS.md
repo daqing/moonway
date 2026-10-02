@@ -228,8 +228,12 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
   JSON), `<Table>.count()`, `<Table>.find(<id>)` and
   `<Table>.insert({...})` (JSON object). Parser and executor are unit-
   tested against an in-memory database, including malformed lines.
-- [ ] **T10.3** Dot-commands — `.help`, `.tables`, `.quit`; prompt shows the
-  connection info (`moonway 0.1.0 · connected to sqlite://app.db`).
+- [x] **T10.3** Dot-commands — `.help` (connection info + command list),
+  `.tables` (from the introspected schema, `(no tables)` when empty),
+  `.quit`/`.exit`; blank lines are ignored, dot-commands are case-sensitive,
+  and the greeting reads `moonway <version> · connected to sqlite://<path>`
+  — matching the README's REPL example. Verified hands-on with a piped
+  session against a seeded database.
 
 ## T11 — Preact frontend integration (preact/) `M4 · P2`
 

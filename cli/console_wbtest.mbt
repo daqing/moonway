@@ -106,3 +106,18 @@ test "parse_console_line edge cases" {
   )
   assert_eq(parse_console_line("\t\r\nPost.all()\r\n"), TableAll("Post"))
 }
+
+///|
+test "dot-commands are case-sensitive and blank executes to nothing" {
+  assert_eq(
+    parse_console_line(".TABLES"),
+    Invalid("unknown dot-command .TABLES (try .help)"),
+  )
+  assert_eq(
+    parse_console_line(".Exit"),
+    Invalid("unknown dot-command .Exit (try .help)"),
+  )
+  let db = @db.open(":memory:").unwrap()
+  assert_eq(execute_console(db, Blank, "app.db"), "")
+  db.close()
+}
