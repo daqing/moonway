@@ -27,4 +27,6 @@ description = "A full-stack web framework for MoonBit"
 
 import {
   "moonbitlang/async@0.22.4",
+  "mizchi/sqlite@0.3.1",
+  "moonbitlang/x@0.5.5",
 }

@@ -42,6 +42,9 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 - [x] **T2.3** `app.listen(port)`——把 `App` 接到 HTTP 服务器（T3）上，
   持续服务直到中断。
 - [x] **T2.4** 用真实的 `App` / `Context` 单元测试替换脚手架测试文件。
+- [ ] **T2.5** `ctx.bind(Post)`——通过 FromJson 把请求体解析成模型（README
+  全栈示例用到了）。同时把 README 全栈示例与真实 API 对齐：`db.migrate()`
+  接收迁移数组，示例需要声明自己的 migration。
 
 > **完成标准**：README 的 hello-world 示例能在仓库内示例上编译并运行。
 
@@ -76,15 +79,22 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 
 ## T5 — 数据库层与 SQLite（db/） `M2 · P0`
 
-- [ ] **T5.1** 模型 schema 描述——MoonBit 结构体到表/列的映射；写清设计
-  决策：derive 推导 vs 显式声明 schema。
-- [ ] **T5.2** 基于 C FFI 的 SQLite 绑定——open / exec / prepare / step；
-  处理 text、integer、blob、null。以 `@moonway.sqlite(path)` 暴露。
-- [ ] **T5.3** 迁移执行器——有序迁移文件、schema 版本表；只做 up 迁移
+- [x] **T5.1** 模型 schema 描述——MoonBit 结构体到表/列的映射。决策
+  （2026-10-02，经讨论）：**显式 schema 作为唯一事实来源**——迁移和 admin
+  界面需要把列类型/约束当数据用，derive 给不了。行映射借用内置
+  `derive(ToJson, FromJson)`，简单模型零转换代码；JSON 表示不了的类型走
+  手写 impl 逃生舱。纯 derive 路线当前不可行：自定义 derive 不受支持，
+  MoonBit 也没有运行时反射。
+- [x] **T5.2** SQLite 绑定——采用 `mizchi/sqlite@0.3.1`（生态中下载量最大的
+  MoonBit SQLite 绑定，native C FFI + JS），不自研：open / exec / prepare /
+  bind / step 由 db 包封装；`@moonway.sqlite(path)` 打开数据库。实际使用
+  数据库的消费者必须自行链接 `-lsqlite3`（该参数不会从依赖继承——已实测）；
+  未使用的导入会被死代码消除，无需任何配置。CI 安装 libsqlite3-dev。
+- [x] **T5.3** 迁移执行器——有序迁移文件、schema 版本表；只做 up 迁移
   （控制范围）。
-- [ ] **T5.4** 查询 API——`db.insert`、`db.all(Model)`、`db.find(Model, id)`、
+- [x] **T5.4** 查询 API——`db.insert`、`db.all(Model)`、`db.find(Model, id)`、
   `where` 过滤、`count`。
-- [ ] **T5.5** 测试——对临时 SQLite 数据库文件跑查询 API 与迁移测试。
+- [x] **T5.5** 测试——对临时 SQLite 数据库文件跑查询 API 与迁移测试。
 
 > **完成标准**：README Post 示例中的数据库调用与文档行为一致。
 
@@ -96,7 +106,10 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
   （按 T1.4 的决策）、`models/` `handlers/` `migrations/` `web/` 目录、
   预先接好 moonway 依赖。
 - [ ] **T6.3** `moonway generate scaffold <Model> field:type …`——生成模型
-  文件、handlers、migration，并注册到 admin。
+  文件、handlers、migration，并注册到 admin。生成的模型必须声明
+  `pub extend <Model> with ToJson::{to_json}`（FromJson 同理）——derive 实现的
+  隐式 trait 方法提升已被废弃；白盒测试文件里用不了 `pub extend`，那里的
+  提升警告属于预期噪音。
 - [ ] **T6.4** 文件模板与生成器测试（golden 文件对比）。
 
 > **完成标准**：`moonway new` 产出的应用第一次编译、运行即成功。

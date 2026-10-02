@@ -48,6 +48,10 @@ M5: Oct 29–31 (final submission: **Oct 31, 2026**).
   serve until interrupted.
 - [x] **T2.4** Replace the scaffold test files with real unit tests for `App`
   and `Context`.
+- [ ] **T2.5** `ctx.bind(Post)` — parse the request body into a model via
+  FromJson (README's full-stack example uses it). Also reconcile the README
+  full-stack example with the real API: `db.migrate()` takes the migrations
+  array, so the example must declare its migration.
 
 > **Done when**: the README hello-world example compiles and runs against an
 > in-repo example.
@@ -89,15 +93,26 @@ synchronous dispatch built in T2.
 
 ## T5 — Database layer & SQLite (db/) `M2 · P0`
 
-- [ ] **T5.1** Model schema description — table/column mapping for MoonBit
-  structs; write down the decision: derive-based vs explicit schema.
-- [ ] **T5.2** SQLite binding via C FFI — open / exec / prepare / step; text,
-  integer, blob, null handling. Exposed as `@moonway.sqlite(path)`.
-- [ ] **T5.3** Migration runner — ordered migration files, schema version
+- [x] **T5.1** Model schema description — table/column mapping for MoonBit
+  structs. Decision (2026-10-02, discussed): **explicit schema is the source
+  of truth** — migrations and the admin UI need column types/constraints as
+  data, which derives cannot provide. Row mapping rides the builtin
+  `derive(ToJson, FromJson)` so simple models write zero conversion code;
+  hand-written impls stay as the escape hatch for JSON-unfriendly types.
+  A pure derive route is impossible today: custom derives are unsupported
+  and MoonBit has no runtime reflection.
+- [x] **T5.2** SQLite binding via C FFI — adopted `mizchi/sqlite@0.3.1`
+  (most-used MoonBit SQLite binding, native C FFI + JS) instead of
+  hand-rolling: `open` / `exec` / prepare / bind / step wrapped in the db
+  package; `@moonway.sqlite(path)` opens it. Consumers using the database
+  must link `-lsqlite3` (the flag is NOT inherited from dependencies —
+  verified hands-on); unused imports are dead-code-eliminated and need
+  nothing. CI installs libsqlite3-dev.
+- [x] **T5.3** Migration runner — ordered migration files, schema version
   table; up-only migrations (keep the scope tight).
-- [ ] **T5.4** Query API — `db.insert`, `db.all(Model)`, `db.find(Model, id)`,
+- [x] **T5.4** Query API — `db.insert`, `db.all(Model)`, `db.find(Model, id)`,
   `where` filters, `count`.
-- [ ] **T5.5** Tests — query API and migrations against a temporary SQLite
+- [x] **T5.5** Tests — query API and migrations against a temporary SQLite
   database file.
 
 > **Done when**: the database calls in the README Post example work as
@@ -111,7 +126,11 @@ synchronous dispatch built in T2.
   `preferred_target` (per T1.4), `models/` `handlers/` `migrations/` `web/`
   folders, moonway dependency wired in.
 - [ ] **T6.3** `moonway generate scaffold <Model> field:type …` — model file,
-  handlers, migration, admin registration.
+  handlers, migration, admin registration. Generated models must declare
+  `pub extend <Model> with ToJson::{to_json}` (and the same for FromJson) —
+  the implicit trait-method promotion on derived impls is deprecated; in
+  whitebox test files `pub extend` is unavailable, so promotion warnings
+  there are expected noise.
 - [ ] **T6.4** File templates and generator tests (golden files).
 
 > **Done when**: an app produced by `moonway new` compiles and runs on the
