@@ -1,0 +1,8 @@
+import {
+  "daqing/moonway/cli",
+  "moonbitlang/core/env",
+}
+
+supported_targets = "native"
+
+pkgtype(kind: "executable")

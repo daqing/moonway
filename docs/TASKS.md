@@ -120,18 +120,27 @@ synchronous dispatch built in T2.
 
 ## T6 — CLI & code generator (cli/) `M2 · P0`
 
-- [ ] **T6.1** `moonway` CLI skeleton — argument parsing, `--help`; the binary
-  is distributed via `moon install daqing/moonway`.
-- [ ] **T6.2** `moonway new <name>` — generate an app skeleton: native
+- [x] **T6.1** `moonway` CLI skeleton — argument parsing, `--help`; the binary
+  is distributed via `moon install daqing/moonway`. Lives in `cli/`
+  (pure `parse` → `Command`) with a thin `cmd/moonway` wrapper reading
+  `@env.args()`; `moon run cmd/moonway -- <args>` passes flags through.
+- [x] **T6.2** `moonway new <name>` — generate an app skeleton: native
   `preferred_target` (per T1.4), `models/` `handlers/` `migrations/` `web/`
-  folders, moonway dependency wired in.
-- [ ] **T6.3** `moonway generate scaffold <Model> field:type …` — model file,
-  handlers, migration, admin registration. Generated models must declare
-  `pub extend <Model> with ToJson::{to_json}` (and the same for FromJson) —
-  the implicit trait-method promotion on derived impls is deprecated; in
-  whitebox test files `pub extend` is unavailable, so promotion warnings
-  there are expected noise.
-- [ ] **T6.4** File templates and generator tests (golden files).
+  folders, moonway dependency wired in. Verified hands-on: the generated app
+  passes `moon check` first try and serves on :3000 with its SQLite database
+  migrated (local verification maps the unpublished moonway via a
+  `moon.work` members entry; published users get it from the registry).
+- [x] **T6.3** `moonway generate scaffold <Model> field:type …` — model file,
+  handlers (GET list/detail, POST with 400/500 paths), timestamped migration,
+  and registry updates through markers (admin tables, migrations list,
+  handler registration in cmd/main). Verified end-to-end: scaffolded API
+  serves POST 201 / GET 200 / 404 / 400 against SQLite. Templates pin
+  generic type parameters via annotated locals — leaving `db.all` to infer
+  defaults the row type to Unit and silently returns `[]`.
+- [x] **T6.4** File templates and generator tests (golden files). Templates
+  are pure functions asserted by whitebox tests (native target, sqlite link
+  flags, versioned moonway import, marker lines, pinned generic types,
+  promotion extends); parsing and marker insertion are unit-tested.
 
 > **Done when**: an app produced by `moonway new` compiles and runs on the
 > first try.
