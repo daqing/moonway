@@ -1,0 +1,31 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "daqing/moonway/admin"
+
+import {
+  "daqing/moonway/db",
+}
+
+// Values
+pub fn display_value(Json) -> String
+
+pub fn escape_html(String) -> String
+
+pub fn form_decode(String) -> Map[String, String]
+
+pub fn render_form(String, @db.Table, Json?) -> String
+
+pub fn render_index(String, Array[@db.Table]) -> String
+
+pub fn render_layout(String, String) -> String
+
+pub fn render_list(String, @db.Table, Array[Json], Int, Bool, String) -> String
+
+pub fn render_unauthorized() -> String
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits

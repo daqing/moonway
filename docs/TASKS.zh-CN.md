@@ -162,12 +162,24 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 
 ## T9 — Admin 管理后台（admin/） `M4 · P1`
 
-- [ ] **T9.1** 模型注册表——`app.admin(path, [Model])` 挂载。
-- [ ] **T9.2** 服务端渲染的 CRUD 界面——支持分页与搜索的列表、创建/编辑
-  表单、带确认的删除。
-- [ ] **T9.3** 最小防护 *（可选）*——环境变量 token 或 basic auth；文档明确
-  说明这是基础防护，不是生产级认证。
-- [ ] **T9.4** 截取 admin 后台截图，供 T12.4 使用。
+- [x] **T9.1** 模型注册表——`app.admin(path, [Model])` 挂载。
+  `app.admin(db, tables, prefix~, token~)` 为每张表注册 index/list/new/
+  edit/update/delete 路由；请求现在携带 query string（`Request::query_param`，
+  之前被剥掉丢弃），admin 通过新增的裸行 API
+  （`select_raw`/`find_raw`/`insert_raw`/`update_raw`/`delete_raw`）操作
+  任意表——无需具体模型类型。
+- [x] **T9.2** 服务端渲染的 CRUD 界面——支持分页与搜索的列表、创建/编辑
+  表单、带确认的删除。控件跟随 schema 列类型（文本用 textarea、布尔用
+  checkbox、其余用 number 输入）；文本搜索是对文本列的 LIKE 且做引号
+  转义；动作均为 303 重定向。渲染层是纯函数并有单元测试；完整 CRUD
+  流程经 `app.handle` 做了集成测试。
+- [x] **T9.3** 最小防护 *（可选）*——`app.admin(..., token=...)`：设置后，
+  每个 admin 请求必须经 `?token=`（GET）或表单字段（POST）携带令牌，
+  否则 401。已在 `App::admin` 文档注明这是基础防护、不是生产级认证。
+  集成测试覆盖（拒绝、错误令牌、查询放行、POST 放行）。
+- [x] **T9.4** 截取 admin 后台截图供 T12.4 使用——`docs/images/admin.png`，
+  来自全新 scaffold 的应用并种入样例行（admin 布局使用显式颜色，深色模式
+  下不反色）。
 
 ## T10 — REPL 控制台（cli/） `M4 · P2`
 

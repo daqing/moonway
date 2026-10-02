@@ -24,6 +24,7 @@ pub struct App {
   mut cache_policy : @http.CachePolicy[@cache.RedisClient]?
   ws_routes : Array[@http.WsRoute]
 }
+pub fn App::admin(Self, @db.Database, Array[@db.Table], prefix? : String, token? : String) -> Unit
 pub fn App::cache(Self, @cache.RedisClient, ttl? : Int, prefix? : String) -> Unit
 pub fn App::delete(Self, String, (Context) -> Context) -> Unit
 pub fn App::dispatch(Self, @http.Request) -> @http.Response
@@ -49,6 +50,7 @@ pub fn Context::html(Self, String) -> Self
 pub fn[T : ToJson] Context::json(Self, T) -> Self
 pub fn Context::param(Self, String) -> String?
 pub fn Context::path(Self) -> String
+pub fn Context::query_param(Self, String) -> String?
 pub fn Context::request_header(Self, String) -> String?
 pub fn Context::status(Self, Int) -> Self
 pub fn Context::text(Self, String) -> Self

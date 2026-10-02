@@ -2,8 +2,13 @@ import {
   "daqing/moonway/http",
   "daqing/moonway/db",
   "daqing/moonway/cache",
+  "daqing/moonway/admin",
   "moonbitlang/async",
   "moonbitlang/async/websocket" @async_websocket,
 }
 
 supported_targets = "native"
+
+options(
+  link: { "native": { "cc-link-flags": "-lsqlite3" } },
+)

@@ -194,12 +194,27 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
 
 ## T9 — Admin dashboard (admin/) `M4 · P1`
 
-- [ ] **T9.1** Model registry — `app.admin(path, [Model])` mounting.
-- [ ] **T9.2** Server-rendered CRUD UI — paginated and searchable list,
-  create/edit forms, delete with confirmation.
-- [ ] **T9.3** Minimal protection *(optional)* — env-token or basic auth;
-  clearly documented as basic, not production-grade auth.
-- [ ] **T9.4** Take the admin screenshot used by T12.4.
+- [x] **T9.1** Model registry — `app.admin(path, [Model])` mounting.
+  `app.admin(db, tables, prefix~, token~)` registers index/list/new/edit/
+  update/delete routes per table; requests carry the query string
+  (`Request::query_param`, previously stripped), and admin works on
+  arbitrary tables through new raw row APIs
+  (`select_raw`/`find_raw`/`insert_raw`/`update_raw`/`delete_raw`) — no
+  concrete model types needed.
+- [x] **T9.2** Server-rendered CRUD UI — paginated and searchable list,
+  create/edit forms, delete with confirmation. Controls follow the schema's
+  column types (textarea for text, checkbox for bools, number inputs
+  otherwise); text search is a LIKE across text columns with quote
+  escaping; actions are 303 redirects. Rendering is pure and unit-tested;
+  the full CRUD flow is integration-tested through `app.handle`.
+- [x] **T9.3** Minimal protection *(optional)* — `app.admin(..., token=...)`:
+  when set, every admin request must carry the token via `?token=` (GET) or
+  the form field (POST), otherwise 401. Documented on `App::admin` as basic
+  protection, not production-grade auth. Covered by an integration test
+  (denied, wrong token, query-allowed, POST-allowed).
+- [x] **T9.4** Take the admin screenshot used by T12.4 — `docs/images/admin.png`,
+  captured from a freshly scaffolded app with seeded rows (dark-mode-safe
+  explicit colors in the admin layout).
 
 ## T10 — REPL console (cli/) `M4 · P2`
 

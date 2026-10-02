@@ -42,12 +42,17 @@ pub fn[T : @json.FromJson] Database::all(Self, Table) -> Array[T]
 pub fn Database::changes(Self) -> Int
 pub fn Database::close(Self) -> Unit
 pub fn Database::count(Self, Table) -> Int
+pub fn Database::delete_raw(Self, Table, Int) -> Bool
 pub fn Database::exec(Self, String) -> Bool
 pub fn[T : @json.FromJson] Database::find(Self, Table, Int) -> T?
+pub fn Database::find_raw(Self, Table, Int) -> Json?
 pub fn[T : ToJson] Database::insert(Self, Table, T) -> Bool
+pub fn Database::insert_raw(Self, Table, Map[String, Json]) -> Bool
 pub fn Database::last_insert_rowid(Self) -> Int64
 pub fn Database::migrate(Self, Array[Migration]) -> Bool
 pub fn[T : @json.FromJson] Database::query(Self, Table, String, Array[@sqlite.SqlValue]) -> Array[T]
+pub fn Database::select_raw(Self, Table, String, Array[@sqlite.SqlValue], limit? : Int, offset? : Int) -> Array[Json]
+pub fn Database::update_raw(Self, Table, Int, Map[String, Json]) -> Bool
 
 pub(all) struct Migration {
   version : Int

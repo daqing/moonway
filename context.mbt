@@ -25,6 +25,12 @@ pub fn Context::param(self : Context, name : String) -> String? {
 }
 
 ///|
+/// Look up a query-string parameter (`?name=value`) by name.
+pub fn Context::query_param(self : Context, name : String) -> String? {
+  self.request.query_param(name)
+}
+
+///|
 pub fn Context::verb(self : Context) -> String {
   self.request.verb
 }
