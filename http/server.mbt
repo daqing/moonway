@@ -4,7 +4,7 @@
 /// failure.
 pub async fn serve_async(port : Int, handler : (Request) -> Response) -> Unit {
   let addr = @async_socket.Addr::parse("127.0.0.1:\{port}")
-  let server = @async_http.Server(addr)
+  let server = @async_http.Server(addr, reuse_addr=true)
   server.run_forever(
     async fn(request, body, conn) {
       let body_text = body.read_all().text() catch { _err => "" }

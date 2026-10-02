@@ -27,12 +27,20 @@ fn App::run(self : App, request : @http.Request) -> Context {
         ctx.params[name] = value
       }
       let ctx = self.run_middlewares(ctx)
-      (route.handler)(ctx)
+      if !ctx.halted {
+        (route.handler)(ctx)
+      } else {
+        ctx
+      }
     }
     None => {
       let ctx = self.run_middlewares(ctx)
-      ctx.response.set_status(404)
-      ctx.text("Not Found")
+      if !ctx.halted {
+        ctx.response.set_status(404)
+        ctx.text("Not Found")
+      } else {
+        ctx
+      }
     }
   }
 }
@@ -41,6 +49,9 @@ fn App::run(self : App, request : @http.Request) -> Context {
 fn App::run_middlewares(self : App, ctx : Context) -> Context {
   let mut acc = ctx
   for middleware in self.middlewares {
+    if acc.halted {
+      break
+    }
     acc = middleware(acc)
   }
   acc

@@ -3,11 +3,20 @@ pub struct Context {
   request : @http.Request
   params : Map[String, String]
   response : @http.Response
+  mut halted : Bool
 }
 
 ///|
 fn Context::new(request : @http.Request) -> Context {
-  { request, params: Map([]), response: @http.Response::new(), }
+  { request, params: Map([]), response: @http.Response::new(), halted: false, }
+}
+
+///|
+/// Short-circuit the middleware pipeline: later middlewares and the route
+/// handler are skipped, and the response built so far is returned as-is.
+pub fn Context::halt(self : Context) -> Context {
+  self.halted = true
+  self
 }
 
 ///|
