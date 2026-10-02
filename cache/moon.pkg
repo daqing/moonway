@@ -1,6 +1,8 @@
 import {
   "moonbitlang/x/encoding",
   "moonbitlang/core/debug",
+  "moonbitlang/async",
+  "moonbitlang/async/socket" @async_socket,
 }
 
 supported_targets = "native"

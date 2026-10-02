@@ -126,8 +126,10 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 - [x] **T7.1** RESP 协议编码器/解码器——纯 MoonBit 实现，充分的单元测试。
   bulk 长度按字节精确计算（UTF-8）、半帧检测（`Incomplete`）、嵌套数组、
   管线化流的首条回复消费。
-- [ ] **T7.2** 基于 `moonbitlang/async` TCP 的 Redis 客户端——`GET` / `SET` /
+- [x] **T7.2** 基于 `moonbitlang/async` TCP 的 Redis 客户端——`GET` / `SET` /
   `DEL` / `EXPIRE` / `PING`；服务端错误回复以 MoonBit error 形式抛出。
+  对真实 redis-server 的集成测试覆盖全部命令，包括 WRONGTYPE 回复抛出
+  `Failure`。
 - [ ] **T7.3** 缓存中间件——响应缓存，TTL 与缓存键可配置，通过
   `app.use(...)` 接入。
 - [ ] **T7.4** 优雅降级——Redis 不可达时直接放行并记录警告；文档写明该行为。

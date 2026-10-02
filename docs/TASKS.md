@@ -151,8 +151,10 @@ synchronous dispatch built in T2.
   thorough unit tests. Byte-accurate bulk lengths (UTF-8 counted in bytes),
   partial-frame detection (`Incomplete`), nested arrays, and first-reply
   consumption for pipelined streams.
-- [ ] **T7.2** Redis client over `moonbitlang/async` TCP — `GET` / `SET` /
+- [x] **T7.2** Redis client over `moonbitlang/async` TCP — `GET` / `SET` /
   `DEL` / `EXPIRE` / `PING`; server error replies surfaced as MoonBit errors.
+  Live integration test against a real redis-server covers the full set
+  including WRONGTYPE replies raising `Failure`.
 - [ ] **T7.3** Cache middleware — response caching with configurable TTL and
   cache keys, attached via `app.use(...)`.
 - [ ] **T7.4** Graceful degradation — when Redis is unreachable, pass through
