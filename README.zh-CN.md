@@ -42,6 +42,8 @@ cd hello-moonway
 # moonway 是服务端框架：把项目切换到 native 后端
 awk '{sub(/preferred_target = "wasm"/, "preferred_target = \"native\"")} 1' moon.mod > moon.mod.tmp && mv moon.mod.tmp moon.mod
 moon add daqing/moonway
+# 在主包里也注册依赖
+printf 'import {\n  \"daqing/moonway\",\n}\n' >> cmd/main/moon.pkg
 ```
 
 给你的应用加一条路由：
@@ -65,31 +67,53 @@ moon run cmd/main
 
 ## 一个文件里的全栈
 
+把 `cmd/main/main.mbt` 替换为以下内容（并在 `cmd/main/moon.pkg` 的 imports
+里加上 `"moonbitlang/core/json"`）：
+
 ```moonbit nocheck
 ///|
 struct Post {
   id : Int
   title : String
   body : String
-}
+} derive(ToJson, FromJson)
+
+///|
+let posts : @db.Table = @db.table("posts", [
+  @db.column("id", @db.IntT, primary=true),
+  @db.column("title", @db.TextT),
+  @db.column("body", @db.TextT),
+])
 
 ///|
 fn main {
   let app = @moonway.new()
   let db = @moonway.sqlite("app.db")
-  db.migrate()
-
-  app.get("/posts", ctx => ctx.json(db.all(Post)))
-
-  app.post("/posts", ctx => {
-    let post = ctx.bind(Post)
-    db.insert(post)
-    ctx.status(201).json(post)
+  if !db.migrate([@db.migration(1, "create posts", [posts.create_sql()])]) {
+    abort("migrations failed")
+  }
+  app.get("/posts", ctx => {
+    let items : Array[Json] = db.select_raw(posts, "1=1", [], limit=100)
+    ctx.json(Json::array(items))
   })
-
+  app.post("/posts", ctx => {
+    let row : Json? = try {
+      Some(@json.parse(ctx.body()))
+    } catch {
+      _err => None
+    }
+    match row {
+      Some(Object(fields)) =>
+        if db.insert_raw(posts, fields) {
+          ctx.status(201).json(Json::object(fields))
+        } else {
+          ctx.status(500).text("insert failed")
+        }
+      _ => ctx.status(400).text("invalid JSON body")
+    }
+  })
   // 一个开箱即用的数据管理界面，挂在 /admin
-  app.admin("/admin", [Post])
-
+  app.admin(db, [posts])
   app.listen(3000)
 }
 ```
