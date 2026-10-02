@@ -2,6 +2,7 @@
 package "daqing/moonway"
 
 import {
+  "daqing/moonway/cache",
   "daqing/moonway/db",
   "daqing/moonway/http",
 }
@@ -17,7 +18,9 @@ pub fn sqlite(String) -> @db.Database
 pub struct App {
   routes : Array[Route]
   middlewares : Array[(Context) -> Context]
+  mut cache_policy : @http.CachePolicy[@cache.RedisClient]?
 }
+pub fn App::cache(Self, @cache.RedisClient, ttl? : Int, prefix? : String) -> Unit
 pub fn App::delete(Self, String, (Context) -> Context) -> Unit
 pub fn App::dispatch(Self, @http.Request) -> @http.Response
 pub fn App::get(Self, String, (Context) -> Context) -> Unit

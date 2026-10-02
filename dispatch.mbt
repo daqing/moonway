@@ -1,6 +1,10 @@
 ///|
 pub fn App::listen(self : App, port : Int) -> Unit {
-  @http.serve(port, fn(request) { self.dispatch(request) })
+  let handler = fn(request) { self.dispatch(request) }
+  match self.cache_policy {
+    Some(policy) => @http.serve_cached(policy, port, handler)
+    None => @http.serve(port, handler)
+  }
 }
 
 ///|

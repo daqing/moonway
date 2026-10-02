@@ -2,11 +2,26 @@
 pub struct App {
   routes : Array[Route]
   middlewares : Array[(Context) -> Context]
+  mut cache_policy : @http.CachePolicy[@cache.RedisClient]?
 }
 
 ///|
 pub fn new() -> App {
-  { routes: [], middlewares: [], }
+  { routes: [], middlewares: [], cache_policy: None, }
+}
+
+///|
+/// Enable response caching for GET requests through a Redis client: hits
+/// are served before middlewares and handlers (X-Cache: HIT); 200 responses
+/// are stored with the configured TTL (X-Cache: MISS). Cache failures
+/// degrade to plain dispatch.
+pub fn App::cache(
+  self : App,
+  client : @cache.RedisClient,
+  ttl? : Int = 60,
+  prefix? : String = "moonway",
+) -> Unit {
+  self.cache_policy = Some({ store: client, prefix, ttl, })
 }
 
 ///|

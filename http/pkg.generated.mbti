@@ -6,9 +6,27 @@ pub fn serve(Int, (Request) -> Response) -> Unit
 
 pub async fn serve_async(Int, (Request) -> Response) -> Unit
 
+pub fn[S : CacheStore] serve_cached(CachePolicy[S], Int, (Request) -> Response) -> Unit
+
+pub async fn[S : CacheStore] serve_cached_async(CachePolicy[S], Int, (Request) -> Response) -> Unit
+
 // Errors
 
 // Types and methods
+pub(all) struct CachePolicy[S] {
+  store : S
+  prefix : String
+  ttl : Int
+}
+pub fn[S] CachePolicy::key(Self[S], String) -> String
+pub async fn[S : CacheStore] CachePolicy::lookup(Self[S], String) -> CachedResponse?
+pub async fn[S : CacheStore] CachePolicy::store(Self[S], String, CachedResponse) -> Unit
+
+pub(all) struct CachedResponse {
+  content_type : String
+  body : String
+}
+
 pub(all) struct Request {
   verb : String
   path : String
@@ -36,3 +54,7 @@ pub fn Response::status(Self) -> Int
 // Type aliases
 
 // Traits
+pub(open) trait CacheStore {
+  async fn cache_get(Self, String) -> String?
+  async fn cache_set_ex(Self, String, String, Int) -> Bool
+}

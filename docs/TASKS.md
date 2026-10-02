@@ -155,8 +155,15 @@ synchronous dispatch built in T2.
   `DEL` / `EXPIRE` / `PING`; server error replies surfaced as MoonBit errors.
   Live integration test against a real redis-server covers the full set
   including WRONGTYPE replies raising `Failure`.
-- [ ] **T7.3** Cache middleware — response caching with configurable TTL and
-  cache keys, attached via `app.use(...)`.
+- [x] **T7.3** Cache middleware — response caching with configurable TTL and
+  cache keys. Architecture note: the linear middleware model (T4.3) has no
+  post-handler phase and dispatch is synchronous while Redis is async, so
+  caching attaches via `app.cache(client, ttl~, prefix~)` and lives in the
+  async serving layer — http defines a `CacheStore` trait plus generic
+  `CachePolicy[S]`, cache implements it for `RedisClient` (no dependency
+  cycle), and `serve_cached_async` answers GET hits (`X-Cache: HIT`) before
+  dispatch and stores 200s on the way out (`X-Cache: MISS`). Verified
+  end-to-end against live Redis over HTTP.
 - [ ] **T7.4** Graceful degradation — when Redis is unreachable, pass through
   and log a warning; document this behavior.
 

@@ -2,6 +2,7 @@
 package "daqing/moonway/cache"
 
 import {
+  "daqing/moonway/http",
   "moonbitlang/async/socket",
   "moonbitlang/core/debug",
 }
@@ -36,6 +37,7 @@ pub async fn RedisClient::get(Self, String) -> String?
 pub async fn RedisClient::ping(Self) -> Bool
 pub async fn RedisClient::set(Self, String, String) -> Bool
 pub async fn RedisClient::set_ex(Self, String, String, Int) -> Bool
+pub impl @http.CacheStore for RedisClient
 
 pub(all) enum RespValue {
   Simple(String)
