@@ -1,0 +1,38 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "daqing/moonway/cache"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn decode(Bytes) -> Decoded
+
+pub fn encode_command(Array[String]) -> Bytes
+
+// Errors
+
+// Types and methods
+pub(all) enum Decoded {
+  Complete(RespValue, Int)
+  Incomplete
+  Malformed(String)
+} derive(Eq, @debug.Debug)
+pub fn Decoded::equal(Self, Self) -> Bool
+pub fn Decoded::not_equal(Self, Self) -> Bool
+pub fn Decoded::to_repr(Self) -> @debug.Repr
+
+pub(all) enum RespValue {
+  Simple(String)
+  Error(String)
+  Integer(Int64)
+  Bulk(String?)
+  Array(Array[RespValue])
+} derive(Eq, @debug.Debug)
+pub fn RespValue::equal(Self, Self) -> Bool
+pub fn RespValue::not_equal(Self, Self) -> Bool
+pub fn RespValue::to_repr(Self) -> @debug.Repr
+
+// Type aliases
+
+// Traits

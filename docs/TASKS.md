@@ -147,8 +147,10 @@ synchronous dispatch built in T2.
 
 ## T7 — Redis cache (cache/) `M3 · P1`
 
-- [ ] **T7.1** RESP protocol encoder/decoder — pure MoonBit implementation,
-  thorough unit tests.
+- [x] **T7.1** RESP protocol encoder/decoder — pure MoonBit implementation,
+  thorough unit tests. Byte-accurate bulk lengths (UTF-8 counted in bytes),
+  partial-frame detection (`Incomplete`), nested arrays, and first-reply
+  consumption for pipelined streams.
 - [ ] **T7.2** Redis client over `moonbitlang/async` TCP — `GET` / `SET` /
   `DEL` / `EXPIRE` / `PING`; server error replies surfaced as MoonBit errors.
 - [ ] **T7.3** Cache middleware — response caching with configurable TTL and
