@@ -78,7 +78,9 @@ Open <http://localhost:3000>. You're on the road. 🌙
 
 ## The full stack, in one file
 
-Replace `cmd/main/moon.pkg` with:
+Replace `cmd/main/moon.pkg` with (the link flags are required — `moon add`
+does not inherit them from dependencies; Linux also needs
+`apt install libsqlite3-dev`, macOS ships SQLite):
 
 ```json
 import {
@@ -87,7 +89,13 @@ import {
   "moonbitlang/core/json",
 }
 
+supported_targets = "native"
+
 pkgtype(kind: "executable")
+
+options(
+  link: { "native": { "cc-link-flags": "-lsqlite3" } },
+)
 ```
 
 Then replace `cmd/main/main.mbt` with:

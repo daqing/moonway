@@ -67,7 +67,8 @@ moon run cmd/main
 
 ## 一个文件里的全栈
 
-把 `cmd/main/moon.pkg` 替换为：
+把 `cmd/main/moon.pkg` 替换为（link 参数必须写——`moon add` 不会从依赖继承；
+Linux 还需要 `apt install libsqlite3-dev`，macOS 自带 SQLite）：
 
 ```json
 import {
@@ -76,7 +77,13 @@ import {
   "moonbitlang/core/json",
 }
 
+supported_targets = "native"
+
 pkgtype(kind: "executable")
+
+options(
+  link: { "native": { "cc-link-flags": "-lsqlite3" } },
+)
 ```
 
 然后把 `cmd/main/main.mbt` 替换为：
