@@ -6,6 +6,10 @@ import {
 }
 
 // Values
+pub fn decode_url_encoded(String) -> String
+
+pub fn query_param(String, String) -> String?
+
 pub fn serve(Int, (Request) -> Response, ws_routes? : Array[WsRoute]) -> Unit
 
 pub async fn serve_async(Int, (Request) -> Response, ws_routes? : Array[WsRoute]) -> Unit
@@ -36,11 +40,14 @@ pub(all) struct CachedResponse {
 pub(all) struct Request {
   verb : String
   path : String
+  query : String
   headers : Array[(String, String)]
   body : String
 }
 pub fn Request::header(Self, String) -> String?
 pub fn Request::new(String, String) -> Self
+pub fn Request::query_param(Self, String) -> String?
+pub fn Request::with_body(Self, String) -> Self
 
 pub struct Response {
   mut status_code : Int

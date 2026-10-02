@@ -194,7 +194,13 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
 
 ## T9 — Admin dashboard (admin/) `M4 · P1`
 
-- [ ] **T9.1** Model registry — `app.admin(path, [Model])` mounting.
+- [x] **T9.1** Model registry — `app.admin(path, [Model])` mounting.
+  `app.admin(db, tables, prefix~, token~)` registers index/list/new/edit/
+  update/delete routes per table; requests carry the query string
+  (`Request::query_param`, previously stripped), and admin works on
+  arbitrary tables through new raw row APIs
+  (`select_raw`/`find_raw`/`insert_raw`/`update_raw`/`delete_raw`) — no
+  concrete model types needed.
 - [ ] **T9.2** Server-rendered CRUD UI — paginated and searchable list,
   create/edit forms, delete with confirmation.
 - [ ] **T9.3** Minimal protection *(optional)* — env-token or basic auth;

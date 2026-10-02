@@ -162,7 +162,12 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 
 ## T9 — Admin 管理后台（admin/） `M4 · P1`
 
-- [ ] **T9.1** 模型注册表——`app.admin(path, [Model])` 挂载。
+- [x] **T9.1** 模型注册表——`app.admin(path, [Model])` 挂载。
+  `app.admin(db, tables, prefix~, token~)` 为每张表注册 index/list/new/
+  edit/update/delete 路由；请求现在携带 query string（`Request::query_param`，
+  之前被剥掉丢弃），admin 通过新增的裸行 API
+  （`select_raw`/`find_raw`/`insert_raw`/`update_raw`/`delete_raw`）操作
+  任意表——无需具体模型类型。
 - [ ] **T9.2** 服务端渲染的 CRUD 界面——支持分页与搜索的列表、创建/编辑
   表单、带确认的删除。
 - [ ] **T9.3** 最小防护 *（可选）*——环境变量 token 或 basic auth；文档明确

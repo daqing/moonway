@@ -20,7 +20,7 @@ pub fn App::handle(
   path : String,
   body? : String = "",
 ) -> @http.Response {
-  self.dispatch({ verb, path, headers: [], body, })
+  self.dispatch(@http.Request::new(verb, path).with_body(body))
 }
 
 ///|
