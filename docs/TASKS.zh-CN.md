@@ -222,10 +222,11 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 
 - [x] **T12.1** 发布 `daqing/moonway@0.11.3` 到 mooncakes.io——已完成
   （`moon publish`，Server 200 OK）；`moon add daqing/moonway` 已在干净项目
-  验证（验收运行从 registry 拉取 0.11.3）。⚠️ `moon install` **被工具链
-  限制阻塞**：它要求包声明 `is-main`，moon.pkg DSL 无法表达该声明，而
-  moon.pkg.json 形式会被 `moon fmt` 强制迁移并丢弃——待上游修复；修复前
-  CLI 从源码检出安装。
+  验证（验收运行从 registry 拉取 0.11.3）。⚠️ `moon install daqing/moonway`
+  仍报 "not a main package (is-main: true required)"，尽管包用的是
+  `pkgtype(kind: "executable")`，且显式写 `options("is-main": true)` 会被
+  `moon fmt` 规范化回 pkgtype——install 与 pkgtype 的判定关系待向上游澄清
+  （moon 0.1.20260920）。
 - [x] **T12.2** `examples/blog`——参考应用，覆盖模型、路由、缓存、WebSocket
   聊天与 admin。
 - [x] **T12.3** README 验收演练——在干净目录中对已发布的 0.11.3 逐字执行

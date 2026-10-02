@@ -265,10 +265,11 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
 - [x] **T12.1** Publish `daqing/moonway@0.11.3` to mooncakes.io — done
   (`moon publish`, Server 200 OK); `moon add daqing/moonway` verified from a
   clean project (acceptance run pulled 0.11.3 from the registry). ⚠️
-  `moon install` is **blocked by a toolchain limitation**: it requires a
-  package declared `is-main`, which the moon.pkg DSL cannot express and the
-  moon.pkg.json form is force-migrated (and dropped) by `moon fmt` — report
-  upstream; until fixed, the CLI installs from a source checkout.
+  `moon install daqing/moonway` still fails with "not a main package
+  (is-main: true required)" even though the package uses
+  `pkgtype(kind: "executable")` and `moon fmt` normalizes any explicit
+  `options("is-main": true)` back to pkgtype — the install-vs-pkgtype
+  relationship needs upstream clarification (moon 0.1.20260920).
 - [x] **T12.2** `examples/blog` — the reference app covering models, routes,
   cache, WebSocket chat, and admin.
 - [x] **T12.3** README acceptance run — executed every command in both
