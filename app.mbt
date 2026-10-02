@@ -4,11 +4,26 @@ pub struct App {
   middlewares : Array[(Context) -> Context]
   mut cache_policy : @http.CachePolicy[@cache.RedisClient]?
   ws_routes : Array[@http.WsRoute]
+  mut static_dir : String?
 }
 
 ///|
 pub fn new() -> App {
-  { routes: [], middlewares: [], cache_policy: None, ws_routes: [], }
+  {
+    routes: [],
+    middlewares: [],
+    cache_policy: None,
+    ws_routes: [],
+    static_dir: None,
+  }
+}
+
+///|
+/// Serve static files from `dir` as a fallback for unmatched GET requests:
+/// `/` maps to `index.html`, directories to their `index.html`, and
+/// path-traversal attempts are rejected. Dynamic routes always win.
+pub fn App::static_files(self : App, dir : String) -> Unit {
+  self.static_dir = Some(dir)
 }
 
 ///|

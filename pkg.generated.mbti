@@ -23,6 +23,7 @@ pub struct App {
   middlewares : Array[(Context) -> Context]
   mut cache_policy : @http.CachePolicy[@cache.RedisClient]?
   ws_routes : Array[@http.WsRoute]
+  mut static_dir : String?
 }
 pub fn App::admin(Self, @db.Database, Array[@db.Table], prefix? : String, token? : String) -> Unit
 pub fn App::cache(Self, @cache.RedisClient, ttl? : Int, prefix? : String) -> Unit
@@ -34,6 +35,7 @@ pub fn App::listen(Self, Int) -> Unit
 pub fn App::patch(Self, String, (Context) -> Context) -> Unit
 pub fn App::post(Self, String, (Context) -> Context) -> Unit
 pub fn App::put(Self, String, (Context) -> Context) -> Unit
+pub fn App::static_files(Self, String) -> Unit
 pub fn App::use(Self, (Context) -> Context) -> Unit
 pub fn App::ws(Self, String, WsHandler) -> Unit
 

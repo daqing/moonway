@@ -200,10 +200,21 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 
 ## T11 — Preact 前端集成（preact/） `M4 · P2`
 
-- [ ] **T11.1** 生成项目中的前端脚手架——Preact + esbuild，`npm run build`
-  产物输出到静态目录；文档写明需要 Node.js 环境。
-- [ ] **T11.2** 静态文件服务——Content-Type、`index.html` 回退。
-- [ ] **T11.3** 接入 posts API 的示例页面。
+- [x] **T11.1** 生成项目中的前端脚手架——`moonway new` 产出
+  `static/index.html` + `static/app.js`（vanilla、零构建、已接 posts API）
+  以及 `web/` 的 Preact + esbuild 脚手架，`npm run build` 会重新生成
+  `static/app.js`。Node.js 前置条件写在生成的 README 里；已用真实
+  `npm install && npm run build` 验证（15.9 kB Preact 包）。
+- [x] **T11.2** 静态文件服务——`app.static_files(dir)` 为未匹配的 GET 请求
+  提供 `dir` 下的文件：`/` 回退到 `index.html`、目录回退到其 `index.html`、
+  按扩展名给出 Content-Type（文本类型走字符串 body，图片等二进制走新增的
+  bytes body），`..` 穿越在触碰文件系统前即被拒绝。动态路由永远优先。
+  已有集成测试。
+- [x] **T11.3** 接入 posts API 的示例页面——生成的 `static/app.js` 会
+  fetch `/posts`、渲染列表并提交表单；生成的 `main.mbt` 挂载
+  `app.static_files("static")` 使 `/` 服务该页面。真浏览器验证：页面与
+  `/app.js` 正常送达、已有帖子从 API 渲染；等价 POST 经 curl 验证
+  （201）。浏览器内表单提交尚需人工点击确认一次（IAB 自动化未能复现）。
 
 > P2：按风险预案可收缩——若收缩，删除 README 中对应功能条目并如实说明。
 

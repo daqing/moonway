@@ -237,11 +237,25 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
 
 ## T11 — Preact frontend integration (preact/) `M4 · P2`
 
-- [ ] **T11.1** Frontend scaffold in generated projects — Preact + esbuild,
-  `npm run build` outputs to a static directory; document the Node.js
-  prerequisite.
-- [ ] **T11.2** Static file serving — content types, `index.html` fallback.
-- [ ] **T11.3** Example page wired to the posts API.
+- [x] **T11.1** Frontend scaffold in generated projects — `moonway new`
+  emits `static/index.html` + `static/app.js` (vanilla, zero-build, wired
+  to the posts API) plus a `web/` Preact + esbuild scaffold whose
+  `npm run build` regenerates `static/app.js`. Node.js prerequisite
+  documented in the generated README; verified with a real
+  `npm install && npm run build` (15.9 kB Preact bundle).
+- [x] **T11.2** Static file serving — `app.static_files(dir)` serves
+  unmatched GET requests from `dir`: `/` falls back to `index.html`,
+  directories to their `index.html`, content types by extension (text
+  types through the string body, binaries like images through a new bytes
+  body), and `..` traversal attempts are rejected before any filesystem
+  access. Dynamic routes always win. Integration-tested.
+- [x] **T11.3** Example page wired to the posts API — the generated
+  `static/app.js` fetches `/posts`, renders the list and submits the form;
+  the generated `main.mbt` mounts `app.static_files("static")` so `/`
+  serves the page. Verified in a real browser: page + `/app.js` served,
+  existing post rendered from the API; the equivalent POST verified with
+  curl (201). The in-browser form submit needs one manual click to confirm
+  (IAB automation could not reproduce it).
 
 > P2: shrinkable per the risk plan — if cut, remove the README feature bullet
 > and say so.

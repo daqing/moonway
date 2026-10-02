@@ -12,7 +12,10 @@ async fn Response::write_to(
     reason_of(self.status_code),
     extra_headers=extra,
   )
-  conn.write(self.resp_body)
+  match self.resp_bytes {
+    Some(bytes) => conn.write(bytes)
+    None => conn.write(self.resp_body)
+  }
   conn.end_response()
 }
 
