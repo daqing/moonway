@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "daqing/moonway/cmd/moonway"
+package "daqing/moonway/cmd/main"
 
 // Values
 

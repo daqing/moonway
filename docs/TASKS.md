@@ -266,12 +266,13 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
   0.11.5 published (Server 200 OK); `moon add daqing/moonway` verified from
   a clean project (acceptance pulled 0.11.5 from the registry). ⚠️
   `moon install daqing/moonway` is **blocked by an upstream moon bug**
-  (0.1.20260920): it requires `is-main`, which cannot be expressed in the
-  moon.pkg DSL, and a moon.pkg.json carrying it is force-migrated by
-  `moon fmt` (dropping the flag); the DSL `options("is-main": true)` form
-  publishes but install still does not recognize it. Reproduction lives in
-  this repo's history (cmd/moonway → cmd/main experiments). Until upstream
-  fixes it, the CLI runs from a source checkout via `moon run cmd/main`.
+  (0.1.20260920): `moon check` accepts `is-main` declared in
+  `moon.pkg.json`, but `moon install` only reads the `moon.pkg` DSL, which
+  cannot express `is-main` on this version — so a sub-package main like
+  `cmd/main` can never satisfy install. Minimal reproduction: fresh
+  `moon new`-style module, `cmd/main/moon.pkg.json` with `{"is-main":
+  true}`, `moon check` passes, `moon install <dir>` still reports "not a
+  main package". CLI usage remains `git clone` + `moon run cmd/main`.
 - [x] **T12.2** `examples/blog` — the reference app covering models, routes,
   cache, WebSocket chat, and admin.
 - [x] **T12.3** README acceptance run — executed every command in both
