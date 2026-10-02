@@ -4,6 +4,8 @@ package "daqing/moonway/http"
 // Values
 pub fn serve(Int, (Request) -> Response) -> Unit
 
+pub async fn serve_async(Int, (Request) -> Response) -> Unit
+
 // Errors
 
 // Types and methods

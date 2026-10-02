@@ -69,7 +69,7 @@ synchronous dispatch built in T2.
 - [x] **T3.4** Error handling — handler errors surface as 500 responses
   without killing the server; document library behavior for malformed
   requests.
-- [ ] **T3.5** End-to-end — real serving of `examples/hello` from a plain
+- [x] **T3.5** End-to-end — real serving of `examples/hello` from a plain
   `fn main` (sync bridge); verify with curl; keep-alive comes from the
   runtime.
 
