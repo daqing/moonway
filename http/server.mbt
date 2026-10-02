@@ -9,9 +9,7 @@ pub fn serve(port : Int, handler : (Request) -> Response) -> Unit {
       server.run_forever(async fn(request, body, conn) {
         let body_text = body.read_all().text() catch { _err => "" }
         let resp = handler(Request::from_runtime(request, body_text))
-        conn.send_response(resp.status(), "OK")
-        conn.write(resp.body())
-        conn.end_response()
+        resp.write_to(conn)
       })
     } catch {
       err =>

@@ -63,7 +63,7 @@ synchronous dispatch built in T2.
   `App::dispatch`.
 - [x] **T3.2** Request mapping — runtime `Request` (method enum, headers,
   body reader) → moonway `Request` (`verb`, headers, body); unit tests.
-- [ ] **T3.3** Response mapping — moonway `Response` (status, headers, body)
+- [x] **T3.3** Response mapping — moonway `Response` (status, headers, body)
   → `conn..send_response(code, reason).write(body)`; keep the Content-Type
   defaults set by the builders.
 - [ ] **T3.4** Error handling — handler errors surface as 500 responses

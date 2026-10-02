@@ -54,7 +54,7 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
   `@http.Server(...).run_forever(...)`，桥接到 `App::dispatch`。
 - [x] **T3.2** 请求映射——运行时 `Request`（method 枚举、请求头、body
   reader）→ moonway `Request`（`verb`、headers、body）；单元测试。
-- [ ] **T3.3** 响应映射——moonway `Response`（status、headers、body）→
+- [x] **T3.3** 响应映射——moonway `Response`（status、headers、body）→
   `conn..send_response(code, reason).write(body)`；保留构造器设置的
   Content-Type 默认值。
 - [ ] **T3.4** 错误处理——handler 出错时以 500 响应返回且不拖垮服务器；
