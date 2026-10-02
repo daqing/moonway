@@ -103,7 +103,10 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
   （按 T1.4 的决策）、`models/` `handlers/` `migrations/` `web/` 目录、
   预先接好 moonway 依赖。
 - [ ] **T6.3** `moonway generate scaffold <Model> field:type …`——生成模型
-  文件、handlers、migration，并注册到 admin。
+  文件、handlers、migration，并注册到 admin。生成的模型必须声明
+  `pub extend <Model> with ToJson::{to_json}`（FromJson 同理）——derive 实现的
+  隐式 trait 方法提升已被废弃；白盒测试文件里用不了 `pub extend`，那里的
+  提升警告属于预期噪音。
 - [ ] **T6.4** 文件模板与生成器测试（golden 文件对比）。
 
 > **完成标准**：`moonway new` 产出的应用第一次编译、运行即成功。

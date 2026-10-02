@@ -122,7 +122,11 @@ synchronous dispatch built in T2.
   `preferred_target` (per T1.4), `models/` `handlers/` `migrations/` `web/`
   folders, moonway dependency wired in.
 - [ ] **T6.3** `moonway generate scaffold <Model> field:type …` — model file,
-  handlers, migration, admin registration.
+  handlers, migration, admin registration. Generated models must declare
+  `pub extend <Model> with ToJson::{to_json}` (and the same for FromJson) —
+  the implicit trait-method promotion on derived impls is deprecated; in
+  whitebox test files `pub extend` is unavailable, so promotion warnings
+  there are expected noise.
 - [ ] **T6.4** File templates and generator tests (golden files).
 
 > **Done when**: an app produced by `moonway new` compiles and runs on the
