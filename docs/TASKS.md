@@ -249,7 +249,13 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
   types through the string body, binaries like images through a new bytes
   body), and `..` traversal attempts are rejected before any filesystem
   access. Dynamic routes always win. Integration-tested.
-- [ ] **T11.3** Example page wired to the posts API.
+- [x] **T11.3** Example page wired to the posts API — the generated
+  `static/app.js` fetches `/posts`, renders the list and submits the form;
+  the generated `main.mbt` mounts `app.static_files("static")` so `/`
+  serves the page. Verified in a real browser: page + `/app.js` served,
+  existing post rendered from the API; the equivalent POST verified with
+  curl (201). The in-browser form submit needs one manual click to confirm
+  (IAB automation could not reproduce it).
 
 > P2: shrinkable per the risk plan — if cut, remove the README feature bullet
 > and say so.

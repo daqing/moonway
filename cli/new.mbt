@@ -157,18 +157,10 @@ fn main_pkg_t(name : String) -> String {
 ///|
 fn main_src_t(name : String) -> String {
   join_lines([
-    "///|",
-    "fn main {",
-    "  let app = @moonway.new()",
-    "  let db = @moonway.sqlite(\"app.db\")",
-    "  if !db.migrate(@migrations.all()) {",
-    "    abort(\"moonway: migrations failed\")",
-    "  }",
-    "  @handlers.register(app, db)",
-    "  // moonway:register-handlers",
-    "  app.get(\"/\", ctx => ctx.text(\"Welcome to \{name}\"))",
-    "  app.listen(3000)",
-    "}",
+    "///|", "fn main {", "  let app = @moonway.new()", "  let db = @moonway.sqlite(\"app.db\")",
+    "  if !db.migrate(@migrations.all()) {", "    abort(\"moonway: migrations failed\")",
+    "  }", "  @handlers.register(app, db)", "  // moonway:register-handlers", "  app.static_files(\"static\")",
+    "  app.listen(3000)", "}",
   ])
 }
 
