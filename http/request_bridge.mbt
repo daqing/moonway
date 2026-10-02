@@ -7,7 +7,20 @@ fn Request::from_runtime(
   for k, v in request.headers {
     headers.push((k.to_string(), v))
   }
-  { verb: verb_of(request.meth), path: request.path, headers, body, }
+  {
+    verb: verb_of(request.meth),
+    path: strip_query(request.path),
+    headers,
+    body,
+  }
+}
+
+///|
+fn strip_query(path : String) -> String {
+  match path.split("?").next() {
+    Some(first) => first.to_string()
+    None => path
+  }
 }
 
 ///|

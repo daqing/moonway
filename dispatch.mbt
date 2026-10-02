@@ -21,10 +21,16 @@ pub fn App::handle(
 ///|
 fn App::run(self : App, request : @http.Request) -> Context {
   let ctx = Context::new(request)
-  let ctx = self.run_middlewares(ctx)
   match self.find_route(request.verb, request.path) {
-    Some(route) => (route.handler)(ctx)
+    Some((route, params)) => {
+      for name, value in params {
+        ctx.params[name] = value
+      }
+      let ctx = self.run_middlewares(ctx)
+      (route.handler)(ctx)
+    }
     None => {
+      let ctx = self.run_middlewares(ctx)
       ctx.response.set_status(404)
       ctx.text("Not Found")
     }
