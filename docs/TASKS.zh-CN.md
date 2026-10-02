@@ -109,11 +109,12 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
   预先接好 moonway 依赖。已实测：生成的项目第一次 `moon check` 即通过，
   运行即在 :3000 提供服务且 SQLite 已迁移（moonway 未发布前的本地验证用
   `moon.work` members 映射；发布后的用户从 registry 拉取）。
-- [ ] **T6.3** `moonway generate scaffold <Model> field:type …`——生成模型
-  文件、handlers、migration，并注册到 admin。生成的模型必须声明
-  `pub extend <Model> with ToJson::{to_json}`（FromJson 同理）——derive 实现的
-  隐式 trait 方法提升已被废弃；白盒测试文件里用不了 `pub extend`，那里的
-  提升警告属于预期噪音。
+- [x] **T6.3** `moonway generate scaffold <Model> field:type …`——生成模型
+  文件、handlers（GET 列表/详情、POST 含 400/500 路径）、带时间戳版本的
+  migration，并通过标记行更新各注册表（admin 表清单、迁移清单、cmd/main
+  的 handler 注册）。已端到端验证：scaffold 出的 API 对 SQLite 提供
+  POST 201 / GET 200 / 404 / 400。模板用注解局部变量钉住泛型类型参数——
+  让 `db.all` 自行推断会把行类型默认成 Unit 并静默返回 `[]`。
 - [ ] **T6.4** 文件模板与生成器测试（golden 文件对比）。
 
 > **完成标准**：`moonway new` 产出的应用第一次编译、运行即成功。

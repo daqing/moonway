@@ -30,9 +30,12 @@ fn execute_new(name : String, dir : String) -> Unit {
     @fs.write_string_to_file(root + "/cmd/main/main.mbt", main_src_t(name))
     @fs.write_string_to_file(root + "/models/moon.pkg", models_pkg_t())
     @fs.write_string_to_file(root + "/models/models.mbt", models_src_t())
-    @fs.write_string_to_file(root + "/handlers/moon.pkg", handlers_pkg_t())
+    @fs.write_string_to_file(root + "/handlers/moon.pkg", handlers_pkg_t(name))
     @fs.write_string_to_file(root + "/handlers/handlers.mbt", handlers_src_t())
-    @fs.write_string_to_file(root + "/migrations/moon.pkg", migrations_pkg_t())
+    @fs.write_string_to_file(
+      root + "/migrations/moon.pkg",
+      migrations_pkg_t(name),
+    )
     @fs.write_string_to_file(
       root + "/migrations/migrations.mbt",
       migrations_src_t(),
@@ -134,6 +137,7 @@ fn main_src_t(name : String) -> String {
     "    abort(\"moonway: migrations failed\")",
     "  }",
     "  @handlers.register(app, db)",
+    "  // moonway:register-handlers",
     "  app.get(\"/\", ctx => ctx.text(\"Welcome to \{name}\"))",
     "  app.listen(3000)",
     "}",
@@ -143,7 +147,9 @@ fn main_src_t(name : String) -> String {
 ///|
 fn models_pkg_t() -> String {
   join_lines([
-    "import {", "  \"daqing/moonway/db\" @db,", "}", "", "supported_targets = \"native\"",
+    "import {", "  \"daqing/moonway/db\" @db,", "  \"moonbitlang/core/json\" @json,",
+    "}", "", "supported_targets = \"native\"", "", "options(", "  link: { \"native\": { \"cc-link-flags\": \"-lsqlite3\" } },",
+    ")",
   ])
 }
 
@@ -151,15 +157,26 @@ fn models_pkg_t() -> String {
 fn models_src_t() -> String {
   join_lines([
     "///|", "/// Tables for the admin UI. moonway generate scaffold appends entries here.",
-    "pub fn admin_tables() -> Array[@db.Table] {", "  []", "}",
+    "pub fn admin_tables() -> Array[@db.Table] {", "  [", "    // moonway:admin-tables",
+    "  ]", "}",
   ])
 }
 
 ///|
-fn handlers_pkg_t() -> String {
+fn handlers_pkg_t(name : String) -> String {
   join_lines([
-    "import {", "  \"daqing/moonway\" @moonway,", "  \"daqing/moonway/db\" @db,",
-    "}", "", "supported_targets = \"native\"",
+    "import {",
+    "  \"daqing/moonway\" @moonway,",
+    "  \"daqing/moonway/db\" @db,",
+    "  \"\{name}/models\" @models,",
+    "  \"moonbitlang/core/json\" @json,",
+    "}",
+    "",
+    "supported_targets = \"native\"",
+    "",
+    "options(",
+    "  link: { \"native\": { \"cc-link-flags\": \"-lsqlite3\" } },",
+    ")",
   ])
 }
 
@@ -171,9 +188,18 @@ fn handlers_src_t() -> String {
 }
 
 ///|
-fn migrations_pkg_t() -> String {
+fn migrations_pkg_t(name : String) -> String {
   join_lines([
-    "import {", "  \"daqing/moonway/db\" @db,", "}", "", "supported_targets = \"native\"",
+    "import {",
+    "  \"daqing/moonway/db\" @db,",
+    "  \"\{name}/models\" @models,",
+    "}",
+    "",
+    "supported_targets = \"native\"",
+    "",
+    "options(",
+    "  link: { \"native\": { \"cc-link-flags\": \"-lsqlite3\" } },",
+    ")",
   ])
 }
 
@@ -181,6 +207,6 @@ fn migrations_pkg_t() -> String {
 fn migrations_src_t() -> String {
   join_lines([
     "///|", "/// All migrations, in ascending version order.", "pub fn all() -> Array[@db.Migration] {",
-    "  []", "}",
+    "  [", "    // moonway:migrations", "  ]", "}",
   ])
 }

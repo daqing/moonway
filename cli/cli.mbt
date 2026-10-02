@@ -44,7 +44,7 @@ pub fn run(argv : Array[String]) -> Unit {
     Help => println(help_text())
     Version => println(version())
     New(name, dir) => execute_new(name, dir.unwrap_or("."))
-    GenerateScaffold(_, _) => eprintln("moonway: not implemented yet")
+    GenerateScaffold(model, fields) => execute_scaffold(model, fields)
     Invalid(message) => eprintln("moonway: \{message}")
   }
 }

@@ -6,9 +6,15 @@ import {
 }
 
 // Values
+pub fn field_column_type(String) -> String?
+
+pub fn field_moonbit_type(String) -> String?
+
 pub fn help_text() -> String
 
 pub fn parse(Array[String]) -> Command
+
+pub fn parse_field(String) -> (String, String)?
 
 pub fn run(Array[String]) -> Unit
 
