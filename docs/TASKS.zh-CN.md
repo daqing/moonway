@@ -183,12 +183,20 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 
 ## T10 — REPL 控制台（cli/） `M4 · P2`
 
-- [ ] **T10.1** `moonway console`——加载应用配置与数据库连接。
-- [ ] **T10.2** 查询解释器子集——解析 `<Model>.all()`、`<Model>.find(id)`、
-  `<Model>.count()`、`insert`；这是方法调用式 DSL，**不是**通用语言求值器
-  （有意为之的范围收缩）。
-- [ ] **T10.3** 点命令——`.help`、`.tables`、`.quit`；提示符显示连接信息
-  （`moonway 0.1.0 · connected to sqlite://app.db`）。
+- [x] **T10.1** `moonway console`——加载数据库连接
+  （`console [--db <path>]`，默认 app.db）并在 async 运行时里跑交互式
+  stdin/stdout 循环。表从 SQLite 自身的目录发现（经 sqlite_master 与
+  PRAGMA table_info 的 `list_tables`/`table_schema`），控制台无需编译期
+  模型。
+- [x] **T10.2** 查询解释器子集——有意设计的方法调用 DSL，**不是**通用语言
+  求值器：`<Table>.all()`（最多 200 行 JSON）、`<Table>.count()`、
+  `<Table>.find(<id>)`、`<Table>.insert({...})`（JSON 对象）。解析器与
+  执行器在内存数据库上有单元测试，含各种畸形输入。
+- [x] **T10.3** 点命令——`.help`（连接信息 + 命令列表）、`.tables`（来自
+  内省 schema，空库输出 `(no tables)`）、`.quit`/`.exit`；空行忽略，点命令
+  大小写敏感，问候语为
+  `moonway <version> · connected to sqlite://<path>`——与 README 的 REPL
+  示例一致。已用种入数据的管道会话实测验证。
 
 ## T11 — Preact 前端集成（preact/） `M4 · P2`
 

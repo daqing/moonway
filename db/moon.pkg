@@ -2,6 +2,7 @@ import {
   "mizchi/sqlite",
   "moonbitlang/x/encoding",
   "moonbitlang/core/json",
+  "moonbitlang/core/debug",
 }
 
 supported_targets = "native"

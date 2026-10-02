@@ -3,6 +3,7 @@
 pub(all) enum Command {
   New(String, String?)
   GenerateScaffold(String, Array[String])
+  Console(String)
   Help
   Version
   Invalid(String)
@@ -39,6 +40,15 @@ pub fn parse(argv : Array[String]) -> Command {
       }
     }
     return New(name, dir)
+  }
+  if command == "console" {
+    if argv.length() == 3 {
+      return Console("app.db")
+    }
+    if argv.length() == 4 && argv[2] == "--db" {
+      return Console(argv[3])
+    }
+    return Invalid("usage: moonway console [--db <path>]")
   }
   if command == "generate" {
     return parse_generate(argv)

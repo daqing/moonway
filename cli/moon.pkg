@@ -1,6 +1,15 @@
 import {
   "moonbitlang/x/fs",
+  "moonbitlang/x/encoding",
   "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "moonbitlang/async",
+  "moonbitlang/async/stdio",
+  "daqing/moonway/db",
 }
 
 supported_targets = "native"
+
+options(
+  link: { "native": { "cc-link-flags": "-lsqlite3" } },
+)

@@ -218,13 +218,22 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
 
 ## T10 — REPL console (cli/) `M4 · P2`
 
-- [ ] **T10.1** `moonway console` — loads app config and the database
-  connection.
-- [ ] **T10.2** Query interpreter subset — parse `<Model>.all()`,
-  `<Model>.find(id)`, `<Model>.count()`, `insert`; a method-call DSL, **not**
-  a general language evaluator (deliberate scope cut).
-- [ ] **T10.3** Dot-commands — `.help`, `.tables`, `.quit`; prompt shows the
-  connection info (`moonway 0.1.0 · connected to sqlite://app.db`).
+- [x] **T10.1** `moonway console` — loads the database connection
+  (`console [--db <path>]`, default app.db) and runs an interactive
+  stdin/stdout loop inside the async runtime. Tables are discovered from
+  SQLite's own catalog (`list_tables`/`table_schema` via sqlite_master and
+  PRAGMA table_info), so the console needs no compiled-in models.
+- [x] **T10.2** Query interpreter subset — a deliberate method-call DSL,
+  not a general language evaluator: `<Table>.all()` (up to 200 rows as
+  JSON), `<Table>.count()`, `<Table>.find(<id>)` and
+  `<Table>.insert({...})` (JSON object). Parser and executor are unit-
+  tested against an in-memory database, including malformed lines.
+- [x] **T10.3** Dot-commands — `.help` (connection info + command list),
+  `.tables` (from the introspected schema, `(no tables)` when empty),
+  `.quit`/`.exit`; blank lines are ignored, dot-commands are case-sensitive,
+  and the greeting reads `moonway <version> · connected to sqlite://<path>`
+  — matching the README's REPL example. Verified hands-on with a piped
+  session against a seeded database.
 
 ## T11 — Preact frontend integration (preact/) `M4 · P2`
 
