@@ -47,14 +47,20 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 
 ## T3 — HTTP/1.1 服务器（http/） `M1 · P0`
 
-- [ ] **T3.1** 基于 native FFI 的 TCP 监听与 accept 循环。
-- [ ] **T3.2** 请求解析器——请求行、请求头、Content-Length 请求体；用原始
-  字节 fixture 做单元测试。
-- [ ] **T3.3** 响应写出器——状态行、响应头、响应体；合理的默认 Content-Type。
-- [ ] **T3.4** 错误处理——默认 404/405/500 响应；格式非法的请求返回 400 并
-  关闭连接。
-- [ ] **T3.5** Keep-alive *（可选）*——可以不带该特性发布；若不支持，需在
-  文档中说明。
+基于 `moonbitlang/async@0.22.4`（2026-10-02 决策，已实测验证）：协议层由运行时
+提供，moonway 把它桥接到 T2 构建的同步 dispatch 上。
+
+- [x] **T3.1** 添加 `moonbitlang/async` 依赖，把 `http.serve` 桩替换为
+  `@http.Server(...).run_forever(...)`，桥接到 `App::dispatch`。
+- [x] **T3.2** 请求映射——运行时 `Request`（method 枚举、请求头、body
+  reader）→ moonway `Request`（`verb`、headers、body）；单元测试。
+- [x] **T3.3** 响应映射——moonway `Response`（status、headers、body）→
+  `conn..send_response(code, reason).write(body)`；保留构造器设置的
+  Content-Type 默认值。
+- [x] **T3.4** 错误处理——handler 出错时以 500 响应返回且不拖垮服务器；
+  文档写明运行时对格式非法请求的处理行为。
+- [x] **T3.5** 端到端——从普通 `fn main`（同步桥接）真实启动
+  `examples/hello`，用 curl 验证；keep-alive 由运行时提供。
 
 ## T4 — 路由与中间件（http/） `M1 · P0`
 
@@ -96,23 +102,21 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 
 ## T7 — Redis 缓存（cache/） `M3 · P1`
 
-- [ ] **T7.1** RESP 协议编码器/解码器——纯 MoonBit 实现、零外部依赖、
-  充分的单元测试。
-- [ ] **T7.2** 基于 TCP 的 Redis 客户端——`GET` / `SET` / `DEL` / `EXPIRE` /
-  `PING`；服务端错误回复以 MoonBit error 形式抛出。
+- [ ] **T7.1** RESP 协议编码器/解码器——纯 MoonBit 实现，充分的单元测试。
+- [ ] **T7.2** 基于 `moonbitlang/async` TCP 的 Redis 客户端——`GET` / `SET` /
+  `DEL` / `EXPIRE` / `PING`；服务端错误回复以 MoonBit error 形式抛出。
 - [ ] **T7.3** 缓存中间件——响应缓存，TTL 与缓存键可配置，通过
   `app.use(...)` 接入。
 - [ ] **T7.4** 优雅降级——Redis 不可达时直接放行并记录警告；文档写明该行为。
 
 ## T8 — WebSocket（ws/） `M3 · P1`
 
-- [ ] **T8.1** Upgrade 握手——`Sec-WebSocket-Key` / `Sec-WebSocket-Accept`
-  （MoonBit 实现 SHA-1 + base64），返回 101 响应。
-- [ ] **T8.2** 帧编解码（RFC 6455）——客户端到服务端的掩码、opcode、负载
-  长度；最小限度的分片支持；单元测试。
-- [ ] **T8.3** `app.ws(path, handler)`——连接事件（`on_message`、`on_close`）
-  与广播辅助函数。
-- [ ] **T8.4** `examples/` 下的聊天示例。
+基于 `moonbitlang/async` 的 websocket 包——握手与 RFC 6455 帧由运行时提供。
+
+- [ ] **T8.1** 把运行时的 websocket 包接入 moonway 的 HTTP 服务。
+- [ ] **T8.2** `app.ws(path, handler)`——把 websocket 连接桥接进 moonway
+  路由；连接事件（`on_message`、`on_close`）与广播辅助函数。
+- [ ] **T8.3** `examples/` 下的聊天示例。
 
 ## T9 — Admin 管理后台（admin/） `M4 · P1`
 
