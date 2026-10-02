@@ -18,7 +18,7 @@ pub fn render_layout(title : String, body : String) -> String {
     "<html>",
     "<head><meta charset=\"utf-8\"><title>\{escape_html(title)} — moonway admin</title>",
     "<style>",
-    "body{font-family:system-ui,sans-serif;margin:2rem;color:#1a1a2e}",
+    "body{font-family:system-ui,sans-serif;margin:2rem;color:#111;background:#fff}",
     "table{border-collapse:collapse;width:100%}",
     "th,td{border:1px solid #ccc;padding:.4rem .6rem;text-align:left}",
     "th{background:#eef}",

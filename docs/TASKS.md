@@ -212,7 +212,9 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
   the form field (POST), otherwise 401. Documented on `App::admin` as basic
   protection, not production-grade auth. Covered by an integration test
   (denied, wrong token, query-allowed, POST-allowed).
-- [ ] **T9.4** Take the admin screenshot used by T12.4.
+- [x] **T9.4** Take the admin screenshot used by T12.4 — `docs/images/admin.png`,
+  captured from a freshly scaffolded app with seeded rows (dark-mode-safe
+  explicit colors in the admin layout).
 
 ## T10 — REPL console (cli/) `M4 · P2`
 
