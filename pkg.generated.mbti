@@ -5,10 +5,13 @@ import {
   "daqing/moonway/cache",
   "daqing/moonway/db",
   "daqing/moonway/http",
+  "moonbitlang/async/websocket",
 }
 
 // Values
 pub fn new() -> App
+
+pub async fn run_ws(WsHandler, @websocket.Conn) -> Unit
 
 pub fn sqlite(String) -> @db.Database
 
@@ -19,6 +22,7 @@ pub struct App {
   routes : Array[Route]
   middlewares : Array[(Context) -> Context]
   mut cache_policy : @http.CachePolicy[@cache.RedisClient]?
+  ws_routes : Array[@http.WsRoute]
 }
 pub fn App::cache(Self, @cache.RedisClient, ttl? : Int, prefix? : String) -> Unit
 pub fn App::delete(Self, String, (Context) -> Context) -> Unit
@@ -30,6 +34,7 @@ pub fn App::patch(Self, String, (Context) -> Context) -> Unit
 pub fn App::post(Self, String, (Context) -> Context) -> Unit
 pub fn App::put(Self, String, (Context) -> Context) -> Unit
 pub fn App::use(Self, (Context) -> Context) -> Unit
+pub fn App::ws(Self, String, WsHandler) -> Unit
 
 pub struct Context {
   request : @http.Request
@@ -54,6 +59,27 @@ pub struct Route {
   path : String
   handler : (Context) -> Context
 }
+
+pub struct WsConn {
+  conn : @websocket.Conn
+  id : Int
+}
+pub async fn WsConn::close(Self) -> Unit
+pub async fn WsConn::recv_text(Self) -> String
+pub async fn WsConn::send_text(Self, String) -> Unit
+
+pub(all) struct WsHandler {
+  on_message : async (WsConn, String) -> Unit
+  on_close : async (WsConn) -> Unit
+}
+
+pub struct WsHub {
+  conns : Array[WsConn]
+}
+pub async fn WsHub::broadcast(Self, String) -> Unit
+pub fn WsHub::join(Self, WsConn) -> Unit
+pub fn WsHub::leave(Self, WsConn) -> Unit
+pub fn WsHub::new() -> Self
 
 // Type aliases
 

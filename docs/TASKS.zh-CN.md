@@ -146,10 +146,19 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 
 基于 `moonbitlang/async` 的 websocket 包——握手与 RFC 6455 帧由运行时提供。
 
-- [ ] **T8.1** 把运行时的 websocket 包接入 moonway 的 HTTP 服务。
-- [ ] **T8.2** `app.ws(path, handler)`——把 websocket 连接桥接进 moonway
-  路由；连接事件（`on_message`、`on_close`）与广播辅助函数。
-- [ ] **T8.3** `examples/` 下的聊天示例。
+- [x] **T8.1** 把运行时的 websocket 包接入 moonway 的 HTTP 服务。
+  `WsRoute`（精确路径匹配）传给 `serve`/`serve_cached_async`；匹配的 GET
+  请求经运行时的 `Conn::from_http_server` 升级（passthrough 模式），不再
+  进入 dispatch。已用运行时 websocket 客户端的实时回显升级测试验证。
+- [x] **T8.2** `app.ws(path, handler)`——把 websocket 连接桥接进 moonway
+  路由；连接事件（`on_message`、`on_close`）与广播辅助函数。`WsConn` 以
+  文本形式封装收发，框架运行接收循环并保证 `on_close` 恰好触发一次，
+  `WsHub` 提供 join/leave/broadcast（单线程事件循环内无需加锁）。已用
+  双客户端交叉广播 e2e 测试验证。
+- [x] **T8.3** `examples/` 下的聊天示例——`examples/chat` 提供极简 HTML
+  页面（原生 WebSocket API，无需构建步骤）和经 `WsHub` 广播的 `/chat`
+  路由。已验证页面 HTTP 服务；WebSocket 路径与 T8.2 e2e 测试覆盖的
+  hub 逻辑相同。
 
 ## T9 — Admin 管理后台（admin/） `M4 · P1`
 

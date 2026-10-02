@@ -2,6 +2,8 @@ import {
   "daqing/moonway/http",
   "daqing/moonway/db",
   "daqing/moonway/cache",
+  "moonbitlang/async",
+  "moonbitlang/async/websocket" @async_websocket,
 }
 
 supported_targets = "native"

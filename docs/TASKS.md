@@ -175,12 +175,22 @@ synchronous dispatch built in T2.
 Based on the `moonbitlang/async` websocket package — the handshake and RFC
 6455 frames are provided by the runtime.
 
-- [ ] **T8.1** Wire the runtime websocket package into moonway's HTTP
-  serving.
-- [ ] **T8.2** `app.ws(path, handler)` — bridge websocket connections into
+- [x] **T8.1** Wire the runtime websocket package into moonway's HTTP
+  serving. `WsRoute` (exact-path) entries are passed to `serve`/`serve_cached_async`;
+  matching GET requests are upgraded via the runtime's
+  `Conn::from_http_server` (passthrough mode) and never reach dispatch.
+  Verified with a live echo upgrade test using the runtime's websocket
+  client.
+- [x] **T8.2** `app.ws(path, handler)` — bridge websocket connections into
   moonway routing; connection events (`on_message`, `on_close`) and a
-  broadcast helper.
-- [ ] **T8.3** Chat example under `examples/`.
+  broadcast helper. `WsConn` wraps send/recv as text, the framework runs
+  the receive loop and fires `on_close` exactly once, and `WsHub` offers
+  join/leave/broadcast (no locking needed inside the single-threaded event
+  loop). Verified with a two-client cross-broadcast e2e test.
+- [x] **T8.3** Chat example under `examples/` — `examples/chat` serves a
+  minimal HTML page (native WebSocket API, no build step) plus a `/chat`
+  route broadcasting through `WsHub`. Verified serving the page over HTTP;
+  the WebSocket path shares the hub logic covered by T8.2's e2e test.
 
 ## T9 — Admin dashboard (admin/) `M4 · P1`
 
