@@ -162,6 +162,9 @@ fn update_registry(path : String, marker : String, line : String) -> Unit {
       return
     }
   }
+  if has_line(content, line) {
+    return
+  }
   match insert_after_marker(content, marker, line) {
     Some(updated) =>
       @fs.write_string_to_file(path, updated) catch {

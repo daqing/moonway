@@ -137,7 +137,10 @@ synchronous dispatch built in T2.
   serves POST 201 / GET 200 / 404 / 400 against SQLite. Templates pin
   generic type parameters via annotated locals — leaving `db.all` to infer
   defaults the row type to Unit and silently returns `[]`.
-- [ ] **T6.4** File templates and generator tests (golden files).
+- [x] **T6.4** File templates and generator tests (golden files). Templates
+  are pure functions asserted by whitebox tests (native target, sqlite link
+  flags, versioned moonway import, marker lines, pinned generic types,
+  promotion extends); parsing and marker insertion are unit-tested.
 
 > **Done when**: an app produced by `moonway new` compiles and runs on the
 > first try.
