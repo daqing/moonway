@@ -113,7 +113,7 @@ updated  admin registry
 
 ### Admin 管理后台
 
-<!-- TODO: 补充 admin 后台截图 -->
+![Admin 管理后台](docs/images/admin.png)
 
 每个注册的数据模型都会在 `/admin` 下获得一个支持搜索、分页的 CRUD 管理界面——
 增删改查数据，一行前端代码都不用写。
@@ -132,15 +132,15 @@ moonway> Post.count()
 moonway 正在为 2026 年 10 月的 MoonBit 黑客松公开开发（最终提交：**2026 年 10 月 31 日**）。
 
 - [x] 项目初始化——仓库、工具链、CI
-- [ ] HTTP 路由与中间件管线
-- [ ] SQLite 数据库层与迁移
-- [ ] 代码生成器（`moonway new`、`moonway generate`）
-- [ ] Redis 缓存中间件
-- [ ] WebSocket 支持
-- [ ] 自动生成的 Admin 管理后台
-- [ ] REPL 控制台
-- [ ] Preact 前端集成
-- [ ] 指南、示例与文档
+- [x] HTTP 路由与中间件管线
+- [x] SQLite 数据库层与迁移
+- [x] 代码生成器（`moonway new`、`moonway generate`）
+- [x] Redis 缓存中间件
+- [x] WebSocket 支持
+- [x] 自动生成的 Admin 管理后台
+- [x] REPL 控制台
+- [x] Preact 前端集成
+- [x] 指南、示例与文档
 
 ## 参与贡献
 

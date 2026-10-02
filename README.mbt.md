@@ -125,7 +125,7 @@ updated  admin registry
 
 ### Admin dashboard
 
-<!-- TODO: add a screenshot of the generated admin dashboard -->
+![Admin dashboard](docs/images/admin.png)
 
 Every registered model gets a searchable, paginated CRUD interface at
 `/admin` — create, edit, and inspect your data without writing a line of
@@ -146,15 +146,15 @@ moonway is being built in the open for the October 2026 MoonBit hackathon
 (final submission: **October 31, 2026**).
 
 - [x] Project setup — repository, toolchain, CI
-- [ ] HTTP router & middleware pipeline
-- [ ] SQLite database layer & migrations
-- [ ] Code generator (`moonway new`, `moonway generate`)
-- [ ] Redis cache middleware
-- [ ] WebSocket support
-- [ ] Auto-generated admin dashboard
-- [ ] REPL console
-- [ ] Preact frontend integration
-- [ ] Guides, examples & documentation
+- [x] HTTP router & middleware pipeline
+- [x] SQLite database layer & migrations
+- [x] Code generator (`moonway new`, `moonway generate`)
+- [x] Redis cache middleware
+- [x] WebSocket support
+- [x] Auto-generated admin dashboard
+- [x] REPL console
+- [x] Preact frontend integration
+- [x] Guides, examples & documentation
 
 ## Contributing
 
