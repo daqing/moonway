@@ -41,7 +41,7 @@ test "new templates pin native target, link flags and markers" {
   assert_true(main_pkg.contains("\"daqing/moonway\" @moonway"))
   assert_true(main_pkg.contains("blog/handlers"))
   assert_true(main_pkg.contains("blog/migrations"))
-  let main_src = main_src_t("blog")
+  let main_src = main_src_t()
   assert_true(main_src.contains("app.listen(3000)"))
   assert_true(main_src.contains("// moonway:register-handlers"))
   let models_src = models_src_t()

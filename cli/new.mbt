@@ -37,7 +37,7 @@ fn execute_new(name : String, dir : String) -> Unit {
     @fs.write_string_to_file(root + "/.gitignore", gitignore_t())
     @fs.write_string_to_file(root + "/README.mbt.md", readme_t(name))
     @fs.write_string_to_file(root + "/cmd/main/moon.pkg", main_pkg_t(name))
-    @fs.write_string_to_file(root + "/cmd/main/main.mbt", main_src_t(name))
+    @fs.write_string_to_file(root + "/cmd/main/main.mbt", main_src_t())
     @fs.write_string_to_file(root + "/models/moon.pkg", models_pkg_t())
     @fs.write_string_to_file(root + "/models/models.mbt", models_src_t())
     @fs.write_string_to_file(root + "/handlers/moon.pkg", handlers_pkg_t(name))
@@ -155,7 +155,7 @@ fn main_pkg_t(name : String) -> String {
 }
 
 ///|
-fn main_src_t(name : String) -> String {
+fn main_src_t() -> String {
   join_lines([
     "///|", "fn main {", "  let app = @moonway.new()", "  let db = @moonway.sqlite(\"app.db\")",
     "  if !db.migrate(@migrations.all()) {", "    abort(\"moonway: migrations failed\")",
