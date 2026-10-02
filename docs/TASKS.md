@@ -104,7 +104,7 @@ synchronous dispatch built in T2.
   must link `-lsqlite3` (the flag is NOT inherited from dependencies —
   verified hands-on); unused imports are dead-code-eliminated and need
   nothing. CI installs libsqlite3-dev.
-- [ ] **T5.3** Migration runner — ordered migration files, schema version
+- [x] **T5.3** Migration runner — ordered migration files, schema version
   table; up-only migrations (keep the scope tight).
 - [ ] **T5.4** Query API — `db.insert`, `db.all(Model)`, `db.find(Model, id)`,
   `where` filters, `count`.

@@ -10,6 +10,8 @@ pub fn column(String, ColumnType, primary? : Bool) -> Column
 
 pub fn json_to_sql(Json, ColumnType) -> @sqlite.SqlValue?
 
+pub fn migration(Int, String, Array[String]) -> Migration
+
 pub fn open(String) -> Database?
 
 pub fn sql_to_json(@sqlite.SqlValue, ColumnType) -> Json
@@ -39,6 +41,13 @@ pub fn Database::changes(Self) -> Int
 pub fn Database::close(Self) -> Unit
 pub fn Database::exec(Self, String) -> Bool
 pub fn Database::last_insert_rowid(Self) -> Int64
+pub fn Database::migrate(Self, Array[Migration]) -> Bool
+
+pub(all) struct Migration {
+  version : Int
+  name : String
+  statements : Array[String]
+}
 
 pub(all) struct Table {
   name : String

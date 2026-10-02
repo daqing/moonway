@@ -87,7 +87,7 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
   bind / step 由 db 包封装；`@moonway.sqlite(path)` 打开数据库。实际使用
   数据库的消费者必须自行链接 `-lsqlite3`（该参数不会从依赖继承——已实测）；
   未使用的导入会被死代码消除，无需任何配置。CI 安装 libsqlite3-dev。
-- [ ] **T5.3** 迁移执行器——有序迁移文件、schema 版本表；只做 up 迁移
+- [x] **T5.3** 迁移执行器——有序迁移文件、schema 版本表；只做 up 迁移
   （控制范围）。
 - [ ] **T5.4** 查询 API——`db.insert`、`db.all(Model)`、`db.find(Model, id)`、
   `where` 过滤、`count`。
