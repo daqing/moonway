@@ -201,8 +201,12 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
   arbitrary tables through new raw row APIs
   (`select_raw`/`find_raw`/`insert_raw`/`update_raw`/`delete_raw`) — no
   concrete model types needed.
-- [ ] **T9.2** Server-rendered CRUD UI — paginated and searchable list,
-  create/edit forms, delete with confirmation.
+- [x] **T9.2** Server-rendered CRUD UI — paginated and searchable list,
+  create/edit forms, delete with confirmation. Controls follow the schema's
+  column types (textarea for text, checkbox for bools, number inputs
+  otherwise); text search is a LIKE across text columns with quote
+  escaping; actions are 303 redirects. Rendering is pure and unit-tested;
+  the full CRUD flow is integration-tested through `app.handle`.
 - [ ] **T9.3** Minimal protection *(optional)* — env-token or basic auth;
   clearly documented as basic, not production-grade auth.
 - [ ] **T9.4** Take the admin screenshot used by T12.4.
