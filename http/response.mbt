@@ -3,11 +3,26 @@ pub struct Response {
   mut status_code : Int
   resp_headers : Array[(String, String)]
   mut resp_body : String
+  /// When set, served as raw bytes instead of `resp_body` (binary files).
+  mut resp_bytes : Bytes?
 }
 
 ///|
 pub fn Response::new() -> Response {
-  { status_code: 200, resp_headers: [], resp_body: "", }
+  { status_code: 200, resp_headers: [], resp_body: "", resp_bytes: None, }
+}
+
+///|
+/// Set a binary body (e.g. static files). Takes precedence over the text
+/// body.
+pub fn Response::set_body_bytes(self : Response, body : Bytes) -> Unit {
+  self.resp_bytes = Some(body)
+}
+
+///|
+/// The binary body when one was set.
+pub fn Response::bytes_body(self : Response) -> Bytes? {
+  self.resp_bytes
 }
 
 ///|

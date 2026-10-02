@@ -243,7 +243,12 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
   `npm run build` regenerates `static/app.js`. Node.js prerequisite
   documented in the generated README; verified with a real
   `npm install && npm run build` (15.9 kB Preact bundle).
-- [ ] **T11.2** Static file serving — content types, `index.html` fallback.
+- [x] **T11.2** Static file serving — `app.static_files(dir)` serves
+  unmatched GET requests from `dir`: `/` falls back to `index.html`,
+  directories to their `index.html`, content types by extension (text
+  types through the string body, binaries like images through a new bytes
+  body), and `..` traversal attempts are rejected before any filesystem
+  access. Dynamic routes always win. Integration-tested.
 - [ ] **T11.3** Example page wired to the posts API.
 
 > P2: shrinkable per the risk plan — if cut, remove the README feature bullet

@@ -205,7 +205,11 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
   以及 `web/` 的 Preact + esbuild 脚手架，`npm run build` 会重新生成
   `static/app.js`。Node.js 前置条件写在生成的 README 里；已用真实
   `npm install && npm run build` 验证（15.9 kB Preact 包）。
-- [ ] **T11.2** 静态文件服务——Content-Type、`index.html` 回退。
+- [x] **T11.2** 静态文件服务——`app.static_files(dir)` 为未匹配的 GET 请求
+  提供 `dir` 下的文件：`/` 回退到 `index.html`、目录回退到其 `index.html`、
+  按扩展名给出 Content-Type（文本类型走字符串 body，图片等二进制走新增的
+  bytes body），`..` 穿越在触碰文件系统前即被拒绝。动态路由永远优先。
+  已有集成测试。
 - [ ] **T11.3** 接入 posts API 的示例页面。
 
 > P2：按风险预案可收缩——若收缩，删除 README 中对应功能条目并如实说明。

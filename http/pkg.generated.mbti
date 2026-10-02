@@ -6,9 +6,13 @@ import {
 }
 
 // Values
+pub fn content_type_for(String) -> String
+
 pub fn decode_url_encoded(String) -> String
 
 pub fn query_param(String, String) -> String?
+
+pub fn resolve_static(String, String) -> String? raise
 
 pub fn serve(Int, (Request) -> Response, ws_routes? : Array[WsRoute]) -> Unit
 
@@ -17,6 +21,8 @@ pub async fn serve_async(Int, (Request) -> Response, ws_routes? : Array[WsRoute]
 pub fn[S : CacheStore] serve_cached(CachePolicy[S], Int, (Request) -> Response, ws_routes? : Array[WsRoute]) -> Unit
 
 pub async fn[S : CacheStore] serve_cached_async(CachePolicy[S], Int, (Request) -> Response, ws_routes? : Array[WsRoute]) -> Unit
+
+pub fn serve_static_file(String, String) -> Response?
 
 pub async fn serve_websocket(Array[WsRoute], @moonbitlang/async/http.Request, @moonbitlang/async/http.ServerConnection) -> Bool
 
@@ -53,13 +59,16 @@ pub struct Response {
   mut status_code : Int
   resp_headers : Array[(String, String)]
   mut resp_body : String
+  mut resp_bytes : Bytes?
 }
 pub fn Response::body(Self) -> String
+pub fn Response::bytes_body(Self) -> Bytes?
 pub fn Response::header(Self, String) -> String?
 pub fn Response::headers(Self) -> Array[(String, String)]
 pub fn Response::internal_error() -> Self
 pub fn Response::new() -> Self
 pub fn Response::set_body(Self, String) -> Unit
+pub fn Response::set_body_bytes(Self, Bytes) -> Unit
 pub fn Response::set_header(Self, String, String) -> Unit
 pub fn Response::set_status(Self, Int) -> Unit
 pub fn Response::status(Self) -> Int

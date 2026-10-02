@@ -39,6 +39,25 @@ fn App::run(self : App, request : @http.Request) -> Context {
       }
     }
     None => {
+      if request.verb == "GET" {
+        match self.static_dir {
+          Some(dir) =>
+            match @http.serve_static_file(dir, request.path) {
+              Some(resp) => {
+                for pair in resp.headers() {
+                  ctx.response.set_header(pair.0, pair.1)
+                }
+                match resp.bytes_body() {
+                  Some(bytes) => ctx.response.set_body_bytes(bytes)
+                  None => ctx.response.set_body(resp.body())
+                }
+                return ctx
+              }
+              None => ()
+            }
+          None => ()
+        }
+      }
       let ctx = self.run_middlewares(ctx)
       if !ctx.halted {
         self.not_allowed_or_not_found(ctx)
