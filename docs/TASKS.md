@@ -54,15 +54,24 @@ M5: Oct 29–31 (final submission: **Oct 31, 2026**).
 
 ## T3 — HTTP/1.1 server (http/) `M1 · P0`
 
-- [ ] **T3.1** TCP listener and accept loop via native FFI.
-- [ ] **T3.2** Request parser — request line, headers, Content-Length body;
-  unit tests with raw byte fixtures.
-- [ ] **T3.3** Response writer — status line, headers, body; sensible
-  Content-Type defaults.
-- [ ] **T3.4** Error handling — default 404/405/500 responses; malformed
-  requests get 400 and the connection closes.
-- [ ] **T3.5** Keep-alive *(optional)* — the framework may ship without it;
-  if unsupported, state that in the docs.
+Based on `moonbitlang/async@0.22.4` (decision of 2026-10-02, verified
+hands-on): the runtime provides the protocol layer; moonway bridges it to the
+synchronous dispatch built in T2.
+
+- [ ] **T3.1** Add the `moonbitlang/async` dependency and replace the
+  `http.serve` stub with `@http.Server(...).run_forever(...)` bridged to
+  `App::dispatch`.
+- [ ] **T3.2** Request mapping — runtime `Request` (method enum, headers,
+  body reader) → moonway `Request` (`verb`, headers, body); unit tests.
+- [ ] **T3.3** Response mapping — moonway `Response` (status, headers, body)
+  → `conn..send_response(code, reason).write(body)`; keep the Content-Type
+  defaults set by the builders.
+- [ ] **T3.4** Error handling — handler errors surface as 500 responses
+  without killing the server; document library behavior for malformed
+  requests.
+- [ ] **T3.5** End-to-end — real serving of `examples/hello` from a plain
+  `fn main` (sync bridge); verify with curl; keep-alive comes from the
+  runtime.
 
 ## T4 — Router & middleware (http/) `M1 · P0`
 
@@ -109,10 +118,10 @@ M5: Oct 29–31 (final submission: **Oct 31, 2026**).
 
 ## T7 — Redis cache (cache/) `M3 · P1`
 
-- [ ] **T7.1** RESP protocol encoder/decoder — pure MoonBit, no external
-  dependencies, thorough unit tests.
-- [ ] **T7.2** Redis client over TCP — `GET` / `SET` / `DEL` / `EXPIRE` /
-  `PING`; server error replies surfaced as MoonBit errors.
+- [ ] **T7.1** RESP protocol encoder/decoder — pure MoonBit implementation,
+  thorough unit tests.
+- [ ] **T7.2** Redis client over `moonbitlang/async` TCP — `GET` / `SET` /
+  `DEL` / `EXPIRE` / `PING`; server error replies surfaced as MoonBit errors.
 - [ ] **T7.3** Cache middleware — response caching with configurable TTL and
   cache keys, attached via `app.use(...)`.
 - [ ] **T7.4** Graceful degradation — when Redis is unreachable, pass through
@@ -120,13 +129,15 @@ M5: Oct 29–31 (final submission: **Oct 31, 2026**).
 
 ## T8 — WebSocket (ws/) `M3 · P1`
 
-- [ ] **T8.1** Upgrade handshake — `Sec-WebSocket-Key` / `Sec-WebSocket-Accept`
-  (SHA-1 + base64 in MoonBit), 101 response.
-- [ ] **T8.2** Frame codec (RFC 6455) — client-to-server masking, opcodes,
-  payload lengths; minimal fragmentation support; unit tests.
-- [ ] **T8.3** `app.ws(path, handler)` — connection events (`on_message`,
-  `on_close`) and a broadcast helper.
-- [ ] **T8.4** Chat example under `examples/`.
+Based on the `moonbitlang/async` websocket package — the handshake and RFC
+6455 frames are provided by the runtime.
+
+- [ ] **T8.1** Wire the runtime websocket package into moonway's HTTP
+  serving.
+- [ ] **T8.2** `app.ws(path, handler)` — bridge websocket connections into
+  moonway routing; connection events (`on_message`, `on_close`) and a
+  broadcast helper.
+- [ ] **T8.3** Chat example under `examples/`.
 
 ## T9 — Admin dashboard (admin/) `M4 · P1`
 
