@@ -48,6 +48,10 @@ M5: Oct 29–31 (final submission: **Oct 31, 2026**).
   serve until interrupted.
 - [x] **T2.4** Replace the scaffold test files with real unit tests for `App`
   and `Context`.
+- [ ] **T2.5** `ctx.bind(Post)` — parse the request body into a model via
+  FromJson (README's full-stack example uses it). Also reconcile the README
+  full-stack example with the real API: `db.migrate()` takes the migrations
+  array, so the example must declare its migration.
 
 > **Done when**: the README hello-world example compiles and runs against an
 > in-repo example.
@@ -108,7 +112,7 @@ synchronous dispatch built in T2.
   table; up-only migrations (keep the scope tight).
 - [x] **T5.4** Query API — `db.insert`, `db.all(Model)`, `db.find(Model, id)`,
   `where` filters, `count`.
-- [ ] **T5.5** Tests — query API and migrations against a temporary SQLite
+- [x] **T5.5** Tests — query API and migrations against a temporary SQLite
   database file.
 
 > **Done when**: the database calls in the README Post example work as

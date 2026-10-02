@@ -42,6 +42,9 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 - [x] **T2.3** `app.listen(port)`——把 `App` 接到 HTTP 服务器（T3）上，
   持续服务直到中断。
 - [x] **T2.4** 用真实的 `App` / `Context` 单元测试替换脚手架测试文件。
+- [ ] **T2.5** `ctx.bind(Post)`——通过 FromJson 把请求体解析成模型（README
+  全栈示例用到了）。同时把 README 全栈示例与真实 API 对齐：`db.migrate()`
+  接收迁移数组，示例需要声明自己的 migration。
 
 > **完成标准**：README 的 hello-world 示例能在仓库内示例上编译并运行。
 
@@ -91,7 +94,7 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
   （控制范围）。
 - [x] **T5.4** 查询 API——`db.insert`、`db.all(Model)`、`db.find(Model, id)`、
   `where` 过滤、`count`。
-- [ ] **T5.5** 测试——对临时 SQLite 数据库文件跑查询 API 与迁移测试。
+- [x] **T5.5** 测试——对临时 SQLite 数据库文件跑查询 API 与迁移测试。
 
 > **完成标准**：README Post 示例中的数据库调用与文档行为一致。
 
