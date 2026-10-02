@@ -44,3 +44,31 @@ test "admin dashboard lists, creates, searches, edits and deletes" {
   assert_eq(db.count(admin_test_table), 0)
   db.close()
 }
+
+///|
+test "admin token guard rejects requests without the token" {
+  let app = new()
+  let db = @db.open(":memory:").unwrap()
+  let _ = db.exec(admin_test_table.create_sql())
+  app.admin(db, [admin_test_table], token="s3cret")
+  let denied = app.handle("GET", "/admin")
+  assert_eq(denied.status(), 401)
+  assert_true(denied.body().contains("Invalid or missing admin token"))
+  let wrong = app.handle("GET", "/admin?token=nope")
+  assert_eq(wrong.status(), 401)
+  let via_query = app.handle("GET", "/admin?token=s3cret")
+  assert_eq(via_query.status(), 200)
+  let denied_post = app.handle(
+    "POST",
+    "/admin/admin_posts",
+    body="title=X&body=Y",
+  )
+  assert_eq(denied_post.status(), 401)
+  let allowed_post = app.handle(
+    "POST",
+    "/admin/admin_posts?token=s3cret",
+    body="title=T&body=B",
+  )
+  assert_eq(allowed_post.status(), 303)
+  db.close()
+}
