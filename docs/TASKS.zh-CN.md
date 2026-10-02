@@ -155,7 +155,10 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
   文本形式封装收发，框架运行接收循环并保证 `on_close` 恰好触发一次，
   `WsHub` 提供 join/leave/broadcast（单线程事件循环内无需加锁）。已用
   双客户端交叉广播 e2e 测试验证。
-- [ ] **T8.3** `examples/` 下的聊天示例。
+- [x] **T8.3** `examples/` 下的聊天示例——`examples/chat` 提供极简 HTML
+  页面（原生 WebSocket API，无需构建步骤）和经 `WsHub` 广播的 `/chat`
+  路由。已验证页面 HTTP 服务；WebSocket 路径与 T8.2 e2e 测试覆盖的
+  hub 逻辑相同。
 
 ## T9 — Admin 管理后台（admin/） `M4 · P1`
 

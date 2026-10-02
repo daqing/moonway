@@ -187,7 +187,10 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
   the receive loop and fires `on_close` exactly once, and `WsHub` offers
   join/leave/broadcast (no locking needed inside the single-threaded event
   loop). Verified with a two-client cross-broadcast e2e test.
-- [ ] **T8.3** Chat example under `examples/`.
+- [x] **T8.3** Chat example under `examples/` — `examples/chat` serves a
+  minimal HTML page (native WebSocket API, no build step) plus a `/chat`
+  route broadcasting through `WsHub`. Verified serving the page over HTTP;
+  the WebSocket path shares the hub logic covered by T8.2's e2e test.
 
 ## T9 — Admin dashboard (admin/) `M4 · P1`
 
