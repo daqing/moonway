@@ -49,3 +49,33 @@ test "differing segment counts never match" {
   assert_eq(app.handle("GET", "/posts").status(), 404)
   assert_eq(app.handle("GET", "/posts/1/replies").status(), 404)
 }
+
+///|
+test "known path with wrong verb returns 405 and Allow" {
+  let app = @moonway.new()
+  app.get("/posts/:id", ctx => ctx.text("one"))
+  app.post("/posts/:id", ctx => ctx.text("two"))
+  app.delete("/posts/:id", ctx => ctx.text("three"))
+  let resp = app.handle("PUT", "/posts/42")
+  assert_eq(resp.status(), 405)
+  assert_eq(resp.header("Allow"), Some("GET, POST, DELETE"))
+  assert_eq(resp.body(), "Method Not Allowed")
+}
+
+///|
+test "unknown path still returns plain 404" {
+  let app = @moonway.new()
+  app.get("/posts/:id", ctx => ctx.text("one"))
+  let resp = app.handle("GET", "/comments/1")
+  assert_eq(resp.status(), 404)
+  assert_eq(resp.body(), "Not Found")
+}
+
+///|
+test "405 considers parameter shapes, not literal paths" {
+  let app = @moonway.new()
+  app.get("/users/:id", ctx => ctx.text("one"))
+  let resp = app.handle("POST", "/users/9")
+  assert_eq(resp.status(), 405)
+  assert_eq(resp.header("Allow"), Some("GET"))
+}

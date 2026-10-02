@@ -36,12 +36,31 @@ fn App::run(self : App, request : @http.Request) -> Context {
     None => {
       let ctx = self.run_middlewares(ctx)
       if !ctx.halted {
-        ctx.response.set_status(404)
-        ctx.text("Not Found")
+        self.not_allowed_or_not_found(ctx)
       } else {
         ctx
       }
     }
+  }
+}
+
+///|
+fn App::not_allowed_or_not_found(self : App, ctx : Context) -> Context {
+  let verbs = self.allowed_verbs(ctx.path())
+  if verbs.length() > 0 {
+    let mut allow = ""
+    for i, verb in verbs {
+      if i > 0 {
+        allow = allow + ", "
+      }
+      allow = allow + verb
+    }
+    ctx.response.set_status(405)
+    let ctx = ctx.header("Allow", allow)
+    ctx.text("Method Not Allowed")
+  } else {
+    ctx.response.set_status(404)
+    ctx.text("Not Found")
   }
 }
 

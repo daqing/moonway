@@ -82,7 +82,7 @@ synchronous dispatch built in T2.
 - [x] **T4.3** Middleware pipeline — `app.use(fn)`, well-defined ordering
   (linear registration order, documented on `App::use`), short-circuit
   support (`ctx.halt()`).
-- [ ] **T4.4** 405 responses with an `Allow` header on method mismatch.
+- [x] **T4.4** 405 responses with an `Allow` header on method mismatch.
 
 > **Done when**: the routing part of the README "full stack in one file"
 > example behaves exactly as documented.

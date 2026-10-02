@@ -62,6 +62,20 @@ fn Route::specificity(self : Route) -> Int {
 }
 
 ///|
+/// Verbs registered for routes whose pattern (ignoring the verb) matches
+/// `path`, in registration order without duplicates.
+fn App::allowed_verbs(self : App, path : String) -> Array[String] {
+  let actual = split_path(path)
+  let verbs = []
+  for route in self.routes {
+    if route.try_match(actual) is Some(_) && !verbs.contains(route.verb) {
+      verbs.push(route.verb)
+    }
+  }
+  verbs
+}
+
+///|
 /// Find the best matching route for a request: shape-compatible routes
 /// compete on specificity (static segments win over `:param` captures,
 /// registration order breaks ties). Returns the route with its captured
