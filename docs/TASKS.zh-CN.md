@@ -76,8 +76,12 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 
 ## T5 — 数据库层与 SQLite（db/） `M2 · P0`
 
-- [ ] **T5.1** 模型 schema 描述——MoonBit 结构体到表/列的映射；写清设计
-  决策：derive 推导 vs 显式声明 schema。
+- [x] **T5.1** 模型 schema 描述——MoonBit 结构体到表/列的映射。决策
+  （2026-10-02，经讨论）：**显式 schema 作为唯一事实来源**——迁移和 admin
+  界面需要把列类型/约束当数据用，derive 给不了。行映射借用内置
+  `derive(ToJson, FromJson)`，简单模型零转换代码；JSON 表示不了的类型走
+  手写 impl 逃生舱。纯 derive 路线当前不可行：自定义 derive 不受支持，
+  MoonBit 也没有运行时反射。
 - [ ] **T5.2** 基于 C FFI 的 SQLite 绑定——open / exec / prepare / step；
   处理 text、integer、blob、null。以 `@moonway.sqlite(path)` 暴露。
 - [ ] **T5.3** 迁移执行器——有序迁移文件、schema 版本表；只做 up 迁移

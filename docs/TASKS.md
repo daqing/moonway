@@ -89,8 +89,14 @@ synchronous dispatch built in T2.
 
 ## T5 — Database layer & SQLite (db/) `M2 · P0`
 
-- [ ] **T5.1** Model schema description — table/column mapping for MoonBit
-  structs; write down the decision: derive-based vs explicit schema.
+- [x] **T5.1** Model schema description — table/column mapping for MoonBit
+  structs. Decision (2026-10-02, discussed): **explicit schema is the source
+  of truth** — migrations and the admin UI need column types/constraints as
+  data, which derives cannot provide. Row mapping rides the builtin
+  `derive(ToJson, FromJson)` so simple models write zero conversion code;
+  hand-written impls stay as the escape hatch for JSON-unfriendly types.
+  A pure derive route is impossible today: custom derives are unsupported
+  and MoonBit has no runtime reflection.
 - [ ] **T5.2** SQLite binding via C FFI — open / exec / prepare / step; text,
   integer, blob, null handling. Exposed as `@moonway.sqlite(path)`.
 - [ ] **T5.3** Migration runner — ordered migration files, schema version

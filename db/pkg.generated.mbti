@@ -1,0 +1,33 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "daqing/moonway/db"
+
+// Values
+pub fn column(String, ColumnType, primary? : Bool) -> Column
+
+pub fn table(String, Array[Column]) -> Table
+
+// Errors
+
+// Types and methods
+pub(all) struct Column {
+  name : String
+  col_type : ColumnType
+  primary : Bool
+}
+
+pub(all) enum ColumnType {
+  IntT
+  RealT
+  TextT
+  BoolT
+}
+
+pub(all) struct Table {
+  name : String
+  columns : Array[Column]
+}
+pub fn Table::create_sql(Self) -> String
+
+// Type aliases
+
+// Traits
