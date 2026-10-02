@@ -8,7 +8,7 @@ pub struct Route {
 ///|
 fn without_query(path : String) -> String {
   match path.split("?").next() {
-    Some(first) => first.to_string()
+    Some(first) => first.to_owned()
     None => path
   }
 }
@@ -19,7 +19,7 @@ fn split_path(path : String) -> Array[String] {
   let segments = []
   for segment in without_query(path).split("/") {
     if segment != "" {
-      segments.push(segment.to_string())
+      segments.push(segment.to_owned())
     }
   }
   segments
@@ -40,7 +40,7 @@ fn Route::try_match(
   let params : Map[String, String] = Map([])
   for i, segment in pattern {
     if segment.has_prefix(":") {
-      params[segment.substring(start=1)] = actual[i]
+      params[segment[1:].to_owned()] = actual[i]
     } else if segment != actual[i] {
       return None
     }

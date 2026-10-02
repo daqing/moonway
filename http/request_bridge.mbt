@@ -18,7 +18,7 @@ fn Request::from_runtime(
 ///|
 fn strip_query(path : String) -> String {
   match path.split("?").next() {
-    Some(first) => first.to_string()
+    Some(first) => first.to_owned()
     None => path
   }
 }
