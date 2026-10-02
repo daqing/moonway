@@ -164,8 +164,11 @@ synchronous dispatch built in T2.
   cycle), and `serve_cached_async` answers GET hits (`X-Cache: HIT`) before
   dispatch and stores 200s on the way out (`X-Cache: MISS`). Verified
   end-to-end against live Redis over HTTP.
-- [ ] **T7.4** Graceful degradation — when Redis is unreachable, pass through
-  and log a warning; document this behavior.
+- [x] **T7.4** Graceful degradation — when Redis is unreachable, requests are
+  served untouched with a warning on stderr (`cache unavailable, serving
+  without cache`); failed cache writes never fail the request and suppress
+  the X-Cache header. Documented on the serving functions and in the README
+  feature list; covered by a dead-connection end-to-end test.
 
 ## T8 — WebSocket (ws/) `M3 · P1`
 

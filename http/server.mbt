@@ -49,7 +49,12 @@ async fn[S : CacheStore] serve_one(
   req : Request,
   handler : (Request) -> Response,
 ) -> Response {
-  let cached = policy.lookup(req.path) catch { _err => None }
+  let cached = policy.lookup(req.path) catch {
+    err => {
+      eprintln("moonway: cache unavailable, serving without cache: \{err}")
+      None
+    }
+  }
   match cached {
     Some(hit) => {
       let resp = Response::new()
@@ -64,8 +69,18 @@ async fn[S : CacheStore] serve_one(
       if resp.status() == 200 {
         let content_type = resp.header("Content-Type").unwrap_or("text/plain")
         let payload : CachedResponse = { content_type, body: resp.body(), }
-        let _ = policy.store(req.path, payload) catch { _err => () }
-        resp.set_header("X-Cache", "MISS")
+        let stored = try {
+          policy.store(req.path, payload)
+          true
+        } catch {
+          err => {
+            eprintln("moonway: cache unavailable, response not cached: \{err}")
+            false
+          }
+        }
+        if stored {
+          resp.set_header("X-Cache", "MISS")
+        }
       }
       resp
     }

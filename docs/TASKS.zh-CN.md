@@ -137,7 +137,10 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
   `RedisClient` 实现该接口（无依赖环），`serve_cached_async` 在 dispatch
   前应答 GET 命中（`X-Cache: HIT`）并在返回途中存储 200 响应
   （`X-Cache: MISS`）。已对真实 Redis 走 HTTP 端到端验证。
-- [ ] **T7.4** 优雅降级——Redis 不可达时直接放行并记录警告；文档写明该行为。
+- [x] **T7.4** 优雅降级——Redis 不可达时请求照常处理并在 stderr 记录警告
+  （`cache unavailable, serving without cache`）；缓存写入失败绝不导致请求
+  失败，并抑制 X-Cache 头。行为已在服务函数文档与 README 功能列表中说明，
+  并有断连场景的端到端测试覆盖。
 
 ## T8 — WebSocket（ws/） `M3 · P1`
 
