@@ -1,0 +1,79 @@
+///|
+pub struct Response {
+  mut status_code : Int
+  resp_headers : Array[(String, String)]
+  mut resp_body : String
+  /// When set, served as raw bytes instead of `resp_body` (binary files).
+  mut resp_bytes : Bytes?
+}
+
+///|
+pub fn Response::new() -> Response {
+  { status_code: 200, resp_headers: [], resp_body: "", resp_bytes: None, }
+}
+
+///|
+/// Set a binary body (e.g. static files). Takes precedence over the text
+/// body.
+pub fn Response::set_body_bytes(self : Response, body : Bytes) -> Unit {
+  self.resp_bytes = Some(body)
+}
+
+///|
+/// The binary body when one was set.
+pub fn Response::bytes_body(self : Response) -> Bytes? {
+  self.resp_bytes
+}
+
+///|
+pub fn Response::internal_error() -> Response {
+  let resp = Response::new()
+  resp.set_status(500)
+  resp.set_body("Internal Server Error")
+  resp
+}
+
+///|
+pub fn Response::set_status(self : Response, status : Int) -> Unit {
+  self.status_code = status
+}
+
+///|
+pub fn Response::set_header(
+  self : Response,
+  name : String,
+  value : String,
+) -> Unit {
+  self.resp_headers.push((name, value))
+}
+
+///|
+pub fn Response::set_body(self : Response, body : String) -> Unit {
+  self.resp_body = body
+}
+
+///|
+pub fn Response::status(self : Response) -> Int {
+  self.status_code
+}
+
+///|
+pub fn Response::body(self : Response) -> String {
+  self.resp_body
+}
+
+///|
+pub fn Response::headers(self : Response) -> Array[(String, String)] {
+  self.resp_headers
+}
+
+///|
+pub fn Response::header(self : Response, name : String) -> String? {
+  let mut found : String? = None
+  for entry in self.resp_headers {
+    if entry.0 == name {
+      found = Some(entry.1)
+    }
+  }
+  found
+}

@@ -1,0 +1,62 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "daqing/moonway/cli"
+
+import {
+  "daqing/moonway/db",
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn execute_console(@db.Database, ConsoleCommand, String) -> String
+
+pub fn field_column_type(String) -> String?
+
+pub fn field_moonbit_type(String) -> String?
+
+pub fn help_text() -> String
+
+pub fn parse(Array[String]) -> Command
+
+pub fn parse_console_line(String) -> ConsoleCommand
+
+pub fn parse_field(String) -> (String, String)?
+
+pub fn run(Array[String]) -> Unit
+
+pub fn run_console(String) -> Unit
+
+pub fn version() -> String
+
+// Errors
+
+// Types and methods
+pub(all) enum Command {
+  New(String, String?)
+  GenerateScaffold(String, Array[String])
+  Console(String)
+  Help
+  Version
+  Invalid(String)
+} derive(Eq, @debug.Debug)
+pub fn Command::equal(Self, Self) -> Bool
+pub fn Command::not_equal(Self, Self) -> Bool
+pub fn Command::to_repr(Self) -> @debug.Repr
+
+pub(all) enum ConsoleCommand {
+  TableAll(String)
+  TableCount(String)
+  TableFind(String, Int)
+  TableInsert(String, Json)
+  DotHelp
+  DotTables
+  DotQuit
+  Blank
+  Invalid(String)
+} derive(Eq, @debug.Debug)
+pub fn ConsoleCommand::equal(Self, Self) -> Bool
+pub fn ConsoleCommand::not_equal(Self, Self) -> Bool
+pub fn ConsoleCommand::to_repr(Self) -> @debug.Repr
+
+// Type aliases
+
+// Traits

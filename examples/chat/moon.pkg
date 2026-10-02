@@ -1,0 +1,7 @@
+import {
+  "daqing/moonway",
+}
+
+pkgtype(kind: "executable")
+
+supported_targets = "native"

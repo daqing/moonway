@@ -1,14 +1,13 @@
 import {
+  "daqing/moonway",
   "daqing/moonway/http",
   "daqing/moonway/db",
   "daqing/moonway/cache",
-  "daqing/moonway/admin",
   "moonbitlang/async",
-  "moonbitlang/async/websocket" @async_websocket,
-  "moonbitlang/x/fs",
+  "moonbitlang/core/json",
 }
 
-warnings = "-29-35"
+pkgtype(kind: "executable")
 
 supported_targets = "native"
 

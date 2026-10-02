@@ -1,5 +1,0 @@
-// import {
-//   "daqing/moonway" @lib,
-// }
-
-pkgtype(kind: "executable")

@@ -1,0 +1,6 @@
+import {
+  "daqing/moonway/db",
+  "daqing/moonway/http",
+}
+
+supported_targets = "native"

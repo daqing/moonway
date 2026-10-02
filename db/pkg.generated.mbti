@@ -1,0 +1,77 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "daqing/moonway/db"
+
+import {
+  "mizchi/sqlite",
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+}
+
+// Values
+pub fn column(String, ColumnType, primary? : Bool) -> Column
+
+pub fn json_to_sql(Json, ColumnType) -> @sqlite.SqlValue?
+
+pub fn migration(Int, String, Array[String]) -> Migration
+
+pub fn open(String) -> Database?
+
+pub fn sql_to_json(@sqlite.SqlValue, ColumnType) -> Json
+
+pub fn table(String, Array[Column]) -> Table
+
+// Errors
+
+// Types and methods
+pub(all) struct Column {
+  name : String
+  col_type : ColumnType
+  primary : Bool
+}
+
+pub(all) enum ColumnType {
+  IntT
+  RealT
+  TextT
+  BoolT
+} derive(Eq, @debug.Debug)
+pub fn ColumnType::equal(Self, Self) -> Bool
+pub fn ColumnType::not_equal(Self, Self) -> Bool
+pub fn ColumnType::to_repr(Self) -> @debug.Repr
+
+pub struct Database {
+  inner : @sqlite.Database
+}
+pub fn[T : @json.FromJson] Database::all(Self, Table) -> Array[T]
+pub fn Database::changes(Self) -> Int
+pub fn Database::close(Self) -> Unit
+pub fn Database::count(Self, Table) -> Int
+pub fn Database::delete_raw(Self, Table, Int) -> Bool
+pub fn Database::exec(Self, String) -> Bool
+pub fn[T : @json.FromJson] Database::find(Self, Table, Int) -> T?
+pub fn Database::find_raw(Self, Table, Int) -> Json?
+pub fn[T : ToJson] Database::insert(Self, Table, T) -> Bool
+pub fn Database::insert_raw(Self, Table, Map[String, Json]) -> Bool
+pub fn Database::last_insert_rowid(Self) -> Int64
+pub fn Database::list_tables(Self) -> Array[String]
+pub fn Database::migrate(Self, Array[Migration]) -> Bool
+pub fn[T : @json.FromJson] Database::query(Self, Table, String, Array[@sqlite.SqlValue]) -> Array[T]
+pub fn Database::select_raw(Self, Table, String, Array[@sqlite.SqlValue], limit? : Int, offset? : Int) -> Array[Json]
+pub fn Database::table_schema(Self, String) -> Table?
+pub fn Database::update_raw(Self, Table, Int, Map[String, Json]) -> Bool
+
+pub(all) struct Migration {
+  version : Int
+  name : String
+  statements : Array[String]
+}
+
+pub(all) struct Table {
+  name : String
+  columns : Array[Column]
+}
+pub fn Table::create_sql(Self) -> String
+
+// Type aliases
+
+// Traits
