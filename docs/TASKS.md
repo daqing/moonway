@@ -120,8 +120,10 @@ synchronous dispatch built in T2.
 
 ## T6 — CLI & code generator (cli/) `M2 · P0`
 
-- [ ] **T6.1** `moonway` CLI skeleton — argument parsing, `--help`; the binary
-  is distributed via `moon install daqing/moonway`.
+- [x] **T6.1** `moonway` CLI skeleton — argument parsing, `--help`; the binary
+  is distributed via `moon install daqing/moonway`. Lives in `cli/`
+  (pure `parse` → `Command`) with a thin `cmd/moonway` wrapper reading
+  `@env.args()`; `moon run cmd/moonway -- <args>` passes flags through.
 - [ ] **T6.2** `moonway new <name>` — generate an app skeleton: native
   `preferred_target` (per T1.4), `models/` `handlers/` `migrations/` `web/`
   folders, moonway dependency wired in.

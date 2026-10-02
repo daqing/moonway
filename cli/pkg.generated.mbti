@@ -1,0 +1,33 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "daqing/moonway/cli"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn help_text() -> String
+
+pub fn parse(Array[String]) -> Command
+
+pub fn run(Array[String]) -> Unit
+
+pub fn version() -> String
+
+// Errors
+
+// Types and methods
+pub(all) enum Command {
+  New(String)
+  GenerateScaffold(String, Array[String])
+  Help
+  Version
+  Invalid(String)
+} derive(Eq, @debug.Debug)
+pub fn Command::equal(Self, Self) -> Bool
+pub fn Command::not_equal(Self, Self) -> Bool
+pub fn Command::to_repr(Self) -> @debug.Repr
+
+// Type aliases
+
+// Traits

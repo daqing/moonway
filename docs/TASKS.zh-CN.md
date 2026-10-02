@@ -100,8 +100,10 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 
 ## T6 — CLI 与代码生成器（cli/） `M2 · P0`
 
-- [ ] **T6.1** `moonway` CLI 骨架——参数解析、`--help`；二进制通过
-  `moon install daqing/moonway` 分发。
+- [x] **T6.1** `moonway` CLI 骨架——参数解析、`--help`；二进制通过
+  `moon install daqing/moonway` 分发。解析逻辑在 `cli/` 包（纯函数
+  `parse` → `Command`），`cmd/moonway` 是读 `@env.args()` 的薄入口；
+  `moon run cmd/moonway -- <args>` 透传参数。
 - [ ] **T6.2** `moonway new <name>`——生成应用骨架：native `preferred_target`
   （按 T1.4 的决策）、`models/` `handlers/` `migrations/` `web/` 目录、
   预先接好 moonway 依赖。
