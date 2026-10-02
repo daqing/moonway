@@ -52,7 +52,7 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 
 - [x] **T3.1** 添加 `moonbitlang/async` 依赖，把 `http.serve` 桩替换为
   `@http.Server(...).run_forever(...)`，桥接到 `App::dispatch`。
-- [ ] **T3.2** 请求映射——运行时 `Request`（method 枚举、请求头、body
+- [x] **T3.2** 请求映射——运行时 `Request`（method 枚举、请求头、body
   reader）→ moonway `Request`（`verb`、headers、body）；单元测试。
 - [ ] **T3.3** 响应映射——moonway `Response`（status、headers、body）→
   `conn..send_response(code, reason).write(body)`；保留构造器设置的

@@ -61,7 +61,7 @@ synchronous dispatch built in T2.
 - [x] **T3.1** Add the `moonbitlang/async` dependency and replace the
   `http.serve` stub with `@http.Server(...).run_forever(...)` bridged to
   `App::dispatch`.
-- [ ] **T3.2** Request mapping — runtime `Request` (method enum, headers,
+- [x] **T3.2** Request mapping — runtime `Request` (method enum, headers,
   body reader) → moonway `Request` (`verb`, headers, body); unit tests.
 - [ ] **T3.3** Response mapping — moonway `Response` (status, headers, body)
   → `conn..send_response(code, reason).write(body)`; keep the Content-Type
