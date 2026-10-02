@@ -82,8 +82,11 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
   `derive(ToJson, FromJson)`，简单模型零转换代码；JSON 表示不了的类型走
   手写 impl 逃生舱。纯 derive 路线当前不可行：自定义 derive 不受支持，
   MoonBit 也没有运行时反射。
-- [ ] **T5.2** 基于 C FFI 的 SQLite 绑定——open / exec / prepare / step；
-  处理 text、integer、blob、null。以 `@moonway.sqlite(path)` 暴露。
+- [x] **T5.2** SQLite 绑定——采用 `mizchi/sqlite@0.3.1`（生态中下载量最大的
+  MoonBit SQLite 绑定，native C FFI + JS），不自研：open / exec / prepare /
+  bind / step 由 db 包封装；`@moonway.sqlite(path)` 打开数据库。实际使用
+  数据库的消费者必须自行链接 `-lsqlite3`（该参数不会从依赖继承——已实测）；
+  未使用的导入会被死代码消除，无需任何配置。CI 安装 libsqlite3-dev。
 - [ ] **T5.3** 迁移执行器——有序迁移文件、schema 版本表；只做 up 迁移
   （控制范围）。
 - [ ] **T5.4** 查询 API——`db.insert`、`db.all(Model)`、`db.find(Model, id)`、

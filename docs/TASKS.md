@@ -97,8 +97,13 @@ synchronous dispatch built in T2.
   hand-written impls stay as the escape hatch for JSON-unfriendly types.
   A pure derive route is impossible today: custom derives are unsupported
   and MoonBit has no runtime reflection.
-- [ ] **T5.2** SQLite binding via C FFI — open / exec / prepare / step; text,
-  integer, blob, null handling. Exposed as `@moonway.sqlite(path)`.
+- [x] **T5.2** SQLite binding via C FFI — adopted `mizchi/sqlite@0.3.1`
+  (most-used MoonBit SQLite binding, native C FFI + JS) instead of
+  hand-rolling: `open` / `exec` / prepare / bind / step wrapped in the db
+  package; `@moonway.sqlite(path)` opens it. Consumers using the database
+  must link `-lsqlite3` (the flag is NOT inherited from dependencies —
+  verified hands-on); unused imports are dead-code-eliminated and need
+  nothing. CI installs libsqlite3-dev.
 - [ ] **T5.3** Migration runner — ordered migration files, schema version
   table; up-only migrations (keep the scope tight).
 - [ ] **T5.4** Query API — `db.insert`, `db.all(Model)`, `db.find(Model, id)`,

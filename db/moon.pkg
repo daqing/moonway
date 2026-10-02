@@ -1,1 +1,11 @@
+import {
+  "mizchi/sqlite",
+  "moonbitlang/x/encoding",
+  "moonbitlang/core/json",
+}
 
+supported_targets = "native"
+
+options(
+  link: { "native": { "cc-link-flags": "-lsqlite3" } },
+)

@@ -2,11 +2,14 @@
 package "daqing/moonway"
 
 import {
+  "daqing/moonway/db",
   "daqing/moonway/http",
 }
 
 // Values
 pub fn new() -> App
+
+pub fn sqlite(String) -> @db.Database
 
 // Errors
 
