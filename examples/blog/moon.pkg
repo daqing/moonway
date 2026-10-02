@@ -1,0 +1,16 @@
+import {
+  "daqing/moonway",
+  "daqing/moonway/http",
+  "daqing/moonway/db",
+  "daqing/moonway/cache",
+  "moonbitlang/async",
+  "moonbitlang/core/json",
+}
+
+pkgtype(kind: "executable")
+
+supported_targets = "native"
+
+options(
+  link: { "native": { "cc-link-flags": "-lsqlite3" } },
+)

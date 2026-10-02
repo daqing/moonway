@@ -220,13 +220,23 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 
 ## T12 — 发布、示例与验收 `M3（T12.1）· M5`
 
-- [ ] **T12.1** 尽早（M3）发布 `daqing/moonway@0.1.0` 到 mooncakes.io——在
-  干净项目中验证 `moon add daqing/moonway` 与 `moon install daqing/moonway`。
-- [ ] **T12.2** `examples/blog`——参考应用，覆盖模型、路由、缓存、WebSocket
+- [x] **T12.1** 发布 `daqing/moonway` 到 mooncakes.io——已完成：0.11.3 与
+  0.11.5 两个版本（`moon publish`，Server 200 OK）；`moon add
+  daqing/moonway` 已在干净项目验证（验收运行从 registry 拉取 0.11.5）。
+  ⚠️ `moon install daqing/moonway` **被 moon 上游 bug 阻塞**
+  （0.1.20260920）：`moon check` 接受 `moon.pkg.json` 里声明的 `is-main`，
+  但 `moon install` 只读 `moon.pkg` DSL，而该版本的 DSL 无法表达
+  `is-main`——因此 `cmd/main` 这类子包主入口永远无法满足 install。最小
+  复现：新建模块 + `cmd/main/moon.pkg.json` 写 `{"is-main": true}`，
+  `moon check` 通过、`moon install <目录>` 仍报 "not a main package"。
+  上游修复前，CLI 通过源码检出 `moon run cmd/main` 使用。
+- [x] **T12.2** `examples/blog`——参考应用，覆盖模型、路由、缓存、WebSocket
   聊天与 admin。
-- [ ] **T12.3** README 验收演练——在干净目录中逐字执行两份 README 的每一条
-  命令；修代码或改文档，直到 100% 通过。
-- [ ] **T12.4** README 截图——admin 后台（以及可选的演示 GIF）；移除
-  `<!-- TODO -->` 占位注释。
-- [ ] **T12.5** 最终发布——按需升版本号、打 annotated tag、写 changelog；
-  勾选两份 README 中的路线图复选框。
+- [x] **T12.3** README 验收演练——在干净目录中对已发布的 0.11.3 逐字执行
+  两份 README 的每一条命令；抓出并修复三个真实缺口（包级 import 步骤、
+  full-stack 示例的 db/json 导入、sqlite 链接参数与系统依赖）。
+- [x] **T12.4** README 截图——admin 后台截图保存在
+  `docs/images/admin.png` 并嵌入两份 README；`<!-- TODO -->` 占位注释已
+  移除。
+- [x] **T12.5** 最终发布——0.11.5 已发布、两份 README 的路线图复选框已
+  勾选；annotated tag 打在发布提交上。

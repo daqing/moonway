@@ -42,6 +42,8 @@ cd hello-moonway
 # moonway 是服务端框架：把项目切换到 native 后端
 awk '{sub(/preferred_target = "wasm"/, "preferred_target = \"native\"")} 1' moon.mod > moon.mod.tmp && mv moon.mod.tmp moon.mod
 moon add daqing/moonway
+# 在主包里也注册依赖
+printf 'import {\n  \"daqing/moonway\",\n}\n' >> cmd/main/moon.pkg
 ```
 
 给你的应用加一条路由：
@@ -65,31 +67,71 @@ moon run cmd/main
 
 ## 一个文件里的全栈
 
+把 `cmd/main/moon.pkg` 替换为（link 参数必须写——`moon add` 不会从依赖继承；
+Linux 还需要 `apt install libsqlite3-dev`，macOS 自带 SQLite）：
+
+```json
+import {
+  "daqing/moonway",
+  "daqing/moonway/db",
+  "moonbitlang/core/json",
+}
+
+supported_targets = "native"
+
+pkgtype(kind: "executable")
+
+options(
+  link: { "native": { "cc-link-flags": "-lsqlite3" } },
+)
+```
+
+然后把 `cmd/main/main.mbt` 替换为：
+
 ```moonbit nocheck
 ///|
 struct Post {
   id : Int
   title : String
   body : String
-}
+} derive(ToJson, FromJson)
+
+///|
+let posts : @db.Table = @db.table("posts", [
+  @db.column("id", @db.IntT, primary=true),
+  @db.column("title", @db.TextT),
+  @db.column("body", @db.TextT),
+])
 
 ///|
 fn main {
   let app = @moonway.new()
   let db = @moonway.sqlite("app.db")
-  db.migrate()
-
-  app.get("/posts", ctx => ctx.json(db.all(Post)))
-
-  app.post("/posts", ctx => {
-    let post = ctx.bind(Post)
-    db.insert(post)
-    ctx.status(201).json(post)
+  if !db.migrate([@db.migration(1, "create posts", [posts.create_sql()])]) {
+    abort("migrations failed")
+  }
+  app.get("/posts", ctx => {
+    let items : Array[Json] = db.select_raw(posts, "1=1", [], limit=100)
+    ctx.json(Json::array(items))
   })
-
+  app.post("/posts", ctx => {
+    let row : Json? = try {
+      Some(@json.parse(ctx.body()))
+    } catch {
+      _err => None
+    }
+    match row {
+      Some(Object(fields)) =>
+        if db.insert_raw(posts, fields) {
+          ctx.status(201).json(Json::object(fields))
+        } else {
+          ctx.status(500).text("insert failed")
+        }
+      _ => ctx.status(400).text("invalid JSON body")
+    }
+  })
   // 一个开箱即用的数据管理界面，挂在 /admin
-  app.admin("/admin", [Post])
-
+  app.admin(db, [posts])
   app.listen(3000)
 }
 ```
@@ -113,7 +155,7 @@ updated  admin registry
 
 ### Admin 管理后台
 
-<!-- TODO: 补充 admin 后台截图 -->
+![Admin 管理后台](docs/images/admin.png)
 
 每个注册的数据模型都会在 `/admin` 下获得一个支持搜索、分页的 CRUD 管理界面——
 增删改查数据，一行前端代码都不用写。
@@ -132,15 +174,15 @@ moonway> Post.count()
 moonway 正在为 2026 年 10 月的 MoonBit 黑客松公开开发（最终提交：**2026 年 10 月 31 日**）。
 
 - [x] 项目初始化——仓库、工具链、CI
-- [ ] HTTP 路由与中间件管线
-- [ ] SQLite 数据库层与迁移
-- [ ] 代码生成器（`moonway new`、`moonway generate`）
-- [ ] Redis 缓存中间件
-- [ ] WebSocket 支持
-- [ ] 自动生成的 Admin 管理后台
-- [ ] REPL 控制台
-- [ ] Preact 前端集成
-- [ ] 指南、示例与文档
+- [x] HTTP 路由与中间件管线
+- [x] SQLite 数据库层与迁移
+- [x] 代码生成器（`moonway new`、`moonway generate`）
+- [x] Redis 缓存中间件
+- [x] WebSocket 支持
+- [x] 自动生成的 Admin 管理后台
+- [x] REPL 控制台
+- [x] Preact 前端集成
+- [x] 指南、示例与文档
 
 ## 参与贡献
 

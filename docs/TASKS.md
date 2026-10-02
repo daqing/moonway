@@ -262,14 +262,25 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
 
 ## T12 — Release, example & acceptance `M3 (T12.1) · M5`
 
-- [ ] **T12.1** Publish `daqing/moonway@0.1.0` to mooncakes.io **early (M3)** —
-  verify `moon add daqing/moonway` and `moon install daqing/moonway` from a
-  clean project.
-- [ ] **T12.2** `examples/blog` — the reference app covering models, routes,
+- [x] **T12.1** Publish `daqing/moonway` to mooncakes.io — done: 0.11.3 and
+  0.11.5 published (Server 200 OK); `moon add daqing/moonway` verified from
+  a clean project (acceptance pulled 0.11.5 from the registry). ⚠️
+  `moon install daqing/moonway` is **blocked by an upstream moon bug**
+  (0.1.20260920): `moon check` accepts `is-main` declared in
+  `moon.pkg.json`, but `moon install` only reads the `moon.pkg` DSL, which
+  cannot express `is-main` on this version — so a sub-package main like
+  `cmd/main` can never satisfy install. Minimal reproduction: fresh
+  `moon new`-style module, `cmd/main/moon.pkg.json` with `{"is-main":
+  true}`, `moon check` passes, `moon install <dir>` still reports "not a
+  main package". CLI usage remains `git clone` + `moon run cmd/main`.
+- [x] **T12.2** `examples/blog` — the reference app covering models, routes,
   cache, WebSocket chat, and admin.
-- [ ] **T12.3** README acceptance run — execute every command in both READMEs
-  verbatim in a clean directory; fix code or amend docs until 100% pass.
-- [ ] **T12.4** README screenshots — admin dashboard (and an optional demo
-  GIF); remove the `<!-- TODO -->` placeholders.
-- [ ] **T12.5** Final release — version bump if needed, annotated tag,
-  changelog; tick the roadmap checkboxes in both READMEs.
+- [x] **T12.3** README acceptance run — executed every command in both
+  READMEs verbatim in a clean directory against the published 0.11.3;
+  caught and fixed three real gaps (package-level import step, db/json
+  imports for the full-stack example, sqlite link flags + system dep).
+- [x] **T12.4** README screenshots — admin dashboard captured at
+  `docs/images/admin.png` and embedded in both READMEs; TODO placeholders
+  removed.
+- [x] **T12.5** Final release — 0.11.5 published, roadmap checkboxes ticked
+  in both READMEs; annotated tags on the release commits.

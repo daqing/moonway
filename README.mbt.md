@@ -53,6 +53,8 @@ cd hello-moonway
 # moonway is a server-side framework: switch the project to the native backend
 awk '{sub(/preferred_target = "wasm"/, "preferred_target = \"native\"")} 1' moon.mod > moon.mod.tmp && mv moon.mod.tmp moon.mod
 moon add daqing/moonway
+# register the dependency in the main package too
+printf 'import {\n  "daqing/moonway",\n}\n' >> cmd/main/moon.pkg
 ```
 
 Give your app a route:
@@ -76,31 +78,68 @@ Open <http://localhost:3000>. You're on the road. 🌙
 
 ## The full stack, in one file
 
+Replace `cmd/main/moon.pkg` with (the link flags are required — `moon add`
+does not inherit them from dependencies; Linux also needs
+`apt install libsqlite3-dev`, macOS ships SQLite):
+
+```json
+import {
+  "daqing/moonway",
+  "daqing/moonway/db",
+  "moonbitlang/core/json",
+}
+
+supported_targets = "native"
+
+pkgtype(kind: "executable")
+
+options(
+  link: { "native": { "cc-link-flags": "-lsqlite3" } },
+)
+```
+
+Then replace `cmd/main/main.mbt` with:
+
 ```moonbit nocheck
 ///|
 struct Post {
   id : Int
   title : String
   body : String
-}
+} derive(ToJson, FromJson)
+
+///|
+let posts : @db.Table = @db.table("posts", [
+  @db.column("id", @db.IntT, primary=true),
+  @db.column("title", @db.TextT),
+  @db.column("body", @db.TextT),
+])
 
 ///|
 fn main {
   let app = @moonway.new()
   let db = @moonway.sqlite("app.db")
-  db.migrate()
-
-  app.get("/posts", ctx => ctx.json(db.all(Post)))
-
-  app.post("/posts", ctx => {
-    let post = ctx.bind(Post)
-    db.insert(post)
-    ctx.status(201).json(post)
+  if !db.migrate([@db.migration(1, "create posts", [posts.create_sql()])]) {
+    abort("migrations failed")
+  }
+  app.get("/posts", ctx => {
+    let items : Array[Json] = db.select_raw(posts, "1=1", [], limit=100)
+    ctx.json(Json::array(items))
   })
-
+  app.post("/posts", ctx => {
+    let row : Json? = Some(@json.parse(ctx.body())) catch { _err => None }
+    match row {
+      Some(Object(fields)) =>
+        if db.insert_raw(posts, fields) {
+          ctx.status(201).json(Json::object(fields))
+        } else {
+          ctx.status(500).text("insert failed")
+        }
+      _ => ctx.status(400).text("invalid JSON body")
+    }
+  })
   // A ready-to-use admin UI for your data, served at /admin
-  app.admin("/admin", [Post])
-
+  app.admin(db, [posts])
   app.listen(3000)
 }
 ```
@@ -125,7 +164,7 @@ updated  admin registry
 
 ### Admin dashboard
 
-<!-- TODO: add a screenshot of the generated admin dashboard -->
+![Admin dashboard](docs/images/admin.png)
 
 Every registered model gets a searchable, paginated CRUD interface at
 `/admin` — create, edit, and inspect your data without writing a line of
@@ -146,15 +185,15 @@ moonway is being built in the open for the October 2026 MoonBit hackathon
 (final submission: **October 31, 2026**).
 
 - [x] Project setup — repository, toolchain, CI
-- [ ] HTTP router & middleware pipeline
-- [ ] SQLite database layer & migrations
-- [ ] Code generator (`moonway new`, `moonway generate`)
-- [ ] Redis cache middleware
-- [ ] WebSocket support
-- [ ] Auto-generated admin dashboard
-- [ ] REPL console
-- [ ] Preact frontend integration
-- [ ] Guides, examples & documentation
+- [x] HTTP router & middleware pipeline
+- [x] SQLite database layer & migrations
+- [x] Code generator (`moonway new`, `moonway generate`)
+- [x] Redis cache middleware
+- [x] WebSocket support
+- [x] Auto-generated admin dashboard
+- [x] REPL console
+- [x] Preact frontend integration
+- [x] Guides, examples & documentation
 
 ## Contributing
 
