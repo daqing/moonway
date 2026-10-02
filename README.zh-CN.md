@@ -67,8 +67,19 @@ moon run cmd/main
 
 ## 一个文件里的全栈
 
-把 `cmd/main/main.mbt` 替换为以下内容（并在 `cmd/main/moon.pkg` 的 imports
-里加上 `"moonbitlang/core/json"`）：
+把 `cmd/main/moon.pkg` 替换为：
+
+```json
+import {
+  "daqing/moonway",
+  "daqing/moonway/db",
+  "moonbitlang/core/json",
+}
+
+pkgtype(kind: "executable")
+```
+
+然后把 `cmd/main/main.mbt` 替换为：
 
 ```moonbit nocheck
 ///|

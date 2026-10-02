@@ -78,8 +78,19 @@ Open <http://localhost:3000>. You're on the road. 🌙
 
 ## The full stack, in one file
 
-Replace `cmd/main/main.mbt` with the following (and add
-`"moonbitlang/core/json"` to the imports in `cmd/main/moon.pkg`):
+Replace `cmd/main/moon.pkg` with:
+
+```json
+import {
+  "daqing/moonway",
+  "daqing/moonway/db",
+  "moonbitlang/core/json",
+}
+
+pkgtype(kind: "executable")
+```
+
+Then replace `cmd/main/main.mbt` with:
 
 ```moonbit nocheck
 ///|
