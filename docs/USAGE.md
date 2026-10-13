@@ -1,7 +1,7 @@
 # moonway 使用指南
 
 本文根据仓库当前的 README 与源码实现整理，介绍如何安装、创建、开发和运行一个
-moonway 应用。API 名称、行为与示例均以当前代码（`moon.mod` 版本 `0.11.6`）为准。
+moonway 应用。API 名称、行为与示例均以当前代码（`moon.mod` 版本 `0.11.7`）为准。
 
 > moonway 是一个**服务端框架**，运行在 MoonBit 的 **native** 后端。所有包都以
 > native 为目标编译，不支持 wasm/js 后端。
@@ -915,7 +915,7 @@ pub fn execute_console(@db.Database, ConsoleCommand, String) -> String
     且不再自动更新对应文件。
 
 11. **CLI 版本常量**：`moonway --version` 目前输出 `moonway 0.1.0`（CLI 内部常量），
-    与模块版本 `0.11.6` 不同步。
+    与模块版本 `0.11.7` 不同步。
 
 ---
 

@@ -103,7 +103,7 @@ Then replace `cmd/main/main.mbt` with:
 ```moonbit nocheck
 ///|
 struct Post {
-  id : Int
+  id : Int32
   title : String
   body : String
 } derive(ToJson, FromJson)

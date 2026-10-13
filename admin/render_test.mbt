@@ -7,7 +7,7 @@ let render_table : @db.Table = @db.table("render_posts", [
 ])
 
 ///|
-fn row_of(title : String, published : Bool, views : Int) -> Json {
+fn row_of(title : String, published : Bool, views : Int32) -> Json {
   let fields : Map[String, Json] = Map([])
   fields["id"] = Json(1)
   fields["title"] = Json(title)

@@ -1,6 +1,6 @@
 ///|
 pub struct Response {
-  mut status_code : Int
+  mut status_code : Int32
   resp_headers : Array[(String, String)]
   mut resp_body : String
   /// When set, served as raw bytes instead of `resp_body` (binary files).
@@ -34,7 +34,7 @@ pub fn Response::internal_error() -> Response {
 }
 
 ///|
-pub fn Response::set_status(self : Response, status : Int) -> Unit {
+pub fn Response::set_status(self : Response, status : Int32) -> Unit {
   self.status_code = status
 }
 
@@ -53,7 +53,7 @@ pub fn Response::set_body(self : Response, body : String) -> Unit {
 }
 
 ///|
-pub fn Response::status(self : Response) -> Int {
+pub fn Response::status(self : Response) -> Int32 {
   self.status_code
 }
 

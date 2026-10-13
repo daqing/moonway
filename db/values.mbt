@@ -75,7 +75,7 @@ pub fn sql_to_json(v : @sqlite.SqlValue, col_type : ColumnType) -> Json {
 
 ///|
 /// Best-effort numeric parse for string values landing in numeric columns.
-fn string_to_int(s : String) -> Int {
+fn string_to_int(s : String) -> Int32 {
   match (@json.parse(s) catch { _err => Json::null() }) {
     Number(n, ..) => n.to_int()
     _ => 0

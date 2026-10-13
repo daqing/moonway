@@ -130,7 +130,7 @@ fn to_lower_snake(model : String) -> String {
 }
 
 ///|
-fn next_migration_version() -> Int {
+fn next_migration_version() -> Int32 {
   let mut count = 0
   let listed = @fs.read_dir("migrations") catch { _err => [] }
   for entry in listed {
@@ -142,7 +142,7 @@ fn next_migration_version() -> Int {
 }
 
 ///|
-fn pad3(n : Int) -> String {
+fn pad3(n : Int32) -> String {
   if n < 10 {
     "00\{n}"
   } else if n < 100 {

@@ -51,7 +51,7 @@ pub fn Context::request_header(self : Context, name : String) -> String? {
 }
 
 ///|
-pub fn Context::status(self : Context, code : Int) -> Context {
+pub fn Context::status(self : Context, code : Int32) -> Context {
   self.response.set_status(code)
   self
 }

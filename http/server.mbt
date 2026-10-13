@@ -4,9 +4,9 @@
 /// failure. GET requests matching a WebSocket route are upgraded instead of
 /// dispatched.
 pub async fn serve_async(
-  port : Int,
+  port : Int32,
   handler : (Request) -> Response,
-  ws_routes? : Array[WsRoute] = [],
+  ws_routes~ : Array[WsRoute] = [],
 ) -> Unit {
   let addr = @async_socket.Addr::parse("127.0.0.1:\{port}")
   let server = @async_http.Server(addr, reuse_addr=true)
@@ -29,9 +29,9 @@ pub async fn serve_async(
 /// policy's TTL (`X-Cache: MISS`). Cache failures degrade to plain dispatch.
 pub async fn[S : CacheStore] serve_cached_async(
   policy : CachePolicy[S],
-  port : Int,
+  port : Int32,
   handler : (Request) -> Response,
-  ws_routes? : Array[WsRoute] = [],
+  ws_routes~ : Array[WsRoute] = [],
 ) -> Unit {
   let addr = @async_socket.Addr::parse("127.0.0.1:\{port}")
   let server = @async_http.Server(addr, reuse_addr=true)
@@ -111,9 +111,9 @@ async fn[S : CacheStore] serve_one(
 /// connection (`allow_failure=true`) and the server keeps serving.
 /// `Response::internal_error()` is available for explicit 500 responses.
 pub fn serve(
-  port : Int,
+  port : Int32,
   handler : (Request) -> Response,
-  ws_routes? : Array[WsRoute] = [],
+  ws_routes~ : Array[WsRoute] = [],
 ) -> Unit {
   @async.run_async_main(async fn() {
     serve_async(port, handler, ws_routes~) catch {
@@ -127,9 +127,9 @@ pub fn serve(
 /// Like `serve`, with response caching bound to a concrete cache store.
 pub fn[S : CacheStore] serve_cached(
   policy : CachePolicy[S],
-  port : Int,
+  port : Int32,
   handler : (Request) -> Response,
-  ws_routes? : Array[WsRoute] = [],
+  ws_routes~ : Array[WsRoute] = [],
 ) -> Unit {
   @async.run_async_main(async fn() {
     serve_cached_async(policy, port, handler, ws_routes~) catch {

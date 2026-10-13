@@ -5,7 +5,7 @@
 pub(all) enum ConsoleCommand {
   TableAll(String)
   TableCount(String)
-  TableFind(String, Int)
+  TableFind(String, Int32)
   TableInsert(String, Json)
   DotHelp
   DotTables
@@ -111,7 +111,7 @@ fn console_trim(line : String) -> String {
 }
 
 ///|
-fn console_parse_int(raw : String) -> Int? {
+fn console_parse_int(raw : String) -> Int32? {
   if raw.length() == 0 {
     return None
   }

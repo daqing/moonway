@@ -66,7 +66,7 @@ pub fn render_list(
   prefix : String,
   t : @db.Table,
   rows : Array[Json],
-  page : Int,
+  page : Int32,
   has_more : Bool,
   q : String,
 ) -> String {

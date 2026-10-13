@@ -140,7 +140,11 @@ pub fn[T : FromJson] Database::all(self : Database, t : Table) -> Array[T] {
 
 ///|
 /// The first row whose primary key equals `id`, or None.
-pub fn[T : FromJson] Database::find(self : Database, t : Table, id : Int) -> T? {
+pub fn[T : FromJson] Database::find(
+  self : Database,
+  t : Table,
+  id : Int32,
+) -> T? {
   match primary_column(t) {
     Some(pk) => {
       let rows : Array[T] = self.query(t, quote_ident(pk.name) + " = ?", [
@@ -154,7 +158,7 @@ pub fn[T : FromJson] Database::find(self : Database, t : Table, id : Int) -> T? 
 
 ///|
 /// Number of rows in the table.
-pub fn Database::count(self : Database, t : Table) -> Int {
+pub fn Database::count(self : Database, t : Table) -> Int32 {
   let mut n = 0
   let queried = self.inner.query("SELECT COUNT(*) FROM " + quote_ident(t.name))
   match queried {

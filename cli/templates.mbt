@@ -93,7 +93,7 @@ fn handlers_scaffold_t(model : String, plural : String) -> String {
 }
 
 ///|
-fn migration_scaffold_t(plural : String, version : Int) -> String {
+fn migration_scaffold_t(plural : String, version : Int32) -> String {
   join_lines([
     "///|",
     "pub fn create_\{plural}() -> @db.Migration {",

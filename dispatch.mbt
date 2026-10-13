@@ -1,5 +1,5 @@
 ///|
-pub fn App::listen(self : App, port : Int) -> Unit {
+pub fn App::listen(self : App, port : Int32) -> Unit {
   let handler = fn(request) { self.dispatch(request) }
   match self.cache_policy {
     Some(policy) =>
@@ -18,7 +18,7 @@ pub fn App::handle(
   self : App,
   verb : String,
   path : String,
-  body? : String = "",
+  body~ : String = "",
 ) -> @http.Response {
   self.dispatch(@http.Request::new(verb, path).with_body(body))
 }

@@ -26,7 +26,7 @@ pub fn Database::exec(self : Database, sql : String) -> Bool {
 
 ///|
 /// Number of rows changed by the most recent statement.
-pub fn Database::changes(self : Database) -> Int {
+pub fn Database::changes(self : Database) -> Int32 {
   self.inner.changes()
 }
 

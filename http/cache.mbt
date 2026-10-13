@@ -3,7 +3,7 @@
 /// `@cache.RedisClient`; the HTTP layer only knows this interface.
 pub(open) trait CacheStore {
   async fn cache_get(Self, String) -> String?
-  async fn cache_set_ex(Self, String, String, Int) -> Bool
+  async fn cache_set_ex(Self, String, String, Int32) -> Bool
 }
 
 ///|
@@ -11,7 +11,7 @@ pub(open) trait CacheStore {
 pub(all) struct CachePolicy[S] {
   store : S
   prefix : String
-  ttl : Int
+  ttl : Int32
 }
 
 ///|
