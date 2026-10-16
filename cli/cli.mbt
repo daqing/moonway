@@ -1,5 +1,5 @@
 ///|
-let cli_version = "0.1.0"
+let cli_version = "0.11.7"
 
 ///|
 pub fn version() -> String {

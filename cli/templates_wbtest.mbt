@@ -51,6 +51,13 @@ test "new templates pin native target, link flags and markers" {
 }
 
 ///|
+test "CLI version and generated dependency match the module version" {
+  let manifest = @fs.read_file_to_string("moon.mod")
+  assert_true(manifest.contains("version = \"\{cli_version}\""))
+  assert_true(moon_mod_t("blog").contains("\"daqing/moonway@\{cli_version}\""))
+}
+
+///|
 test "migration template references the models table" {
   let src = migration_scaffold_t("posts", 1)
   assert_true(src.contains("pub fn create_posts() -> @db.Migration {"))

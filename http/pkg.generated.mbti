@@ -14,13 +14,13 @@ pub fn query_param(String, String) -> String?
 
 pub fn resolve_static(String, String) -> String? raise
 
-pub fn serve(Int, (Request) -> Response, ws_routes? : Array[WsRoute]) -> Unit
+pub fn serve(Int, (Request) -> Response, ws_routes? : Array[WsRoute], host? : String) -> Unit
 
-pub async fn serve_async(Int, (Request) -> Response, ws_routes? : Array[WsRoute]) -> Unit
+pub async fn serve_async(Int, (Request) -> Response, ws_routes? : Array[WsRoute], host? : String) -> Unit
 
-pub fn[S : CacheStore] serve_cached(CachePolicy[S], Int, (Request) -> Response, ws_routes? : Array[WsRoute]) -> Unit
+pub fn[S : CacheStore] serve_cached(CachePolicy[S], Int, (Request) -> Response, ws_routes? : Array[WsRoute], host? : String) -> Unit
 
-pub async fn[S : CacheStore] serve_cached_async(CachePolicy[S], Int, (Request) -> Response, ws_routes? : Array[WsRoute]) -> Unit
+pub async fn[S : CacheStore] serve_cached_async(CachePolicy[S], Int, (Request) -> Response, ws_routes? : Array[WsRoute], host? : String) -> Unit
 
 pub fn serve_static_file(String, String) -> Response?
 

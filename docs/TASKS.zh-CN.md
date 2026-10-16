@@ -101,7 +101,7 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 ## T6 — CLI 与代码生成器（cli/） `M2 · P0`
 
 - [x] **T6.1** `moonway` CLI 骨架——参数解析、`--help`；二进制通过
-  `moon install daqing/moonway` 分发。解析逻辑在 `cli/` 包（纯函数
+  `moon install daqing/moonway/cmd/moonway` 分发。解析逻辑在 `cli/` 包（纯函数
   `parse` → `Command`），`cmd/moonway` 是读 `@env.args()` 的薄入口；
   `moon run cmd/moonway -- <args>` 透传参数。
 - [x] **T6.2** `moonway new <name>`——生成应用骨架：native `preferred_target`
@@ -223,8 +223,8 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 - [x] **T12.1** 发布 `daqing/moonway` 到 mooncakes.io——已完成：0.11.3 与
   0.11.5 两个版本（`moon publish`，Server 200 OK）；`moon add
   daqing/moonway` 已在干净项目验证（验收运行从 registry 拉取 0.11.5）。
-  `moon install daqing/moonway/cmd/main` 也已验证——会将 CLI 二进制以
-  `main` 为名安装（install 路径须指到定义 executable 的子包；仅写模块
+  `moon install daqing/moonway/cmd/moonway` 也已验证——会将 CLI 二进制以
+  `moonway` 为名安装（install 路径须指到定义 executable 的子包；仅写模块
   路径会失败，因为根包是库）。
 - [x] **T12.2** `examples/blog`——参考应用，覆盖模型、路由、缓存、WebSocket
   聊天与 admin。

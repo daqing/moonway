@@ -143,7 +143,8 @@ moon run cmd/main
 # 打开 http://localhost:3000
 ```
 
-`app.listen(port)` 会绑定 `127.0.0.1:<port>` 并阻塞运行，直到进程被中断。
+`app.listen(port)` 默认绑定 `127.0.0.1:<port>` 并阻塞运行，直到进程被中断。
+需要接受其他机器的连接时，显式使用 `app.listen(port, host="0.0.0.0")`。
 
 ---
 
@@ -602,7 +603,7 @@ moon run cmd/moonway -- --help
 ### 12.1 `moonway --help` / `--version`
 
 ```
-moonway 0.1.0 — the road to the moon
+moonway 0.11.7 — the road to the moon
 
 Usage: moonway <command> [options]
 
@@ -663,16 +664,16 @@ updated  models/models.mbt, migrations/migrations.mbt, cmd/main/main.mbt
 
 ```console
 $ moonway console
-moonway 0.1.0 · connected to sqlite://app.db
+moonway 0.11.7 · connected to sqlite://app.db
 Type .help for help, .quit to exit.
-> Post.all()
+> Posts.all()
 {"id":1,"title":"hello","body":"..."}
 (1 rows)
-> Post.count()
+> Posts.count()
 1
-> Post.find(1)
+> Posts.find(1)
 {"id":1,...}
-> Post.insert({"title":"new","body":"..."})
+> Posts.insert({"title":"new","body":"..."})
 inserted, id = 2
 > .tables
 posts
@@ -795,7 +796,7 @@ pub fn App::static_files(Self, String)
 pub fn App::cache(Self, @cache.RedisClient, ttl? : Int, prefix? : String)
 pub fn App::admin(Self, @db.Database, Array[@db.Table], prefix? : String, token? : String)
 pub fn App::ws(Self, String, WsHandler)
-pub fn App::listen(Self, Int)
+pub fn App::listen(Self, Int, host? : String)
 pub fn App::dispatch(Self, @http.Request) -> @http.Response
 pub fn App::handle(Self, String, String, body? : String) -> @http.Response  // 测试用
 
@@ -842,10 +843,10 @@ pub fn Database::exec / changes / last_insert_rowid / list_tables / table_schema
 ### `daqing/moonway/http`
 
 ```moonbit
-pub fn serve(Int, (Request) -> Response, ws_routes? : Array[WsRoute])
-pub async fn serve_async(Int, (Request) -> Response, ws_routes? : Array[WsRoute])
-pub fn[S : CacheStore] serve_cached(CachePolicy[S], Int, (Request) -> Response, ws_routes?)
-pub async fn[S : CacheStore] serve_cached_async(CachePolicy[S], Int, (Request) -> Response, ws_routes?)
+pub fn serve(Int, (Request) -> Response, ws_routes? : Array[WsRoute], host? : String)
+pub async fn serve_async(Int, (Request) -> Response, ws_routes? : Array[WsRoute], host? : String)
+pub fn[S : CacheStore] serve_cached(CachePolicy[S], Int, (Request) -> Response, ws_routes? : Array[WsRoute], host? : String)
+pub async fn[S : CacheStore] serve_cached_async(CachePolicy[S], Int, (Request) -> Response, ws_routes? : Array[WsRoute], host? : String)
 
 pub struct CachePolicy[S] { store : S, prefix : String, ttl : Int }
 pub struct CachedResponse { content_type : String, body : String }
@@ -891,7 +892,8 @@ pub fn execute_console(@db.Database, ConsoleCommand, String) -> String
    `moon.pkg` 里写 `options(link: { "native": { "cc-link-flags": "-lsqlite3" } })`。
    Linux 上还需安装 `libsqlite3-dev`。
 
-3. **只监听本机**：`app.listen` / `serve` 绑定的是 `127.0.0.1`，不适合直接对外暴露。
+3. **默认只监听本机**：`app.listen` / `serve` 默认绑定 `127.0.0.1`；需要对外监听时
+   显式传入 `host="0.0.0.0"`，并自行配置相应的网络安全防护。
 
 4. **同步 vs 异步入口**：
    - 普通应用：`fn main { app.listen(3000) }`；
@@ -913,9 +915,6 @@ pub fn execute_console(@db.Database, ConsoleCommand, String) -> String
 10. **marker 注释不可删除**：`// moonway:admin-tables`、`// moonway:migrations`、
     `// moonway:register-handlers` 被脚手架依赖，删除后 `generate scaffold` 会告警
     且不再自动更新对应文件。
-
-11. **CLI 版本常量**：`moonway --version` 目前输出 `moonway 0.1.0`（CLI 内部常量），
-    与模块版本 `0.11.7` 不同步。
 
 ---
 

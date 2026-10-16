@@ -6,6 +6,11 @@ test "parse dispatches commands" {
   assert_eq(@cli.parse(["moonway", "help"]), Help)
   assert_eq(@cli.parse(["moonway", "--version"]), Version)
   assert_eq(@cli.parse(["moonway", "new", "blog"]), New("blog", None))
+  assert_eq(@cli.parse(["moonway", "console"]), Console("app.db"))
+  assert_eq(
+    @cli.parse(["moonway", "console", "--db", "blog.db"]),
+    Console("blog.db"),
+  )
   assert_eq(
     @cli.parse(["moonway", "new", "blog", "--dir", "tmp"]),
     New("blog", Some("tmp")),
@@ -21,6 +26,14 @@ test "parse reports usage problems" {
   assert_eq(
     @cli.parse(["moonway", "new"]),
     Invalid("usage: moonway new <name> [--dir <dir>]"),
+  )
+  assert_eq(
+    @cli.parse(["moonway", "console", "--db"]),
+    Invalid("usage: moonway console [--db <path>]"),
+  )
+  assert_eq(
+    @cli.parse(["moonway", "console", "unexpected"]),
+    Invalid("usage: moonway console [--db <path>]"),
   )
   assert_eq(
     @cli.parse(["moonway", "generate"]),

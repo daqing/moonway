@@ -4,16 +4,20 @@ async test "end-to-end: real server answers a real HTTP client" {
   @async.with_task_group(async fn(group) {
     group.spawn_bg(
       async fn() {
-        serve_async(port, req => {
-          let resp = Response::new()
-          if req.path == "/hi" {
-            resp.set_body("hello from moonway")
-          } else {
-            resp.set_status(404)
-            resp.set_body("Not Found")
-          }
-          resp
-        }) catch {
+        serve_async(
+          port,
+          req => {
+            let resp = Response::new()
+            if req.path == "/hi" {
+              resp.set_body("hello from moonway")
+            } else {
+              resp.set_status(404)
+              resp.set_body("Not Found")
+            }
+            resp
+          },
+          host="0.0.0.0",
+        ) catch {
           err => eprintln("moonway: test server failed: \{err}")
         }
       },
