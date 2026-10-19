@@ -239,7 +239,7 @@ fn console_should_quit(command : ConsoleCommand) -> Bool {
 
 ///|
 async fn console_loop(db : @db.Database, db_path : String) -> Unit {
-  println("moonway \{cli_version} · connected to sqlite://\{db_path}")
+  println("moonway \{cli_version()} · connected to sqlite://\{db_path}")
   println("Type .help for help, .quit to exit.")
   while true {
     @stdio.stdout.write("> ")

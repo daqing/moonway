@@ -1,15 +1,17 @@
 ///|
-let cli_version = "0.11.7"
+fn cli_version() -> String {
+  "v0.11.8"
+}
 
 ///|
 pub fn version() -> String {
-  "moonway \{cli_version}"
+  "moonway \{cli_version()}"
 }
 
 ///|
 pub fn help_text() -> String {
   let lines = [
-    "moonway \{cli_version} — the road to the moon",
+    "moonway \{cli_version()} — the road to the moon",
     "",
     "Usage: moonway <command> [options]",
     "",

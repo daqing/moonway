@@ -90,7 +90,7 @@ fn moon_mod_t(name : String) -> String {
     "description = \"A moonway app\"",
     "",
     "import {",
-    "  \"daqing/moonway@\{cli_version}\",",
+    "  \"daqing/moonway@\{cli_version()}\",",
     "}",
   ])
 }
