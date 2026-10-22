@@ -68,6 +68,12 @@ test "module name derives from path-like new arguments" {
 }
 
 ///|
+test "web templates degrade gracefully when /posts is missing" {
+  assert_true(app_js_t("blog").contains("if (!res.ok)"))
+  assert_true(web_main_jsx_t("blog").contains("if (!res.ok) return [];"))
+}
+
+///|
 test "version output carries the moonway prefix and never raises" {
   assert_true(version().has_prefix("moonway "))
 }

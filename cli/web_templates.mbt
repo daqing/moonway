@@ -24,8 +24,10 @@ fn index_html_t(name : String) -> String {
 fn app_js_t(_name : String) -> String {
   join_lines([
     "async function loadPosts() {", "  const app = document.getElementById(\"app\");",
-    "  try {", "    const res = await fetch(\"/posts\");", "    const posts = await res.json();",
-    "    const items = posts", "      .map((p) => `<li>#${p.id} ${p.title}${p.published ? \"\" : \" (draft)\"}</li>`)",
+    "  try {", "    const res = await fetch(\"/posts\");", "    if (!res.ok) {",
+    "      app.textContent = \"no posts yet — run: moonway generate scaffold Post title:string body:text published:bool\";",
+    "      return;", "    }", "    const posts = await res.json();", "    const items = posts",
+    "      .map((p) => `<li>#${p.id} ${p.title}${p.published ? \"\" : \" (draft)\"}</li>`)",
     "      .join(\"\");", "    app.innerHTML = `<ul>${items}</ul><form id=\"new\"><input name=\"title\" placeholder=\"title\" /><input name=\"body\" placeholder=\"body\" /><button>add post</button></form>`;",
     "    document.getElementById(\"new\").onsubmit = async (e) => {", "      e.preventDefault();",
     "      const form = e.target;", "      const id = Date.now();", "      await fetch(\"/posts\", {",
@@ -53,6 +55,7 @@ fn web_main_jsx_t(name : String) -> String {
     "",
     "async function posts() {",
     "  const res = await fetch(\"/posts\");",
+    "  if (!res.ok) return [];",
     "  return res.json();",
     "}",
     "",

@@ -51,7 +51,10 @@ fn execute_new(name : String, dir : String) -> Unit {
     @fs.write_string_to_file(root + "/moon.mod", moon_mod_t(mod_name))
     @fs.write_string_to_file(root + "/.gitignore", gitignore_t())
     @fs.write_string_to_file(root + "/README.mbt.md", readme_t(mod_name))
-    @fs.write_string_to_file(root + "/cmd/\{mod_name}/moon.pkg", main_pkg_t(mod_name))
+    @fs.write_string_to_file(
+      root + "/cmd/\{mod_name}/moon.pkg",
+      main_pkg_t(mod_name),
+    )
     @fs.write_string_to_file(root + "/cmd/\{mod_name}/main.mbt", main_src_t())
     @fs.write_string_to_file(root + "/models/moon.pkg", models_pkg_t())
     @fs.write_string_to_file(root + "/models/models.mbt", models_src_t())
@@ -82,7 +85,7 @@ fn execute_new(name : String, dir : String) -> Unit {
     println("Next steps:")
     println("  cd \{root}")
     println("  moon update")
-    println("  moon run cmd/main")
+    println("  moon run cmd/\{mod_name}")
     println("")
     println("Frontend (optional, requires Node.js):")
     println("  cd \{root}/web && npm install && npm run build")
@@ -194,19 +197,10 @@ fn main_pkg_t(name : String) -> String {
 ///|
 fn main_src_t() -> String {
   join_lines([
-    "///|",
-    "fn main {",
-    "  let app = @moonway.new()",
-    "  let db = @moonway.sqlite(\"app.db\")",
-    "  if !db.migrate(@migrations.all()) {",
-    "    abort(\"moonway: migrations failed\")",
-    "  }",
-    "  @handlers.register(app, db)",
-    "  // moonway:register-handlers",
-    "  app.static_files(\"static\")",
-    "  println(\"app is listening at :3000\")",
-    "  app.listen(3000)",
-    "}",
+    "///|", "fn main {", "  let app = @moonway.new()", "  let db = @moonway.sqlite(\"app.db\")",
+    "  if !db.migrate(@migrations.all()) {", "    abort(\"moonway: migrations failed\")",
+    "  }", "  @handlers.register(app, db)", "  // moonway:register-handlers", "  app.static_files(\"static\")",
+    "  println(\"app is listening at :3000\")", "  app.listen(3000)", "}",
   ])
 }
 
