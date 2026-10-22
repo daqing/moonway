@@ -42,7 +42,7 @@ fn execute_new(name : String, dir : String) -> Unit {
     ensure_dir(dir)
     ensure_dir(root)
     ensure_dir(root + "/cmd")
-    ensure_dir(root + "/cmd/main")
+    ensure_dir(root + "/cmd/\{mod_name}")
     ensure_dir(root + "/models")
     ensure_dir(root + "/handlers")
     ensure_dir(root + "/migrations")
@@ -51,8 +51,8 @@ fn execute_new(name : String, dir : String) -> Unit {
     @fs.write_string_to_file(root + "/moon.mod", moon_mod_t(mod_name))
     @fs.write_string_to_file(root + "/.gitignore", gitignore_t())
     @fs.write_string_to_file(root + "/README.mbt.md", readme_t(mod_name))
-    @fs.write_string_to_file(root + "/cmd/main/moon.pkg", main_pkg_t(mod_name))
-    @fs.write_string_to_file(root + "/cmd/main/main.mbt", main_src_t())
+    @fs.write_string_to_file(root + "/cmd/\{mod_name}/moon.pkg", main_pkg_t(mod_name))
+    @fs.write_string_to_file(root + "/cmd/\{mod_name}/main.mbt", main_src_t())
     @fs.write_string_to_file(root + "/models/moon.pkg", models_pkg_t())
     @fs.write_string_to_file(root + "/models/models.mbt", models_src_t())
     @fs.write_string_to_file(
@@ -194,10 +194,19 @@ fn main_pkg_t(name : String) -> String {
 ///|
 fn main_src_t() -> String {
   join_lines([
-    "///|", "fn main {", "  let app = @moonway.new()", "  let db = @moonway.sqlite(\"app.db\")",
-    "  if !db.migrate(@migrations.all()) {", "    abort(\"moonway: migrations failed\")",
-    "  }", "  @handlers.register(app, db)", "  // moonway:register-handlers", "  app.static_files(\"static\")",
-    "  app.listen(3000)", "}",
+    "///|",
+    "fn main {",
+    "  let app = @moonway.new()",
+    "  let db = @moonway.sqlite(\"app.db\")",
+    "  if !db.migrate(@migrations.all()) {",
+    "    abort(\"moonway: migrations failed\")",
+    "  }",
+    "  @handlers.register(app, db)",
+    "  // moonway:register-handlers",
+    "  app.static_files(\"static\")",
+    "  println(\"app is listening at :3000\")",
+    "  app.listen(3000)",
+    "}",
   ])
 }
 
