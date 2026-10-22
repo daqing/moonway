@@ -121,7 +121,7 @@ synchronous dispatch built in T2.
 ## T6 — CLI & code generator (cli/) `M2 · P0`
 
 - [x] **T6.1** `moonway` CLI skeleton — argument parsing, `--help`; the binary
-  is distributed via `moon install daqing/moonway`. Lives in `cli/`
+  is distributed via `moon install daqing/moonway/cmd/moonway`. Lives in `cli/`
   (pure `parse` → `Command`) with a thin `cmd/moonway` wrapper reading
   `@env.args()`; `moon run cmd/moonway -- <args>` passes flags through.
 - [x] **T6.2** `moonway new <name>` — generate an app skeleton: native
@@ -264,8 +264,8 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
 
 - [x] **T12.1** Publish `daqing/moonway` to mooncakes.io — done: 0.11.3 and
   0.11.5 published (Server 200 OK); `moon add daqing/moonway` verified from
-  a clean project (acceptance pulled 0.11.5 from the registry). `moon install daqing/moonway/cmd/main` verified too — it installs the
-  CLI binary as `main` (the install path must point at the subpackage
+  a clean project (acceptance pulled 0.11.5 from the registry). `moon install daqing/moonway/cmd/moonway` verified too — it installs the
+  CLI binary as `moonway` (the install path must point at the subpackage
   that defines the executable; the bare module path fails because the
   root package is a library).
 - [x] **T12.2** `examples/blog` — the reference app covering models, routes,

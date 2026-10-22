@@ -108,6 +108,13 @@ test "parse_console_line edge cases" {
 }
 
 ///|
+test "quit and exit request console termination" {
+  assert_true(console_should_quit(parse_console_line(".quit")))
+  assert_true(console_should_quit(parse_console_line(".exit")))
+  assert_false(console_should_quit(parse_console_line(".tables")))
+}
+
+///|
 test "dot-commands are case-sensitive and blank executes to nothing" {
   assert_eq(
     parse_console_line(".TABLES"),

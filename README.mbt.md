@@ -76,6 +76,9 @@ moon run cmd/main
 
 Open <http://localhost:3000>. You're on the road. 🌙
 
+`app.listen` binds to `127.0.0.1` by default. To accept connections from
+other machines, explicitly use `app.listen(3000, host="0.0.0.0")`.
+
 ## The full stack, in one file
 
 Replace `cmd/main/moon.pkg` with (the link flags are required — `moon add`
@@ -160,7 +163,7 @@ updated  admin registry
 ```
 
 > The `moonway` CLI ships with the framework — install it with
-> `moon install daqing/moonway`.
+> `moon install daqing/moonway/cmd/moonway`.
 
 ### Admin dashboard
 
@@ -174,8 +177,8 @@ frontend code.
 
 ```console
 $ moonway console
-moonway 0.1.0 · connected to sqlite://app.db
-moonway> Post.count()
+moonway 0.11.7 · connected to sqlite://app.db
+> Posts.count()
 42
 ```
 

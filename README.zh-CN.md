@@ -65,6 +65,9 @@ moon run cmd/main
 
 打开 <http://localhost:3000>。月球之路，就此启程。🌙
 
+`app.listen` 默认绑定 `127.0.0.1`。如需接受其他机器的连接，请显式使用
+`app.listen(3000, host="0.0.0.0")`。
+
 ## 一个文件里的全栈
 
 把 `cmd/main/moon.pkg` 替换为（link 参数必须写——`moon add` 不会从依赖继承；
@@ -151,7 +154,7 @@ created  migrations/001_create_posts.mbt
 updated  admin registry
 ```
 
-> `moonway` CLI 随框架一起提供——通过 `moon install daqing/moonway` 安装。
+> `moonway` CLI 随框架一起提供——通过 `moon install daqing/moonway/cmd/moonway` 安装。
 
 ### Admin 管理后台
 
@@ -164,8 +167,8 @@ updated  admin registry
 
 ```console
 $ moonway console
-moonway 0.1.0 · connected to sqlite://app.db
-moonway> Post.count()
+moonway 0.11.7 · connected to sqlite://app.db
+> Posts.count()
 42
 ```
 
