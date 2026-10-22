@@ -5,6 +5,7 @@ import {
   "moonbitlang/async",
   "moonbitlang/async/stdio",
   "daqing/moonway/db",
+  "daqing/parse-version",
 }
 
 supported_targets = "native"

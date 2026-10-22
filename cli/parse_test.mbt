@@ -25,7 +25,7 @@ test "parse dispatches commands" {
 test "parse reports usage problems" {
   assert_eq(
     @cli.parse(["moonway", "new"]),
-    Invalid("usage: moonway new <name> [--dir <dir>]"),
+    Invalid("usage: moonway new <name|path> [--dir <dir>]"),
   )
   assert_eq(
     @cli.parse(["moonway", "console", "--db"]),

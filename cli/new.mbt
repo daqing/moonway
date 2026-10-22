@@ -15,10 +15,25 @@ fn ensure_dir(path : String) -> Unit raise {
 }
 
 ///|
+/// Derive the module name from a possibly path-like `new` argument:
+/// `moonway new blog` -> "blog", `moonway new /tmp/m2` -> "m2".
+fn module_name(path : String) -> String {
+  let mut name = path
+  for part in path.split("/") {
+    if part.length() > 0 {
+      name = part.to_owned()
+    }
+  }
+  name
+}
+
+///|
 /// Handle `moonway new <name> [--dir <dir>]`: scaffold an application in
-/// `<dir>/<name>` (default dir is the working directory).
+/// `<dir>/<name>` (default dir is the working directory). `<name>` may be a
+/// path, in which case the module name is the last path component.
 fn execute_new(name : String, dir : String) -> Unit {
   let root = if dir == "." { name } else { dir + "/" + name }
+  let mod_name = module_name(root)
   if @fs.path_exists(root) {
     eprintln("moonway: \{root} already exists")
     return
@@ -33,27 +48,36 @@ fn execute_new(name : String, dir : String) -> Unit {
     ensure_dir(root + "/migrations")
     ensure_dir(root + "/web/src")
     ensure_dir(root + "/static")
-    @fs.write_string_to_file(root + "/moon.mod", moon_mod_t(name))
+    @fs.write_string_to_file(root + "/moon.mod", moon_mod_t(mod_name))
     @fs.write_string_to_file(root + "/.gitignore", gitignore_t())
-    @fs.write_string_to_file(root + "/README.mbt.md", readme_t(name))
-    @fs.write_string_to_file(root + "/cmd/main/moon.pkg", main_pkg_t(name))
+    @fs.write_string_to_file(root + "/README.mbt.md", readme_t(mod_name))
+    @fs.write_string_to_file(root + "/cmd/main/moon.pkg", main_pkg_t(mod_name))
     @fs.write_string_to_file(root + "/cmd/main/main.mbt", main_src_t())
     @fs.write_string_to_file(root + "/models/moon.pkg", models_pkg_t())
     @fs.write_string_to_file(root + "/models/models.mbt", models_src_t())
-    @fs.write_string_to_file(root + "/handlers/moon.pkg", handlers_pkg_t(name))
+    @fs.write_string_to_file(
+      root + "/handlers/moon.pkg",
+      handlers_pkg_t(mod_name),
+    )
     @fs.write_string_to_file(root + "/handlers/handlers.mbt", handlers_src_t())
     @fs.write_string_to_file(
       root + "/migrations/moon.pkg",
-      migrations_pkg_t(name),
+      migrations_pkg_t(mod_name),
     )
     @fs.write_string_to_file(
       root + "/migrations/migrations.mbt",
       migrations_src_t(),
     )
-    @fs.write_string_to_file(root + "/static/index.html", index_html_t(name))
+    @fs.write_string_to_file(
+      root + "/static/index.html",
+      index_html_t(mod_name),
+    )
     @fs.write_string_to_file(root + "/static/app.js", app_js_t(name))
     @fs.write_string_to_file(root + "/web/package.json", web_package_json_t())
-    @fs.write_string_to_file(root + "/web/src/main.jsx", web_main_jsx_t(name))
+    @fs.write_string_to_file(
+      root + "/web/src/main.jsx",
+      web_main_jsx_t(mod_name),
+    )
     println("Created \{root}")
     println("Next steps:")
     println("  cd \{root}")
@@ -67,6 +91,19 @@ fn execute_new(name : String, dir : String) -> Unit {
       eprintln(
         "moonway: failed to create \{root}: \{@debug.Debug::to_repr(err)}",
       )
+  }
+}
+
+///|
+/// Version pinned into generated `moon.mod` imports. moon.mod dependency
+/// versions are bare semver, so strip the leading "v" used in display
+/// strings — `"pkg@v0.11.8"` fails to parse with `SourceDependencyInfo`.
+fn dep_version() -> String {
+  let v = cli_version()
+  if v.has_prefix("v") {
+    v[1:].to_owned()
+  } else {
+    v
   }
 }
 
@@ -90,7 +127,7 @@ fn moon_mod_t(name : String) -> String {
     "description = \"A moonway app\"",
     "",
     "import {",
-    "  \"daqing/moonway@\{cli_version()}\",",
+    "  \"daqing/moonway@\{dep_version()}\",",
     "}",
   ])
 }

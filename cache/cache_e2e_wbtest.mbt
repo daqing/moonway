@@ -34,6 +34,7 @@ async test "cache serves hits and stores misses" {
 
 ///|
 async test "cache failures degrade to plain dispatch" {
+  @http.set_cache_warnings(false)
   @async.with_task_group(async fn(group) {
     let client = RedisClient::connect("127.0.0.1:6379")
     let policy : @http.CachePolicy[RedisClient] = {
@@ -59,4 +60,5 @@ async test "cache failures degrade to plain dispatch" {
     assert_eq(body.text(), "still serving")
     assert_eq(resp.headers.get("X-Cache"), None)
   })
+  @http.set_cache_warnings(true)
 }

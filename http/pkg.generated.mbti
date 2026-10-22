@@ -26,6 +26,8 @@ pub fn serve_static_file(String, String) -> Response?
 
 pub async fn serve_websocket(Array[WsRoute], @moonbitlang/async/http.Request, @moonbitlang/async/http.ServerConnection) -> Bool
 
+pub fn set_cache_warnings(Bool) -> Unit
+
 // Errors
 
 // Types and methods

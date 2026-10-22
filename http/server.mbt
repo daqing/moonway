@@ -56,6 +56,17 @@ pub async fn[S : CacheStore] serve_cached_async(
 }
 
 ///|
+/// Controls the stderr warnings emitted when the cache backend fails
+/// (`cache unavailable, ...`). Enabled by default; disable to run quietly,
+/// e.g. in tests that exercise cache degradation.
+pub fn set_cache_warnings(enabled : Bool) -> Unit {
+  cache_warnings.val = enabled
+}
+
+///|
+let cache_warnings : Ref[Bool] = Ref(true)
+
+///|
 /// Cache lookup or dispatch-plus-store for one GET request. Any cache
 /// failure degrades to a plain dispatch.
 async fn[S : CacheStore] serve_one(
@@ -65,7 +76,9 @@ async fn[S : CacheStore] serve_one(
 ) -> Response {
   let cached = policy.lookup(req.path) catch {
     err => {
-      eprintln("moonway: cache unavailable, serving without cache: \{err}")
+      if cache_warnings.val {
+        eprintln("moonway: cache unavailable, serving without cache: \{err}")
+      }
       None
     }
   }
@@ -88,7 +101,11 @@ async fn[S : CacheStore] serve_one(
           true
         } catch {
           err => {
-            eprintln("moonway: cache unavailable, response not cached: \{err}")
+            if cache_warnings.val {
+              eprintln(
+                "moonway: cache unavailable, response not cached: \{err}",
+              )
+            }
             false
           }
         }

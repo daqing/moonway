@@ -469,7 +469,8 @@ fn main {
 - 未命中时正常派发，仅当响应状态为 `200` 时写入缓存（TTL 秒），并带 `X-Cache: MISS`；
 - **降级**：Redis 不可用时请求照常处理，只在 stderr 打印
   `moonway: cache unavailable, serving without cache`；写缓存失败不会导致请求失败，
-  此时不输出 `X-Cache` 头。
+  此时不输出 `X-Cache` 头。不需要这些告警时可调用
+  `@http.set_cache_warnings(false)` 关闭。
 
 ### 在 async main 中手动接线
 
@@ -608,7 +609,7 @@ moonway 0.11.7 — the road to the moon
 Usage: moonway <command> [options]
 
 Commands:
-  moonway new <name>                          create a new moonway app
+  moonway new <name|path>                     create a new moonway app
   moonway generate scaffold <Model> f:type    scaffold a model, handlers
                                               and migration
   moonway console [--db <path>]               interactive database console
@@ -618,9 +619,11 @@ Commands:
 Field types: string, text, int, bool, float
 ```
 
-### 12.2 `moonway new <name> [--dir <dir>]`
+### 12.2 `moonway new <name|path> [--dir <dir>]`
 
 生成一个 native、可直接运行的应用骨架（详见第 2、4 节）。若目标目录已存在则报错。
+参数可以是路径，例如 `moonway new /tmp/m2` 或 `moonway new myapp --dir apps`；
+模块名取目标路径的最后一段（上例分别为 `m2`、`myapp`）。
 
 ### 12.3 `moonway generate scaffold <Model> field:type ...`
 

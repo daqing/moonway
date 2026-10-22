@@ -52,14 +52,24 @@ test "new templates pin native target, link flags and markers" {
 
 ///|
 test "CLI version and generated dependency match the module version" {
-  // FIXME: 这里的测试不健壮，先跳过
-  // let manifest = @fs.read_file_to_string("moon.mod")
-  // assert_true(manifest.contains("version = \"\{(cli_version())}\""))
+  let manifest = @fs.read_file_to_string("moon.mod")
+  assert_true(manifest.contains("version = \"\{dep_version()}\""))
+  let mod_src = moon_mod_t("blog")
+  assert_true(mod_src.contains("\"daqing/moonway@\{dep_version()}\","))
+  assert_false(mod_src.contains("@v"))
+}
 
-  // FIXME: 不理解这里测试的是什么，暂时注释掉
-  // assert_true(
-  //   moon_mod_t("blog").contains("\"daqing/moonway@\{cli_version()}\""),
-  // )
+///|
+test "module name derives from path-like new arguments" {
+  assert_eq(module_name("blog"), "blog")
+  assert_eq(module_name("tmp/blog"), "blog")
+  assert_eq(module_name("/tmp/m2"), "m2")
+  assert_eq(module_name("/tmp/m2/"), "m2")
+}
+
+///|
+test "version output carries the moonway prefix and never raises" {
+  assert_true(version().has_prefix("moonway "))
 }
 
 ///|
