@@ -18,7 +18,7 @@ pub fn render_index(String, Array[@db.Table]) -> String
 
 pub fn render_layout(String, String) -> String
 
-pub fn render_list(String, @db.Table, Array[Json], Int, Bool, String) -> String
+pub fn render_list(String, @db.Table, Array[Json], Int32, Bool, String) -> String
 
 pub fn render_unauthorized() -> String
 
