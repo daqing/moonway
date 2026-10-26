@@ -141,6 +141,124 @@ fn main {
 }
 ```
 
+## 生成应用：模板、islands 与 Procfile
+
+如果既需要服务端渲染，又需要局部交互，请使用应用生成器，而不是上面最小的
+`moon new` 示例：
+
+```bash
+moon install daqing/moonway/cmd/moonway
+moonway new hello-moonway
+cd hello-moonway
+moon update
+```
+
+生成项目中与前端相关的文件如下：
+
+```text
+hello-moonway/
+├── app/
+│   ├── frontend/
+│   │   ├── package.json          # Preact、esbuild 与 build/dev 脚本
+│   │   └── src/main.jsx          # 组件、island 注册表与水合逻辑
+│   └── templates/
+│       ├── moon.pkg              # 引入 moon-templ 运行时
+│       ├── home.templ            # 模板源文件：修改这里
+│       ├── home_templ.mbt        # 生成的 MoonBit 代码：请勿手改
+│       └── pages.mbt             # 向应用返回渲染后的 HTML
+├── static/                       # 前端构建产物目录
+├── cmd/hello-moonway/main.mbt    # 首页路由与静态文件服务
+└── Procfile                      # 开发进程配置
+```
+
+### `app/templates`：服务端渲染页面
+
+模板使用 [moon-templ](https://mooncakes.io/docs/daqing/moon-templ@0.1.0)
+在服务端生成 HTML。你需要编辑 `home.templ`；`moon-templ` CLI 负责生成
+`home_templ.mbt`，`pages.mbt` 则通过 `home_page` 对外提供渲染后的页面。
+生成的主程序这样连接首页路由和前端资源：
+
+```moonbit nocheck
+app.get("/", ctx => ctx.html(@templates.home_page("hello-moonway")))
+app.static_files("static")
+```
+
+骨架已附带 `home_templ.mbt`，因此首次编译不需要安装模板 CLI。修改 `.templ`
+文件后，请让 `moon-templ` 位于 `PATH`，再重新生成：
+
+```bash
+moon-templ generate app/templates/home.templ
+```
+
+开发时也可以使用下文 `Procfile` 中的 `templ` 进程自动完成这一步。
+
+### `app/frontend` 与 Preact islands
+
+`app/frontend` 是一个独立的 Node.js 前端包，使用 [Preact](https://preactjs.com)
+编写有状态组件，并通过 esbuild 打包。它不会把整个页面变成单页应用（SPA）：
+服务端先渲染页面，Preact 随后只水合带有 `data-island` 标记的局部区域。
+
+默认模板同时提供 island 挂载点和初始的服务端渲染 HTML：
+
+```templ
+<div data-island="counter">
+  <button type="button" class="counter">Clicked 0 times</button>
+</div>
+<script src="/app.js"></script>
+```
+
+`app/frontend/src/main.jsx` 将 island 名称映射到组件，并水合所有匹配项。
+要添加自己的 island，请定义组件、用模板中的相同名称注册，并让组件的初始
+渲染结果与服务端 HTML 保持一致：
+
+```jsx
+const islands = { counter: Counter };
+
+for (const element of document.querySelectorAll("[data-island]")) {
+  const Component = islands[element.dataset.island];
+  if (Component) {
+    hydrate(<Component />, element);
+  }
+}
+```
+
+### `Procfile`：同时运行开发进程
+
+生成的 `Procfile` 是一份开发进程配置：
+
+```procfile
+web: moon run cmd/hello-moonway
+templ: moon-templ generate --watch app/templates/...
+frontend: cd app/frontend && npm install && npm run dev
+```
+
+确保 `moon-templ`、Node.js、npm 和
+[Foreman](https://github.com/ddollar/foreman) 均位于 `PATH`，然后在项目根目录运行：
+
+```bash
+foreman start
+```
+
+- `web` 启动 MoonBit 服务端。
+- `templ` 监听 `app/templates`，在 `.templ` 文件变更时重新生成 MoonBit 代码。
+- `frontend` 安装 npm 依赖，并以 watch 模式运行 esbuild；前端源码变更时持续
+  更新 `static/app.js`。
+
+也可以不使用 Procfile 工具，手动构建并运行所有部分：
+
+```bash
+cd app/frontend
+npm install
+npm run build
+cd ../..
+moon run cmd/hello-moonway
+```
+
+`npm run build` 会生成 `static/app.js`，由 `app.static_files("static")` 作为
+`/app.js` 提供；该构建产物已被 Git 忽略。手动构建后，前端文件每次变更都需要
+重新执行 `npm run build`。未构建该文件时，服务端 HTML 仍可访问，但 `/app.js`
+会返回 404，islands 也不会具备交互能力。
+
 ## 工具箱
 
 ### 代码生成器
@@ -155,12 +273,6 @@ created  handlers/posts.mbt
 created  migrations/001_create_posts.mbt
 updated  admin registry
 ```
-
-> `moonway` CLI 随框架一起提供——通过 `moon install daqing/moonway/cmd/moonway` 安装。
-
-`moonway new` 还会生成包含 `web`、`templ` 和 `frontend` 进程的 `Procfile`。
-使用 Foreman 等 Procfile 工具即可同时启动 Web 服务器、重新生成模板，并在前端
-文件变更时自动重新构建资源。
 
 ### Admin 管理后台
 
