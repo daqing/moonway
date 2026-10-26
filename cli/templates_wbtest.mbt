@@ -55,6 +55,35 @@ test "new templates pin native target, link flags and markers" {
 }
 
 ///|
+test "new projects include a Procfile for the server and templ watcher" {
+  assert_eq(
+    procfile_t("blog"),
+    "web: moon run cmd/blog\ntempl: moon-templ generate --watch app/templates/...",
+  )
+  let readme = readme_t("blog")
+  assert_true(readme.contains("foreman start"))
+  assert_true(
+    readme.contains("regenerates templates whenever `.templ` files change"),
+  )
+}
+
+///|
+test "new projects write startup logs directly to stdout" {
+  assert_true(moon_mod_t("blog").contains("\"moonbitlang/async@0.22.4\""))
+  let main_pkg = main_pkg_t("blog")
+  assert_true(main_pkg.contains("\"moonbitlang/async\" @async"))
+  assert_true(main_pkg.contains("\"moonbitlang/async/stdio\" @stdio"))
+  let main_src = main_src_t("blog")
+  assert_true(main_src.contains("@async.run_async_main"))
+  assert_true(
+    main_src.contains(
+      "@stdio.stdout.write(\"app is listening at http://127.0.0.1:3000\\n\")",
+    ),
+  )
+  assert_false(main_src.contains("println(\"app is listening"))
+}
+
+///|
 test "templ templates include runtime package and generated homepage" {
   let pkg = templates_pkg_t()
   assert_true(pkg.contains("\"daqing/moon-templ/runtime\" @rt"))

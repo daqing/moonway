@@ -51,6 +51,7 @@ fn execute_new(name : String, dir : String) -> Unit {
     ensure_dir(root + "/static")
     @fs.write_string_to_file(root + "/moon.mod", moon_mod_t(mod_name))
     @fs.write_string_to_file(root + "/.gitignore", gitignore_t())
+    @fs.write_string_to_file(root + "/Procfile", procfile_t(mod_name))
     @fs.write_string_to_file(root + "/README.mbt.md", readme_t(mod_name))
     @fs.write_string_to_file(
       root + "/cmd/\{mod_name}/moon.pkg",
@@ -99,7 +100,9 @@ fn execute_new(name : String, dir : String) -> Unit {
     println("  moon update")
     println("Build the Preact islands:")
     println("  cd app/frontend && npm install && npm run build && cd ../..")
-    println("Start the server:")
+    println("Start the server and templ watcher with Foreman:")
+    println("  foreman start")
+    println("Or start only the server:")
     println("  moon run cmd/\{mod_name}")
   } catch {
     err =>
@@ -144,6 +147,7 @@ fn moon_mod_t(name : String) -> String {
     "import {",
     "  \"daqing/moonway@\{dep_version()}\",",
     "  \"daqing/moon-templ@0.1.0\",",
+    "  \"moonbitlang/async@0.22.4\",",
     "}",
   ])
 }
@@ -152,6 +156,14 @@ fn moon_mod_t(name : String) -> String {
 fn gitignore_t() -> String {
   join_lines([
     "_build/", "target/", ".mooncakes/", "node_modules/", "*.db", "static/app.js",
+  ])
+}
+
+///|
+fn procfile_t(name : String) -> String {
+  join_lines([
+    "web: moon run cmd/\{name}",
+    "templ: moon-templ generate --watch app/templates/...",
   ])
 }
 
@@ -176,6 +188,14 @@ fn readme_t(name : String) -> String {
     "```",
     "",
     "Then open <http://localhost:3000>.",
+    "",
+    "For development, the included `Procfile` runs the web server and templ watcher together. With `moon-templ` and [Foreman](https://github.com/ddollar/foreman) on your PATH:",
+    "",
+    "```",
+    "foreman start",
+    "```",
+    "",
+    "The watcher regenerates templates whenever `.templ` files change.",
     "",
     "## Templates and Preact islands",
     "",
@@ -206,6 +226,8 @@ fn main_pkg_t(name : String) -> String {
     "  \"\{name}/handlers\" @handlers,",
     "  \"\{name}/migrations\" @migrations,",
     "  \"\{name}/app/templates\" @templates,",
+    "  \"moonbitlang/async\" @async,",
+    "  \"moonbitlang/async/stdio\" @stdio,",
     "}",
     "",
     "supported_targets = \"native\"",
@@ -232,7 +254,9 @@ fn main_src_t(name : String) -> String {
     "  // moonway:register-handlers",
     "  app.get(\"/\", ctx => ctx.html(@templates.home_page(\"\{name}\")))",
     "  app.static_files(\"static\")",
-    "  println(\"app is listening at http://127.0.0.1:3000\")",
+    "  @async.run_async_main(async fn() {",
+    "    @stdio.stdout.write(\"app is listening at http://127.0.0.1:3000\\n\")",
+    "  })",
     "  app.listen(3000)",
     "}",
   ])

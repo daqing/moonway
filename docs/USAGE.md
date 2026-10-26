@@ -603,6 +603,10 @@ moon-templ generate app/templates/home.templ
 moon check
 ```
 
+开发时也可以使用骨架根目录的 `Procfile`，通过 Foreman 等 Procfile 工具执行
+`foreman start`，同时启动 Web 服务器和 templ watcher。watcher 会执行
+`moon-templ generate --watch app/templates/...`，在 `.templ` 文件变更后自动重新生成。
+
 要启用首页 islands，需要 Node.js 和 npm 构建前端：
 
 ```bash
