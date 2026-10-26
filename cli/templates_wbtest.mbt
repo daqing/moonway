@@ -68,7 +68,7 @@ test "templ templates include runtime package and generated homepage" {
       "<button type=\"button\" class=\"counter\">Clicked 0 times</button>",
     ),
   )
-  assert_true(source.contains("data-island=\"posts\""))
+  assert_false(source.contains("data-island=\"posts\""))
   assert_true(source.contains("<script src=\"/app.js\"></script>"))
   assert_false(source.contains("/index.html"))
   let generated = home_templ_generated_t()
@@ -114,25 +114,18 @@ test "new projects document templ and Preact islands" {
 }
 
 ///|
-test "Preact islands hydrate Counter and Posts components" {
-  let src = web_main_jsx_t("blog")
+test "Preact islands hydrate the Counter component" {
+  let src = web_main_jsx_t()
   assert_true(src.contains("import { hydrate } from \"preact\""))
   assert_true(src.contains("from \"preact/hooks\""))
   assert_true(src.contains("function Counter()"))
   assert_true(src.contains("useState(0)"))
   assert_true(src.contains("onClick={() => setCount"))
-  assert_true(
-    src.contains("const islands = { counter: Counter, posts: PostsApp }"),
-  )
+  assert_true(src.contains("const islands = { counter: Counter }"))
   assert_true(src.contains("document.querySelectorAll(\"[data-island]\")"))
   assert_true(src.contains("hydrate(<Component />, element)"))
-  assert_true(src.contains("if (!res.ok)"))
+  assert_false(src.contains("PostsApp"))
   assert_false(src.contains("no posts yet"))
-  assert_true(src.contains("method: \"POST\""))
-  assert_true(src.contains("const id = posts.reduce("))
-  assert_false(src.contains("Date.now()"))
-  assert_true(src.contains("<form onSubmit={addPost}>"))
-  assert_true(src.contains("await refreshPosts()"))
   assert_false(src.contains("document.getElementById(\"app\")"))
 }
 

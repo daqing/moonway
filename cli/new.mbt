@@ -91,7 +91,7 @@ fn execute_new(name : String, dir : String) -> Unit {
     )
     @fs.write_string_to_file(
       root + "/app/frontend/src/main.jsx",
-      web_main_jsx_t(mod_name),
+      web_main_jsx_t(),
     )
     println("Created \{root}")
     println("Next steps:")
@@ -180,7 +180,7 @@ fn readme_t(name : String) -> String {
     "## Templates and Preact islands",
     "",
     "`app/templates/home.templ` defines `/` with [moon-templ](https://mooncakes.io/docs/daqing/moon-templ@0.1.0) and `data-island` mount points.",
-    "`app/frontend/src/main.jsx` hydrates those mount points, including the Counter button and Posts component on the same page.",
+    "`app/frontend/src/main.jsx` hydrates the Counter button on the same page.",
     "The generated `home_templ.mbt` is included, so the initial build needs no template CLI.",
     "After editing the template, regenerate it with the `moon-templ` CLI on your PATH:",
     "",

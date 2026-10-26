@@ -591,10 +591,9 @@ app.static_files("static")
 首次编译不需要安装模板 CLI。主程序通过动态路由和 `ctx.html(...)` 返回该页面；
 动态路由优先于静态文件。
 
-模板中的 `data-island="counter"` 包含服务端输出的 Counter 按钮，
-`data-island="posts"` 是 Posts 组件挂载点。`app/frontend/src/main.jsx` 扫描所有
-`[data-island]`，通过 Preact `hydrate` 将注册的组件水合到同一页面。Counter 的
-点击计数和 Posts 的数据加载、提交都由对应组件负责，不再使用独立 `/index.html`。
+模板中的 `data-island="counter"` 包含服务端输出的 Counter 按钮。
+`app/frontend/src/main.jsx` 扫描所有 `[data-island]`，通过 Preact `hydrate` 将注册的
+组件水合到同一页面。Counter 的点击计数由组件负责，不再使用独立 `/index.html`。
 
 修改 `.templ` 后，需要让 `moon-templ` CLI 位于 `PATH`，重新生成并检查生成的 MoonBit
 文件：

@@ -241,8 +241,8 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
 - [x] **T11.1** Frontend scaffold in generated projects — `moonway new`
   emits `app/templates/home.templ` with its checked-in `home_templ.mbt`, wired
   through `daqing/moon-templ/runtime` as the default `/` page. The template
-  includes Counter and Posts `data-island` mount points plus `/app.js`; no
-  separate `static/index.html` is generated. Server-rendered HTML works without
+  includes a Counter `data-island` mount point plus `/app.js`; no separate
+  `static/index.html` is generated. Server-rendered HTML works without
   a frontend build, while the Preact build enables island interactivity.
 - [x] **T11.2** Static file serving — `app.static_files(dir)` serves
   unmatched GET requests from `dir`: `/` falls back to `index.html`,
@@ -253,8 +253,7 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
 - [x] **T11.3** Preact islands on the templ homepage — the Preact source in
   `app/frontend/src/main.jsx` hydrates registered components into
   `[data-island]` elements. Counter adds stateful clicks to the templ-rendered
-  button, and Posts fetches `/posts`, renders the list and submits the add-post
-  form on the same `/` page. The frontend build emits `static/app.js`.
+  button on `/`. The frontend build emits `static/app.js`.
 
 > P2: shrinkable per the risk plan — if cut, remove the README feature bullet
 > and say so.

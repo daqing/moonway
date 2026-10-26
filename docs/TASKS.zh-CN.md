@@ -202,8 +202,8 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 
 - [x] **T11.1** 生成项目中的前端脚手架——`moonway new` 生成
   `app/templates/home.templ` 及随骨架提交的 `home_templ.mbt`，通过
-  `daqing/moon-templ/runtime` 将其作为默认 `/` 页面。模板包含 Counter 和
-  Posts 的 `data-island` 挂载点以及 `/app.js` 引用，不再生成独立的
+  `daqing/moon-templ/runtime` 将其作为默认 `/` 页面。模板包含 Counter 的
+  `data-island` 挂载点以及 `/app.js` 引用，不再生成独立的
   `static/index.html`。服务端 HTML 无需前端构建即可访问，Preact 构建则启用
   island 交互。
 - [x] **T11.2** 静态文件服务——`app.static_files(dir)` 为未匹配的 GET 请求
@@ -213,8 +213,7 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
   已有集成测试。
 - [x] **T11.3** templ 首页中的 Preact islands——`app/frontend/src/main.jsx`
   将注册的组件水合到 `[data-island]` 元素。Counter 让 templ 输出的按钮具备
-  点击计数状态，Posts 在同一个 `/` 页面中 fetch `/posts`、渲染列表并提交
-  新增表单；前端构建生成 `static/app.js`。
+  点击计数状态；前端构建生成 `static/app.js`。
 
 > P2：按风险预案可收缩——若收缩，删除 README 中对应功能条目并如实说明。
 
