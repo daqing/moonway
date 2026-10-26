@@ -43,10 +43,10 @@ fn execute_new(name : String, dir : String) -> Unit {
     ensure_dir(root)
     ensure_dir(root + "/cmd")
     ensure_dir(root + "/cmd/\{mod_name}")
-    ensure_dir(root + "/models")
+    ensure_dir(root + "/app/models")
     ensure_dir(root + "/handlers")
     ensure_dir(root + "/migrations")
-    ensure_dir(root + "/web/src")
+    ensure_dir(root + "/app/views/src")
     ensure_dir(root + "/static")
     @fs.write_string_to_file(root + "/moon.mod", moon_mod_t(mod_name))
     @fs.write_string_to_file(root + "/.gitignore", gitignore_t())
@@ -56,8 +56,8 @@ fn execute_new(name : String, dir : String) -> Unit {
       main_pkg_t(mod_name),
     )
     @fs.write_string_to_file(root + "/cmd/\{mod_name}/main.mbt", main_src_t())
-    @fs.write_string_to_file(root + "/models/moon.pkg", models_pkg_t())
-    @fs.write_string_to_file(root + "/models/models.mbt", models_src_t())
+    @fs.write_string_to_file(root + "/app/models/moon.pkg", models_pkg_t())
+    @fs.write_string_to_file(root + "/app/models/models.mbt", models_src_t())
     @fs.write_string_to_file(
       root + "/handlers/moon.pkg",
       handlers_pkg_t(mod_name),
@@ -75,16 +75,19 @@ fn execute_new(name : String, dir : String) -> Unit {
       root + "/static/index.html",
       index_html_t(mod_name),
     )
-    @fs.write_string_to_file(root + "/web/package.json", web_package_json_t())
     @fs.write_string_to_file(
-      root + "/web/src/main.jsx",
+      root + "/app/views/package.json",
+      web_package_json_t(),
+    )
+    @fs.write_string_to_file(
+      root + "/app/views/src/main.jsx",
       web_main_jsx_t(mod_name),
     )
     println("Created \{root}")
     println("Next steps:")
     println("  cd \{root}")
     println("  moon update")
-    println("  cd web && npm install && npm run build && cd ..")
+    println("  cd app/views && npm install && npm run build && cd ../..")
     println("  moon run cmd/\{mod_name}")
   } catch {
     err =>
@@ -152,10 +155,10 @@ fn readme_t(name : String) -> String {
     "",
     "```",
     "moon update",
-    "cd web",
+    "cd app/views",
     "npm install",
     "npm run build",
-    "cd ..",
+    "cd ../..",
     "moon run cmd/\{name}",
     "```",
     "",
@@ -169,7 +172,7 @@ fn readme_t(name : String) -> String {
     "",
     "## Frontend",
     "",
-    "`web/src/main.jsx` is the only frontend source. The Preact + esbuild",
+    "`app/views/src/main.jsx` is the only frontend source. The Preact + esbuild",
     "build writes `static/app.js`; `static/index.html` only mounts that bundle.",
     "There is no vanilla JavaScript fallback, so rebuild after frontend changes.",
   ])
@@ -228,7 +231,7 @@ fn handlers_pkg_t(name : String) -> String {
     "import {",
     "  \"daqing/moonway\" @moonway,",
     "  \"daqing/moonway/db\" @db,",
-    "  \"\{name}/models\" @models,",
+    "  \"\{name}/app/models\" @models,",
     "  \"moonbitlang/core/json\" @json,",
     "}",
     "",
@@ -252,7 +255,7 @@ fn migrations_pkg_t(name : String) -> String {
   join_lines([
     "import {",
     "  \"daqing/moonway/db\" @db,",
-    "  \"\{name}/models\" @models,",
+    "  \"\{name}/app/models\" @models,",
     "}",
     "",
     "supported_targets = \"native\"",

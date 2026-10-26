@@ -37,7 +37,7 @@ moonway 应用。API 名称、行为与示例均以当前代码（`moon.mod` 版
    - **Ubuntu/Debian**：`sudo apt install libsqlite3-dev`。
 3. （可选）Redis 服务，仅在使用响应缓存时需要。Redis 不可用时应用会以降级模式运行，
    不会启动失败。
-4. 使用 `moonway new` 生成的前端时，必须安装 Node.js（`npm`）并构建 `web/`；
+4. 使用 `moonway new` 生成的前端时，必须安装 Node.js（`npm`）并构建 `app/views/`；
    没有零构建备用前端。
 
 > CI（见 `.github/workflows/ci.yml`）会在 ubuntu-latest 上安装
@@ -83,17 +83,18 @@ moon install daqing/moonway/cmd/moonway
 moonway new hello-moonway
 cd hello-moonway
 moon update
-cd web
+cd app/views
 npm install
 npm run build
-cd ..
+cd ../..
 moon run cmd/hello-moonway
 ```
 
 `moonway new` 会自动完成：
 
 - 生成 `preferred_target = "native"` 的 `moon.mod`，并写入 moonway 依赖；
-- 生成 `cmd/hello-moonway`、`models`、`handlers`、`migrations`、`web`、`static` 目录；
+- 生成 `cmd/hello-moonway`、`app/models`、`handlers`、`migrations`、
+  `app/views`、`static` 目录；
 - 生成可运行的主程序、Preact 前端源码、HTML 挂载壳，以及 SQLite 链接参数 `-lsqlite3`。
 
 可选参数 `--dir <dir>` 指定输出父目录：`moonway new myapp --dir apps` 会在
@@ -165,18 +166,19 @@ hello-moonway/
 │   └── hello-moonway/
 │       ├── moon.pkg              # 可执行包；声明 -lsqlite3
 │       └── main.mbt              # 程序入口
-├── models/
-│   ├── moon.pkg
-│   └── models.mbt                # admin_tables() 注册表（带 marker）
+├── app/
+│   ├── models/
+│   │   ├── moon.pkg
+│   │   └── models.mbt            # admin_tables() 注册表（带 marker）
+│   └── views/                    # 唯一的 Preact + esbuild 前端源码
+│       ├── package.json
+│       └── src/main.jsx
 ├── handlers/
 │   ├── moon.pkg
 │   └── handlers.mbt              # register(app, db)
 ├── migrations/
 │   ├── moon.pkg
 │   └── migrations.mbt            # all() -> Array[Migration]（带 marker）
-├── web/                          # 唯一的 Preact + esbuild 前端源码
-│   ├── package.json
-│   └── src/main.jsx
 └── static/                       # 静态部署目录
     └── index.html                # 仅挂载 Preact 构建产物
 ```
@@ -188,7 +190,7 @@ hello-moonway/
 
 | 文件 | marker 注释 |
 | --- | --- |
-| `models/models.mbt` | `// moonway:admin-tables` |
+| `app/models/models.mbt` | `// moonway:admin-tables` |
 | `migrations/migrations.mbt` | `// moonway:migrations` |
 | `cmd/hello-moonway/main.mbt` | `// moonway:register-handlers` |
 
@@ -446,7 +448,7 @@ app.admin(db, [posts], prefix="/manage", token="s3cret")
 `token` 保护（基础防护，非生产级鉴权）：token 非空时，每个请求都必须携带它——
 GET 通过 `?token=...`，POST 也可通过表单字段——否则返回 `401`。
 
-> `moonway new` 生成的 `models/models.mbt` 里有 `admin_tables()` 注册表，脚手架会
+> `moonway new` 生成的 `app/models/models.mbt` 里有 `admin_tables()` 注册表，脚手架会
 > 自动把新表追加进去。但生成的主程序默认**不会**自动挂载 admin，如需启用请在
 > `cmd/hello-moonway/main.mbt` 中显式调用：
 >
@@ -578,20 +580,20 @@ app.static_files("static")
 
 ### 11.2 前端工作流
 
-`moonway new` 只生成 Preact 前端。`web/src/main.jsx` 是唯一的客户端源码，
+`moonway new` 只生成 Preact 前端。`app/views/src/main.jsx` 是唯一的客户端源码，
 `static/index.html` 仅提供 Preact 挂载节点和 `/app.js` 脚本引用，不包含备用 UI。
 首次运行页面前必须构建：
 
 ```bash
-cd web
+cd app/views
 npm install
-npm run build     # esbuild 将 Preact 应用打包到 ../static/app.js
-cd ..
+npm run build     # esbuild 将 Preact 应用打包到 ../../static/app.js
+cd ../..
 moon run cmd/hello-moonway
 ```
 
 未构建时不会生成 `static/app.js`，浏览器请求 `/app.js` 会得到 404，Preact 页面
-不会渲染。修改 `web/` 后需要重新执行 `npm run build`。
+不会渲染。修改 `app/views/` 后需要重新执行 `npm run build`。
 
 生成的主程序默认调用 `app.static_files("static")`，因此 `/` 返回 HTML 挂载壳，
 `/app.js` 返回构建后的 Preact bundle。
@@ -647,10 +649,10 @@ moonway generate scaffold Post title:string body:text published:bool
 输出示例：
 
 ```console
-created  models/post.mbt
+created  app/models/post.mbt
 created  handlers/posts.mbt
 created  migrations/001_create_posts.mbt
-updated  models/models.mbt, migrations/migrations.mbt, cmd/main/main.mbt
+updated  app/models/models.mbt, migrations/migrations.mbt, cmd/main/main.mbt
 ```
 
 字段类型与生成的 MoonBit / 列类型映射：
@@ -666,7 +668,7 @@ updated  models/models.mbt, migrations/migrations.mbt, cmd/main/main.mbt
 
 - 模型名必须以大写字母开头（否则报错）；
 - 生成的模型自带 `id : Int` 主键；
-- 若 `models/<snake>.mbt` 已存在则拒绝覆盖；
+- 若 `app/models/<snake>.mbt` 已存在则拒绝覆盖；
 - 迁移版本号按 `migrations/` 下已有的 `0xx_*.mbt` 数量递增；
 - 自动生成 handlers：`GET /<plural>`（列表）、`POST /<plural>`（创建，400/500 分支）、
   `GET /<plural>/:id`（详情，404 分支）。

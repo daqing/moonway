@@ -105,9 +105,9 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
   `parse` → `Command`），`cmd/moonway` 是读 `@env.args()` 的薄入口；
   `moon run cmd/moonway -- <args>` 透传参数。
 - [x] **T6.2** `moonway new <name>`——生成应用骨架：native `preferred_target`
-  （按 T1.4 的决策）、`models/` `handlers/` `migrations/` `web/` 目录、
-  预先接好 moonway 依赖。已实测：生成的项目第一次 `moon check` 即通过，
-  运行即在 :3000 提供服务且 SQLite 已迁移（moonway 未发布前的本地验证用
+  （按 T1.4 的决策）、`app/models/` `handlers/` `migrations/` `app/views/`
+  目录、预先接好 moonway 依赖。已实测：生成的项目第一次 `moon check`
+  即通过，运行即在 :3000 提供服务且 SQLite 已迁移（moonway 未发布前的本地验证用
   `moon.work` members 映射；发布后的用户从 registry 拉取）。
 - [x] **T6.3** `moonway generate scaffold <Model> field:type …`——生成模型
   文件、handlers（GET 列表/详情、POST 含 400/500 路径）、带时间戳版本的
@@ -201,7 +201,7 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 ## T11 — Preact 前端集成（preact/） `M4 · P2`
 
 - [x] **T11.1** 生成项目中的前端脚手架——`moonway new` 产出仅用于挂载的
-  `static/index.html`，以及 `web/` 下的 Preact + esbuild 源码。必须执行
+  `static/index.html`，以及 `app/views/` 下的 Preact + esbuild 源码。必须执行
   `npm install && npm run build` 才能生成 `static/app.js`；不再生成 vanilla
   备用前端，构建产物由 git 忽略。Node.js 前置条件写在生成的 README 里。
 - [x] **T11.2** 静态文件服务——`app.static_files(dir)` 为未匹配的 GET 请求
@@ -209,7 +209,7 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
   按扩展名给出 Content-Type（文本类型走字符串 body，图片等二进制走新增的
   bytes body），`..` 穿越在触碰文件系统前即被拒绝。动态路由永远优先。
   已有集成测试。
-- [x] **T11.3** 接入 posts API 的示例页面——`web/src/main.jsx` 中的 Preact
+- [x] **T11.3** 接入 posts API 的示例页面——`app/views/src/main.jsx` 中的 Preact
   源码会 fetch `/posts`、渲染列表并提交新增表单；前端构建生成
   `static/app.js`，生成的 `main.mbt` 挂载 `app.static_files("static")` 使
   `/` 服务该页面。

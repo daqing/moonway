@@ -140,3 +140,17 @@ test "marker insertion places the line and reports missing markers" {
   }
   assert_true(insert_after_marker("no marker here", "// x", "y") is None)
 }
+
+///|
+test "new project templates use app models and views directories" {
+  let handlers_pkg = handlers_pkg_t("blog")
+  assert_true(handlers_pkg.contains("\"blog/app/models\" @models"))
+  let migrations_pkg = migrations_pkg_t("blog")
+  assert_true(migrations_pkg.contains("\"blog/app/models\" @models"))
+  let readme = readme_t("blog")
+  assert_true(readme.contains("cd app/views"))
+  assert_true(readme.contains("cd ../.."))
+  assert_true(readme.contains("`app/views/src/main.jsx`"))
+  let frontend_pkg = web_package_json_t()
+  assert_true(frontend_pkg.contains("--outfile=../../static/app.js"))
+}

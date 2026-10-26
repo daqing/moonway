@@ -1,5 +1,5 @@
 ///|
-/// HTML shell for the Preact bundle built from web/.
+/// HTML shell for the Preact bundle built from app/views/.
 fn index_html_t(name : String) -> String {
   join_lines([
     "<!doctype html>",
@@ -20,7 +20,7 @@ fn index_html_t(name : String) -> String {
 fn web_package_json_t() -> String {
   join_lines([
     "{", "  \"name\": \"web\",", "  \"private\": true,", "  \"type\": \"module\",",
-    "  \"scripts\": {", "    \"build\": \"esbuild src/main.jsx --bundle --outfile=../static/app.js --jsx=automatic --jsx-import-source=preact\"",
+    "  \"scripts\": {", "    \"build\": \"esbuild src/main.jsx --bundle --outfile=../../static/app.js --jsx=automatic --jsx-import-source=preact\"",
     "  },", "  \"dependencies\": {", "    \"preact\": \"^10.19.0\"", "  },", "  \"devDependencies\": {",
     "    \"esbuild\": \"^0.24.0\"", "  }", "}",
   ])

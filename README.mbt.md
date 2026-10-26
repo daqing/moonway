@@ -156,7 +156,7 @@ moonway generate scaffold Post title:string body:string
 ```
 
 ```console
-created  models/post.mbt
+created  app/models/post.mbt
 created  handlers/posts.mbt
 created  migrations/001_create_posts.mbt
 updated  admin registry

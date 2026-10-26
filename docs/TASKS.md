@@ -125,9 +125,9 @@ synchronous dispatch built in T2.
   (pure `parse` → `Command`) with a thin `cmd/moonway` wrapper reading
   `@env.args()`; `moon run cmd/moonway -- <args>` passes flags through.
 - [x] **T6.2** `moonway new <name>` — generate an app skeleton: native
-  `preferred_target` (per T1.4), `models/` `handlers/` `migrations/` `web/`
-  folders, moonway dependency wired in. Verified hands-on: the generated app
-  passes `moon check` first try and serves on :3000 with its SQLite database
+  `preferred_target` (per T1.4), `app/models/` `handlers/` `migrations/`
+  `app/views/` folders, moonway dependency wired in. Verified hands-on: the
+  generated app passes `moon check` first try and serves on :3000 with its SQLite database
   migrated (local verification maps the unpublished moonway via a
   `moon.work` members entry; published users get it from the registry).
 - [x] **T6.3** `moonway generate scaffold <Model> field:type …` — model file,
@@ -238,7 +238,7 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
 ## T11 — Preact frontend integration (preact/) `M4 · P2`
 
 - [x] **T11.1** Frontend scaffold in generated projects — `moonway new`
-  emits a minimal `static/index.html` mount shell plus a `web/` Preact +
+  emits a minimal `static/index.html` mount shell plus an `app/views/` Preact +
   esbuild source tree. `npm install && npm run build` is required to produce
   `static/app.js`; no vanilla fallback is generated, and the bundle is
   gitignored. The Node.js prerequisite is documented in the generated README.
@@ -249,7 +249,7 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
   body), and `..` traversal attempts are rejected before any filesystem
   access. Dynamic routes always win. Integration-tested.
 - [x] **T11.3** Example page wired to the posts API — the Preact source in
-  `web/src/main.jsx` fetches `/posts`, renders the list and submits the
+  `app/views/src/main.jsx` fetches `/posts`, renders the list and submits the
   add-post form. The frontend build emits `static/app.js`, and the generated
   `main.mbt` mounts `app.static_files("static")` so `/` serves the page.
 

@@ -29,15 +29,15 @@ fn execute_scaffold(model : String, field_tokens : Array[String]) -> Unit {
   }
   let snake = to_lower_snake(model)
   let plural = snake + "s"
-  if @fs.path_exists("models/\{snake}.mbt") {
-    eprintln("moonway: models/\{snake}.mbt already exists")
+  if @fs.path_exists("app/models/\{snake}.mbt") {
+    eprintln("moonway: app/models/\{snake}.mbt already exists")
     return
   }
   let version = next_migration_version()
   let version_name = pad3(version)
   try {
     @fs.write_string_to_file(
-      "models/\{snake}.mbt",
+      "app/models/\{snake}.mbt",
       model_src_t(model, plural, fields),
     )
     @fs.write_string_to_file(
@@ -57,7 +57,7 @@ fn execute_scaffold(model : String, field_tokens : Array[String]) -> Unit {
     }
   }
   update_registry(
-    "models/models.mbt",
+    "app/models/models.mbt",
     "// moonway:admin-tables",
     "    \{plural},",
   )
@@ -78,11 +78,11 @@ fn execute_scaffold(model : String, field_tokens : Array[String]) -> Unit {
         "moonway: warning: cmd/main/main.mbt not found (skipped handler registration)",
       )
   }
-  println("created  models/\{snake}.mbt")
+  println("created  app/models/\{snake}.mbt")
   println("created  handlers/\{plural}.mbt")
   println("created  migrations/\{version_name}_create_\{plural}.mbt")
   println(
-    "updated  models/models.mbt, migrations/migrations.mbt, cmd/*/main.mbt",
+    "updated  app/models/models.mbt, migrations/migrations.mbt, cmd/*/main.mbt",
   )
 }
 
