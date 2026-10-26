@@ -46,7 +46,7 @@ fn execute_new(name : String, dir : String) -> Unit {
     ensure_dir(root + "/app/models")
     ensure_dir(root + "/handlers")
     ensure_dir(root + "/migrations")
-    ensure_dir(root + "/app/views/src")
+    ensure_dir(root + "/app/frontend/src")
     ensure_dir(root + "/static")
     @fs.write_string_to_file(root + "/moon.mod", moon_mod_t(mod_name))
     @fs.write_string_to_file(root + "/.gitignore", gitignore_t())
@@ -76,18 +76,18 @@ fn execute_new(name : String, dir : String) -> Unit {
       index_html_t(mod_name),
     )
     @fs.write_string_to_file(
-      root + "/app/views/package.json",
+      root + "/app/frontend/package.json",
       web_package_json_t(),
     )
     @fs.write_string_to_file(
-      root + "/app/views/src/main.jsx",
+      root + "/app/frontend/src/main.jsx",
       web_main_jsx_t(mod_name),
     )
     println("Created \{root}")
     println("Next steps:")
     println("  cd \{root}")
     println("  moon update")
-    println("  cd app/views && npm install && npm run build && cd ../..")
+    println("  cd app/frontend && npm install && npm run build && cd ../..")
     println("  moon run cmd/\{mod_name}")
   } catch {
     err =>
@@ -155,7 +155,7 @@ fn readme_t(name : String) -> String {
     "",
     "```",
     "moon update",
-    "cd app/views",
+    "cd app/frontend",
     "npm install",
     "npm run build",
     "cd ../..",
@@ -172,7 +172,7 @@ fn readme_t(name : String) -> String {
     "",
     "## Frontend",
     "",
-    "`app/views/src/main.jsx` is the only frontend source. The Preact + esbuild",
+    "`app/frontend/src/main.jsx` is the only frontend source. The Preact + esbuild",
     "build writes `static/app.js`; `static/index.html` only mounts that bundle.",
     "There is no vanilla JavaScript fallback, so rebuild after frontend changes.",
   ])
@@ -203,7 +203,8 @@ fn main_src_t() -> String {
     "///|", "fn main {", "  let app = @moonway.new()", "  let db = @moonway.sqlite(\"app.db\")",
     "  if !db.migrate(@migrations.all()) {", "    abort(\"moonway: migrations failed\")",
     "  }", "  @handlers.register(app, db)", "  // moonway:register-handlers", "  app.static_files(\"static\")",
-    "  println(\"app is listening at 127.0.0.1:3000\")", "  app.listen(3000)", "}",
+    "  println(\"app is listening at http://127.0.0.1:3000\")", "  app.listen(3000)",
+    "}",
   ])
 }
 

@@ -37,7 +37,7 @@ moonway 应用。API 名称、行为与示例均以当前代码（`moon.mod` 版
    - **Ubuntu/Debian**：`sudo apt install libsqlite3-dev`。
 3. （可选）Redis 服务，仅在使用响应缓存时需要。Redis 不可用时应用会以降级模式运行，
    不会启动失败。
-4. 使用 `moonway new` 生成的前端时，必须安装 Node.js（`npm`）并构建 `app/views/`；
+4. 使用 `moonway new` 生成的前端时，必须安装 Node.js（`npm`）并构建 `app/frontend/`；
    没有零构建备用前端。
 
 > CI（见 `.github/workflows/ci.yml`）会在 ubuntu-latest 上安装
@@ -83,7 +83,7 @@ moon install daqing/moonway/cmd/moonway
 moonway new hello-moonway
 cd hello-moonway
 moon update
-cd app/views
+cd app/frontend
 npm install
 npm run build
 cd ../..
@@ -94,7 +94,7 @@ moon run cmd/hello-moonway
 
 - 生成 `preferred_target = "native"` 的 `moon.mod`，并写入 moonway 依赖；
 - 生成 `cmd/hello-moonway`、`app/models`、`handlers`、`migrations`、
-  `app/views`、`static` 目录；
+  `app/frontend`、`static` 目录；
 - 生成可运行的主程序、Preact 前端源码、HTML 挂载壳，以及 SQLite 链接参数 `-lsqlite3`。
 
 可选参数 `--dir <dir>` 指定输出父目录：`moonway new myapp --dir apps` 会在
@@ -170,7 +170,7 @@ hello-moonway/
 │   ├── models/
 │   │   ├── moon.pkg
 │   │   └── models.mbt            # admin_tables() 注册表（带 marker）
-│   └── views/                    # 唯一的 Preact + esbuild 前端源码
+│   └── frontend/                 # 唯一的 Preact + esbuild 前端源码
 │       ├── package.json
 │       └── src/main.jsx
 ├── handlers/
@@ -580,12 +580,12 @@ app.static_files("static")
 
 ### 11.2 前端工作流
 
-`moonway new` 只生成 Preact 前端。`app/views/src/main.jsx` 是唯一的客户端源码，
+`moonway new` 只生成 Preact 前端。`app/frontend/src/main.jsx` 是唯一的客户端源码，
 `static/index.html` 仅提供 Preact 挂载节点和 `/app.js` 脚本引用，不包含备用 UI。
 首次运行页面前必须构建：
 
 ```bash
-cd app/views
+cd app/frontend
 npm install
 npm run build     # esbuild 将 Preact 应用打包到 ../../static/app.js
 cd ../..
@@ -593,7 +593,7 @@ moon run cmd/hello-moonway
 ```
 
 未构建时不会生成 `static/app.js`，浏览器请求 `/app.js` 会得到 404，Preact 页面
-不会渲染。修改 `app/views/` 后需要重新执行 `npm run build`。
+不会渲染。修改 `app/frontend/` 后需要重新执行 `npm run build`。
 
 生成的主程序默认调用 `app.static_files("static")`，因此 `/` 返回 HTML 挂载壳，
 `/app.js` 返回构建后的 Preact bundle。

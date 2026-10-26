@@ -1,5 +1,5 @@
 ///|
-/// HTML shell for the Preact bundle built from app/views/.
+/// HTML shell for the Preact bundle built from app/frontend/.
 fn index_html_t(name : String) -> String {
   join_lines([
     "<!doctype html>",

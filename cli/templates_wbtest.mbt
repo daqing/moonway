@@ -142,15 +142,15 @@ test "marker insertion places the line and reports missing markers" {
 }
 
 ///|
-test "new project templates use app models and views directories" {
+test "new project templates use app models and frontend directories" {
   let handlers_pkg = handlers_pkg_t("blog")
   assert_true(handlers_pkg.contains("\"blog/app/models\" @models"))
   let migrations_pkg = migrations_pkg_t("blog")
   assert_true(migrations_pkg.contains("\"blog/app/models\" @models"))
   let readme = readme_t("blog")
-  assert_true(readme.contains("cd app/views"))
+  assert_true(readme.contains("cd app/frontend"))
   assert_true(readme.contains("cd ../.."))
-  assert_true(readme.contains("`app/views/src/main.jsx`"))
+  assert_true(readme.contains("`app/frontend/src/main.jsx`"))
   let frontend_pkg = web_package_json_t()
   assert_true(frontend_pkg.contains("--outfile=../../static/app.js"))
 }
