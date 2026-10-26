@@ -127,6 +127,7 @@ test "Preact islands hydrate Counter and Posts components" {
   assert_true(src.contains("document.querySelectorAll(\"[data-island]\")"))
   assert_true(src.contains("hydrate(<Component />, element)"))
   assert_true(src.contains("if (!res.ok)"))
+  assert_false(src.contains("no posts yet"))
   assert_true(src.contains("method: \"POST\""))
   assert_true(src.contains("const id = posts.reduce("))
   assert_false(src.contains("Date.now()"))
