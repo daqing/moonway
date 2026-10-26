@@ -75,7 +75,6 @@ fn execute_new(name : String, dir : String) -> Unit {
       root + "/static/index.html",
       index_html_t(mod_name),
     )
-    @fs.write_string_to_file(root + "/static/app.js", app_js_t(name))
     @fs.write_string_to_file(root + "/web/package.json", web_package_json_t())
     @fs.write_string_to_file(
       root + "/web/src/main.jsx",
@@ -85,10 +84,8 @@ fn execute_new(name : String, dir : String) -> Unit {
     println("Next steps:")
     println("  cd \{root}")
     println("  moon update")
+    println("  cd web && npm install && npm run build && cd ..")
     println("  moon run cmd/\{mod_name}")
-    println("")
-    println("Frontend (optional, requires Node.js):")
-    println("  cd \{root}/web && npm install && npm run build")
   } catch {
     err =>
       eprintln(
@@ -137,7 +134,9 @@ fn moon_mod_t(name : String) -> String {
 
 ///|
 fn gitignore_t() -> String {
-  join_lines(["_build/", "target/", ".mooncakes/", "node_modules/", "*.db"])
+  join_lines([
+    "_build/", "target/", ".mooncakes/", "node_modules/", "*.db", "static/app.js",
+  ])
 }
 
 ///|
@@ -149,8 +148,15 @@ fn readme_t(name : String) -> String {
     "",
     "## Run",
     "",
+    "Build the Preact frontend (requires Node.js and npm), then start the server:",
+    "",
     "```",
-    "moon run cmd/main",
+    "moon update",
+    "cd web",
+    "npm install",
+    "npm run build",
+    "cd ..",
+    "moon run cmd/\{name}",
     "```",
     "",
     "Then open <http://localhost:3000>.",
@@ -158,20 +164,14 @@ fn readme_t(name : String) -> String {
     "## Scaffold a model",
     "",
     "```",
-    "moonway generate scaffold Post title:string body:text",
+    "moonway generate scaffold Post title:string body:text published:bool",
     "```",
     "",
     "## Frontend",
     "",
-    "The page at <http://localhost:3000> works with no build step",
-    "(static/index.html + static/app.js). To use the Preact + esbuild",
-    "scaffold instead (requires Node.js):",
-    "",
-    "```",
-    "cd web && npm install && npm run build",
-    "```",
-    "",
-    "That regenerates static/app.js from web/src/main.jsx.",
+    "`web/src/main.jsx` is the only frontend source. The Preact + esbuild",
+    "build writes `static/app.js`; `static/index.html` only mounts that bundle.",
+    "There is no vanilla JavaScript fallback, so rebuild after frontend changes.",
   ])
 }
 
@@ -200,7 +200,7 @@ fn main_src_t() -> String {
     "///|", "fn main {", "  let app = @moonway.new()", "  let db = @moonway.sqlite(\"app.db\")",
     "  if !db.migrate(@migrations.all()) {", "    abort(\"moonway: migrations failed\")",
     "  }", "  @handlers.register(app, db)", "  // moonway:register-handlers", "  app.static_files(\"static\")",
-    "  println(\"app is listening at :3000\")", "  app.listen(3000)", "}",
+    "  println(\"app is listening at 127.0.0.1:3000\")", "  app.listen(3000)", "}",
   ])
 }
 

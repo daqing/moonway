@@ -40,8 +40,8 @@ The name is the mission: **moon + way — the road to the moon.**
   running app.
 - **Code generator** — scaffolding for models, handlers, and more, so
   boilerplate never slows you down.
-- **Frontend included** — an integrated [Preact](https://preactjs.com) workflow
-  for the client side of your app.
+- **Preact-only frontend** — generated apps use a single
+  [Preact](https://preactjs.com) + esbuild source tree and build pipeline.
 
 ## Quick start
 

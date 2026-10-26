@@ -238,24 +238,20 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
 ## T11 — Preact frontend integration (preact/) `M4 · P2`
 
 - [x] **T11.1** Frontend scaffold in generated projects — `moonway new`
-  emits `static/index.html` + `static/app.js` (vanilla, zero-build, wired
-  to the posts API) plus a `web/` Preact + esbuild scaffold whose
-  `npm run build` regenerates `static/app.js`. Node.js prerequisite
-  documented in the generated README; verified with a real
-  `npm install && npm run build` (15.9 kB Preact bundle).
+  emits a minimal `static/index.html` mount shell plus a `web/` Preact +
+  esbuild source tree. `npm install && npm run build` is required to produce
+  `static/app.js`; no vanilla fallback is generated, and the bundle is
+  gitignored. The Node.js prerequisite is documented in the generated README.
 - [x] **T11.2** Static file serving — `app.static_files(dir)` serves
   unmatched GET requests from `dir`: `/` falls back to `index.html`,
   directories to their `index.html`, content types by extension (text
   types through the string body, binaries like images through a new bytes
   body), and `..` traversal attempts are rejected before any filesystem
   access. Dynamic routes always win. Integration-tested.
-- [x] **T11.3** Example page wired to the posts API — the generated
-  `static/app.js` fetches `/posts`, renders the list and submits the form;
-  the generated `main.mbt` mounts `app.static_files("static")` so `/`
-  serves the page. Verified in a real browser: page + `/app.js` served,
-  existing post rendered from the API; the equivalent POST verified with
-  curl (201). The in-browser form submit needs one manual click to confirm
-  (IAB automation could not reproduce it).
+- [x] **T11.3** Example page wired to the posts API — the Preact source in
+  `web/src/main.jsx` fetches `/posts`, renders the list and submits the
+  add-post form. The frontend build emits `static/app.js`, and the generated
+  `main.mbt` mounts `app.static_files("static")` so `/` serves the page.
 
 > P2: shrinkable per the risk plan — if cut, remove the README feature bullet
 > and say so.

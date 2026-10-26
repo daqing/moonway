@@ -68,9 +68,31 @@ test "module name derives from path-like new arguments" {
 }
 
 ///|
-test "web templates degrade gracefully when /posts is missing" {
-  assert_true(app_js_t("blog").contains("if (!res.ok)"))
-  assert_true(web_main_jsx_t("blog").contains("if (!res.ok) return [];"))
+test "new projects require the Preact frontend build" {
+  let index = index_html_t("blog")
+  assert_true(index.contains("<div id=\"app\"></div>"))
+  assert_false(index.contains("<h1>"))
+  assert_true(web_package_json_t().contains("--jsx-import-source=preact"))
+  assert_true(gitignore_t().contains("static/app.js"))
+  let readme = readme_t("blog")
+  assert_true(readme.contains("npm install"))
+  assert_true(readme.contains("npm run build"))
+  assert_true(readme.contains("moon run cmd/blog"))
+  assert_false(readme.contains("no build step"))
+  assert_false(readme.contains("optional"))
+}
+
+///|
+test "Preact template handles posts API errors and submissions" {
+  let src = web_main_jsx_t("blog")
+  assert_true(src.contains("from \"preact\""))
+  assert_true(src.contains("from \"preact/hooks\""))
+  assert_true(src.contains("if (!res.ok)"))
+  assert_true(src.contains("method: \"POST\""))
+  assert_true(src.contains("const id = posts.reduce("))
+  assert_false(src.contains("Date.now()"))
+  assert_true(src.contains("<form onSubmit={addPost}>"))
+  assert_true(src.contains("await refreshPosts()"))
 }
 
 ///|

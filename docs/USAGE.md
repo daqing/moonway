@@ -37,7 +37,8 @@ moonway 应用。API 名称、行为与示例均以当前代码（`moon.mod` 版
    - **Ubuntu/Debian**：`sudo apt install libsqlite3-dev`。
 3. （可选）Redis 服务，仅在使用响应缓存时需要。Redis 不可用时应用会以降级模式运行，
    不会启动失败。
-4. （可选）若要构建 `web/` 目录下的 Preact 前端，需要 Node.js（`npm`）。
+4. 使用 `moonway new` 生成的前端时，必须安装 Node.js（`npm`）并构建 `web/`；
+   没有零构建备用前端。
 
 > CI（见 `.github/workflows/ci.yml`）会在 ubuntu-latest 上安装
 > `libsqlite3-dev`，然后执行 `moon check` 与 `moon test`。
@@ -82,14 +83,18 @@ moon install daqing/moonway/cmd/moonway
 moonway new hello-moonway
 cd hello-moonway
 moon update
-moon run cmd/main
+cd web
+npm install
+npm run build
+cd ..
+moon run cmd/hello-moonway
 ```
 
 `moonway new` 会自动完成：
 
 - 生成 `preferred_target = "native"` 的 `moon.mod`，并写入 moonway 依赖；
-- 生成 `cmd/main`、`models`、`handlers`、`migrations`、`web`、`static` 目录；
-- 生成可运行的主程序、示例前端页面，以及 SQLite 链接参数 `-lsqlite3`。
+- 生成 `cmd/hello-moonway`、`models`、`handlers`、`migrations`、`web`、`static` 目录；
+- 生成可运行的主程序、Preact 前端源码、HTML 挂载壳，以及 SQLite 链接参数 `-lsqlite3`。
 
 可选参数 `--dir <dir>` 指定输出父目录：`moonway new myapp --dir apps` 会在
 `apps/myapp` 下生成项目。
@@ -157,7 +162,7 @@ hello-moonway/
 ├── moon.mod                      # preferred_target = "native"
 ├── README.mbt.md
 ├── cmd/
-│   └── main/
+│   └── hello-moonway/
 │       ├── moon.pkg              # 可执行包；声明 -lsqlite3
 │       └── main.mbt              # 程序入口
 ├── models/
@@ -169,13 +174,15 @@ hello-moonway/
 ├── migrations/
 │   ├── moon.pkg
 │   └── migrations.mbt            # all() -> Array[Migration]（带 marker）
-├── web/                          # Preact + esbuild（可选，需 Node.js）
+├── web/                          # 唯一的 Preact + esbuild 前端源码
 │   ├── package.json
 │   └── src/main.jsx
-└── static/                       # 零构建的默认前端
-    ├── index.html
-    └── app.js
+└── static/                       # 静态部署目录
+    └── index.html                # 仅挂载 Preact 构建产物
 ```
+
+`static/app.js` 由 `npm run build` 生成，并已加入 `.gitignore`；初始项目不包含
+该文件，必须先构建前端才能看到页面。
 
 `moonway generate scaffold` 通过文件中的 marker 注释增量更新注册表：
 
@@ -183,7 +190,7 @@ hello-moonway/
 | --- | --- |
 | `models/models.mbt` | `// moonway:admin-tables` |
 | `migrations/migrations.mbt` | `// moonway:migrations` |
-| `cmd/main/main.mbt` | `// moonway:register-handlers` |
+| `cmd/hello-moonway/main.mbt` | `// moonway:register-handlers` |
 
 请勿删除这些 marker，否则脚手架无法自动追加内容。
 
@@ -441,7 +448,7 @@ GET 通过 `?token=...`，POST 也可通过表单字段——否则返回 `401`�
 
 > `moonway new` 生成的 `models/models.mbt` 里有 `admin_tables()` 注册表，脚手架会
 > 自动把新表追加进去。但生成的主程序默认**不会**自动挂载 admin，如需启用请在
-> `cmd/main/main.mbt` 中显式调用：
+> `cmd/hello-moonway/main.mbt` 中显式调用：
 >
 > ```moonbit
 > app.admin(db, @models.admin_tables())
@@ -571,19 +578,23 @@ app.static_files("static")
 
 ### 11.2 前端工作流
 
-`moonway new` 会生成两套前端：
-
-1. **零构建版**（默认可用）：`static/index.html` + `static/app.js`，纯 vanilla
-   JS，直接 fetch `/posts` API 并渲染列表/表单，无需 Node.js。
-2. **Preact + esbuild 版**（可选）：`web/` 目录，构建后会覆盖 `static/app.js`。
+`moonway new` 只生成 Preact 前端。`web/src/main.jsx` 是唯一的客户端源码，
+`static/index.html` 仅提供 Preact 挂载节点和 `/app.js` 脚本引用，不包含备用 UI。
+首次运行页面前必须构建：
 
 ```bash
 cd web
 npm install
-npm run build     # esbuild src/main.jsx > ../static/app.js
+npm run build     # esbuild 将 Preact 应用打包到 ../static/app.js
+cd ..
+moon run cmd/hello-moonway
 ```
 
-生成的主程序默认调用 `app.static_files("static")`，因此 `/` 会返回静态首页。
+未构建时不会生成 `static/app.js`，浏览器请求 `/app.js` 会得到 404，Preact 页面
+不会渲染。修改 `web/` 后需要重新执行 `npm run build`。
+
+生成的主程序默认调用 `app.static_files("static")`，因此 `/` 返回 HTML 挂载壳，
+`/app.js` 返回构建后的 Preact bundle。
 
 ---
 
