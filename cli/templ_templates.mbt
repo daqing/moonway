@@ -11,20 +11,33 @@ fn home_templ_t() -> String {
     #|      <style>
     #|        :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
     #|        body { margin: 0; min-height: 100vh; display: grid; place-items: center; }
-    #|        main { max-width: 40rem; padding: 3rem; text-align: center; }
+    #|        main { width: min(40rem, 100%); padding: 3rem; text-align: center; }
     #|        .eyebrow { color: #6366f1; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
     #|        h1 { margin: .5rem 0; font-size: 4rem; }
     #|        p { line-height: 1.6; }
-    #|        a { color: inherit; }
+    #|        section { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #8884; }
+    #|        .counter { padding: .75rem 1.25rem; font: inherit; cursor: pointer; }
+    #|        form { display: grid; gap: .5rem; margin-top: 1rem; }
+    #|        input, button { font: inherit; padding: .5rem; }
+    #|        ul { padding: 0; list-style: none; }
     #|      </style>
     #|    </head>
     #|    <body>
     #|      <main>
     #|        <p class="eyebrow">moonway</p>
     #|        <h1>{ name }</h1>
-    #|        <p>Your MoonBit app is running. This page is rendered on the server with moon-templ.</p>
+    #|        <p>Your MoonBit app is running with server-rendered templ HTML and interactive Preact islands.</p>
+    #|        <section aria-labelledby="counter-title">
+    #|          <h2 id="counter-title">Preact island</h2>
+    #|          <div data-island="counter">
+    #|            <button type="button" class="counter">Clicked 0 times</button>
+    #|          </div>
+    #|        </section>
+    #|        <section aria-label="Posts">
+    #|          <div data-island="posts"></div>
+    #|        </section>
     #|        <p>Edit <code>app/templates/home.templ</code> to change this page.</p>
-    #|        <p><a href="/index.html">Preact frontend</a> (available after the optional frontend build)</p>
+    #|        <script src="/app.js"></script>
     #|      </main>
     #|    </body>
     #|  </html>
@@ -43,9 +56,9 @@ fn home_templ_generated_t() -> String {
     #|  @rt.component(fn(_ctx, w) {
     #|    w.write_string("<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>")
     #|    @rt.write_any(w, name)
-    #|    w.write_string(" · moonway</title><style>\n        :root { color-scheme: light dark; font-family: system-ui, sans-serif; }\n        body { margin: 0; min-height: 100vh; display: grid; place-items: center; }\n        main { max-width: 40rem; padding: 3rem; text-align: center; }\n        .eyebrow { color: #6366f1; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }\n        h1 { margin: .5rem 0; font-size: 4rem; }\n        p { line-height: 1.6; }\n        a { color: inherit; }\n      </style></head><body><main><p class=\"eyebrow\">moonway</p><h1>")
+    #|    w.write_string(" · moonway</title><style>\n        :root { color-scheme: light dark; font-family: system-ui, sans-serif; }\n        body { margin: 0; min-height: 100vh; display: grid; place-items: center; }\n        main { width: min(40rem, 100%); padding: 3rem; text-align: center; }\n        .eyebrow { color: #6366f1; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }\n        h1 { margin: .5rem 0; font-size: 4rem; }\n        p { line-height: 1.6; }\n        section { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #8884; }\n        .counter { padding: .75rem 1.25rem; font: inherit; cursor: pointer; }\n        form { display: grid; gap: .5rem; margin-top: 1rem; }\n        input, button { font: inherit; padding: .5rem; }\n        ul { padding: 0; list-style: none; }\n      </style></head><body><main><p class=\"eyebrow\">moonway</p><h1>")
     #|    @rt.write_any(w, name)
-    #|    w.write_string("</h1><p>Your MoonBit app is running. This page is rendered on the server with moon-templ.</p><p>Edit <code>app/templates/home.templ</code> to change this page.</p><p><a href=\"/index.html\">Preact frontend</a> (available after the optional frontend build)</p></main></body></html>")
+    #|    w.write_string("</h1><p>Your MoonBit app is running with server-rendered templ HTML and interactive Preact islands.</p><section aria-labelledby=\"counter-title\"><h2 id=\"counter-title\">Preact island</h2><div data-island=\"counter\"><button type=\"button\" class=\"counter\">Clicked 0 times</button></div></section><section aria-label=\"Posts\"><div data-island=\"posts\"></div></section><p>Edit <code>app/templates/home.templ</code> to change this page.</p><script src=\"/app.js\"></script></main></body></html>")
     #|  })
     #|}
     #|

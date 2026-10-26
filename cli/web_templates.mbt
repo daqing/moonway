@@ -1,22 +1,4 @@
 ///|
-/// HTML shell for the Preact bundle built from app/frontend/.
-fn index_html_t(name : String) -> String {
-  join_lines([
-    "<!doctype html>",
-    "<html>",
-    "  <head>",
-    "    <meta charset=\"utf-8\" />",
-    "    <title>\{name}</title>",
-    "  </head>",
-    "  <body>",
-    "    <div id=\"app\"></div>",
-    "    <script src=\"/app.js\"></script>",
-    "  </body>",
-    "</html>",
-  ])
-}
-
-///|
 fn web_package_json_t() -> String {
   join_lines([
     "{", "  \"name\": \"web\",", "  \"private\": true,", "  \"type\": \"module\",",
@@ -29,10 +11,24 @@ fn web_package_json_t() -> String {
 ///|
 fn web_main_jsx_t(name : String) -> String {
   join_lines([
-    "import { render } from \"preact\";",
+    "import { hydrate } from \"preact\";",
     "import { useEffect, useState } from \"preact/hooks\";",
     "",
-    "function App() {",
+    "function Counter() {",
+    "  const [count, setCount] = useState(0);",
+    "  const label = `Clicked ${count} ${count === 1 ? \"time\" : \"times\"}`;",
+    "  return (",
+    "    <button",
+    "      type=\"button\"",
+    "      class=\"counter\"",
+    "      onClick={() => setCount((current) => current + 1)}",
+    "    >",
+    "      {label}",
+    "    </button>",
+    "  );",
+    "}",
+    "",
+    "function PostsApp() {",
     "  const [posts, setPosts] = useState([]);",
     "  const [message, setMessage] = useState(\"\");",
     "",
@@ -83,7 +79,7 @@ fn web_main_jsx_t(name : String) -> String {
     "",
     "  return (",
     "    <div>",
-    "      <h1>\{name}</h1>",
+    "      <h2>\{name} posts</h2>",
     "      {message && <p>{message}</p>}",
     "      <ul>",
     "        {posts.map((p) => (",
@@ -101,6 +97,16 @@ fn web_main_jsx_t(name : String) -> String {
     "  );",
     "}",
     "",
-    "render(<App />, document.getElementById(\"app\"));",
+    "const islands = { counter: Counter, posts: PostsApp };",
+    "",
+    "for (const element of document.querySelectorAll(\"[data-island]\")) {",
+    "  const componentName = element.dataset.island;",
+    "  const Component = islands[componentName];",
+    "  if (Component) {",
+    "    hydrate(<Component />, element);",
+    "  } else {",
+    "    console.warn(`Unknown Preact island: ${componentName}`);",
+    "  }",
+    "}",
   ])
 }

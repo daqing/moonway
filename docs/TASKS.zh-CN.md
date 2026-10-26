@@ -198,23 +198,23 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
   `moonway <version> · connected to sqlite://<path>`——与 README 的 REPL
   示例一致。已用种入数据的管道会话实测验证。
 
-## T11 — templ 与 Preact 前端集成 `M4 · P2`
+## T11 — templ 与 Preact islands `M4 · P2`
 
 - [x] **T11.1** 生成项目中的前端脚手架——`moonway new` 生成
   `app/templates/home.templ` 及随骨架提交的 `home_templ.mbt`，通过
-  `daqing/moon-templ/runtime` 将其作为默认 `/` 页面。首次构建不需要模板 CLI
-  或前端构建。骨架还生成 `static/index.html` 和可选的 `app/frontend/`
-  Preact + esbuild 源码树，用于 `/index.html`；构建产物由 git 忽略，Node.js
-  前置条件写在生成的 README 里。
+  `daqing/moon-templ/runtime` 将其作为默认 `/` 页面。模板包含 Counter 和
+  Posts 的 `data-island` 挂载点以及 `/app.js` 引用，不再生成独立的
+  `static/index.html`。服务端 HTML 无需前端构建即可访问，Preact 构建则启用
+  island 交互。
 - [x] **T11.2** 静态文件服务——`app.static_files(dir)` 为未匹配的 GET 请求
   提供 `dir` 下的文件：`/` 回退到 `index.html`、目录回退到其 `index.html`、
   按扩展名给出 Content-Type（文本类型走字符串 body，图片等二进制走新增的
   bytes body），`..` 穿越在触碰文件系统前即被拒绝。动态路由永远优先。
   已有集成测试。
-- [x] **T11.3** 接入 posts API 的示例页面——`app/frontend/src/main.jsx` 中的 Preact
-  源码会 fetch `/posts`、渲染列表并提交新增表单；前端构建生成
-  `static/app.js`，生成的 `main.mbt` 通过 `app.static_files("static")` 在
-  `/index.html` 服务该页面，动态 templ 路由则负责 `/`。
+- [x] **T11.3** templ 首页中的 Preact islands——`app/frontend/src/main.jsx`
+  将注册的组件水合到 `[data-island]` 元素。Counter 让 templ 输出的按钮具备
+  点击计数状态，Posts 在同一个 `/` 页面中 fetch `/posts`、渲染列表并提交
+  新增表单；前端构建生成 `static/app.js`。
 
 > P2：按风险预案可收缩——若收缩，删除 README 中对应功能条目并如实说明。
 

@@ -40,10 +40,10 @@ The name is the mission: **moon + way — the road to the moon.**
   running app.
 - **Code generator** — scaffolding for models, handlers, and more, so
   boilerplate never slows you down.
-- **templ + Preact frontend** — generated apps start with a server-rendered
-  [moon-templ](https://mooncakes.io/docs/daqing/moon-templ@0.1.0) homepage and
-  include an optional [Preact](https://preactjs.com) + esbuild frontend at
-  `/index.html`.
+- **templ + Preact islands** — generated apps combine server-rendered
+  [moon-templ](https://mooncakes.io/docs/daqing/moon-templ@0.1.0) HTML with
+  hydrated [Preact](https://preactjs.com) + esbuild islands, including stateful
+  components on the same page.
 
 ## Quick start
 

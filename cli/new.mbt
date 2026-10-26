@@ -86,10 +86,6 @@ fn execute_new(name : String, dir : String) -> Unit {
     )
     @fs.write_string_to_file(root + "/app/templates/pages.mbt", pages_src_t())
     @fs.write_string_to_file(
-      root + "/static/index.html",
-      index_html_t(mod_name),
-    )
-    @fs.write_string_to_file(
       root + "/app/frontend/package.json",
       web_package_json_t(),
     )
@@ -101,7 +97,7 @@ fn execute_new(name : String, dir : String) -> Unit {
     println("Next steps:")
     println("  cd \{root}")
     println("  moon update")
-    println("Optional: build the Preact frontend for /index.html")
+    println("Build the Preact islands:")
     println("  cd app/frontend && npm install && npm run build && cd ../..")
     println("Start the server:")
     println("  moon run cmd/\{mod_name}")
@@ -168,18 +164,23 @@ fn readme_t(name : String) -> String {
     "",
     "## Run",
     "",
-    "The server-rendered default homepage needs no frontend build:",
+    "Build the Preact islands, then start the server:",
     "",
     "```",
     "moon update",
+    "cd app/frontend",
+    "npm install",
+    "npm run build",
+    "cd ../..",
     "moon run cmd/\{name}",
     "```",
     "",
     "Then open <http://localhost:3000>.",
     "",
-    "## Templates",
+    "## Templates and Preact islands",
     "",
-    "`app/templates/home.templ` defines `/` with [moon-templ](https://mooncakes.io/docs/daqing/moon-templ@0.1.0).",
+    "`app/templates/home.templ` defines `/` with [moon-templ](https://mooncakes.io/docs/daqing/moon-templ@0.1.0) and `data-island` mount points.",
+    "`app/frontend/src/main.jsx` hydrates those mount points, including the Counter button and Posts component on the same page.",
     "The generated `home_templ.mbt` is included, so the initial build needs no template CLI.",
     "After editing the template, regenerate it with the `moon-templ` CLI on your PATH:",
     "",
@@ -187,25 +188,13 @@ fn readme_t(name : String) -> String {
     "moon-templ generate app/templates/home.templ",
     "```",
     "",
+    "The frontend build writes `static/app.js`. Without it, the server-rendered HTML still works, but the islands are not interactive.",
+    "",
     "## Scaffold a model",
     "",
     "```",
     "moonway generate scaffold Post title:string body:text published:bool",
     "```",
-    "",
-    "## Optional Preact frontend",
-    "",
-    "`app/frontend/src/main.jsx` is the Preact source for `/index.html`.",
-    "Build it only if you want to use that page (requires Node.js and npm):",
-    "",
-    "```",
-    "cd app/frontend",
-    "npm install",
-    "npm run build",
-    "cd ../..",
-    "```",
-    "",
-    "The build writes `static/app.js`; the default `/` page does not depend on it.",
   ])
 }
 

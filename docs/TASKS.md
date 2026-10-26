@@ -236,26 +236,25 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
   — matching the README's REPL example. Verified hands-on with a piped
   session against a seeded database.
 
-## T11 — templ & Preact frontend integration `M4 · P2`
+## T11 — templ & Preact islands `M4 · P2`
 
 - [x] **T11.1** Frontend scaffold in generated projects — `moonway new`
   emits `app/templates/home.templ` with its checked-in `home_templ.mbt`, wired
-  through `daqing/moon-templ/runtime` as the default `/` page. Initial builds
-  need no template CLI or frontend build. The scaffold also emits
-  `static/index.html` and an optional `app/frontend/` Preact + esbuild tree for
-  `/index.html`; its bundle is gitignored and the Node.js prerequisite is
-  documented in the generated README.
+  through `daqing/moon-templ/runtime` as the default `/` page. The template
+  includes Counter and Posts `data-island` mount points plus `/app.js`; no
+  separate `static/index.html` is generated. Server-rendered HTML works without
+  a frontend build, while the Preact build enables island interactivity.
 - [x] **T11.2** Static file serving — `app.static_files(dir)` serves
   unmatched GET requests from `dir`: `/` falls back to `index.html`,
   directories to their `index.html`, content types by extension (text
   types through the string body, binaries like images through a new bytes
   body), and `..` traversal attempts are rejected before any filesystem
   access. Dynamic routes always win. Integration-tested.
-- [x] **T11.3** Example page wired to the posts API — the Preact source in
-  `app/frontend/src/main.jsx` fetches `/posts`, renders the list and submits the
-  add-post form. The frontend build emits `static/app.js`, and the generated
-  `main.mbt` serves it at `/index.html` through `app.static_files("static")`;
-  the dynamic templ route owns `/`.
+- [x] **T11.3** Preact islands on the templ homepage — the Preact source in
+  `app/frontend/src/main.jsx` hydrates registered components into
+  `[data-island]` elements. Counter adds stateful clicks to the templ-rendered
+  button, and Posts fetches `/posts`, renders the list and submits the add-post
+  form on the same `/` page. The frontend build emits `static/app.js`.
 
 > P2: shrinkable per the risk plan — if cut, remove the README feature bullet
 > and say so.

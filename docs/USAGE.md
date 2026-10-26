@@ -37,9 +37,9 @@ moonway 应用。API 名称、行为与示例均以当前代码（`moon.mod` 版
    - **Ubuntu/Debian**：`sudo apt install libsqlite3-dev`。
 3. （可选）Redis 服务，仅在使用响应缓存时需要。Redis 不可用时应用会以降级模式运行，
    不会启动失败。
-4. 默认 templ 首页无需 Node.js；只有使用 `/index.html` 的可选 Preact 页面时，才需要
-   Node.js（`npm`）并构建 `app/frontend/`。修改 `.templ` 后再生成需要 `moon-templ`
-   CLI，初始编译和运行不需要。
+4. 默认首页的服务端 templ HTML 无需前端构建即可访问；要启用其中的 Preact
+   islands，需要 Node.js（`npm`）并构建 `app/frontend/`。修改 `.templ` 后再生成需要
+   `moon-templ` CLI，初始编译不需要。
 
 > CI（见 `.github/workflows/ci.yml`）会在 ubuntu-latest 上安装
 > `libsqlite3-dev`，然后执行 `moon check` 与 `moon test`。
@@ -84,6 +84,10 @@ moon install daqing/moonway/cmd/moonway
 moonway new hello-moonway
 cd hello-moonway
 moon update
+cd app/frontend
+npm install
+npm run build
+cd ../..
 moon run cmd/hello-moonway
 ```
 
@@ -92,7 +96,7 @@ moon run cmd/hello-moonway
 - 生成 `preferred_target = "native"` 的 `moon.mod`，并写入 moonway 与 moon-templ 依赖；
 - 生成 `cmd/hello-moonway`、`app/models`、`handlers`、`migrations`、
   `app/frontend`、`app/templates`、`static` 目录；
-- 生成可运行的主程序、templ 默认首页、可选 Preact 前端源码，以及 SQLite 链接参数 `-lsqlite3`。
+- 生成可运行的主程序、带 Preact islands 的 templ 默认首页，以及 SQLite 链接参数 `-lsqlite3`。
 
 可选参数 `--dir <dir>` 指定输出父目录：`moonway new myapp --dir apps` 会在
 `apps/myapp` 下生成项目。
@@ -167,10 +171,10 @@ hello-moonway/
 │   ├── models/
 │   │   ├── moon.pkg
 │   │   └── models.mbt            # admin_tables() 注册表（带 marker）
-│   ├── frontend/                 # 可选的 Preact + esbuild 前端源码
+│   ├── frontend/                 # Preact islands 与 esbuild 源码
 │   │   ├── package.json
-│   │   └── src/main.jsx
-│   └── templates/                # moon-templ 默认首页
+│   │   └── src/main.jsx          # data-island 扫描与 hydrate
+│   └── templates/                # moon-templ 默认首页与 island 挂载点
 │       ├── moon.pkg              # @rt runtime 与生成文件格式化排除
 │       ├── home.templ            # 模板源文件
 │       ├── home_templ.mbt        # 官方 CLI 生成的 MoonBit 文件
@@ -181,12 +185,11 @@ hello-moonway/
 ├── migrations/
 │   ├── moon.pkg
 │   └── migrations.mbt            # all() -> Array[Migration]（带 marker）
-└── static/                       # 静态部署目录
-    └── index.html                # 可选 Preact 页面的挂载壳
+└── static/                       # Preact bundle 静态目录；不再生成 index.html
 ```
 
-`/` 默认由 templ 渲染，无需前端构建。`static/app.js` 由可选的 `npm run build`
-生成，并已加入 `.gitignore`；只有使用 `/index.html` 的 Preact 页面时才需要它。
+`/` 的服务端 templ HTML 无需前端构建即可访问；`npm run build` 生成
+`static/app.js` 以启用同页 Preact islands。该文件已加入 `.gitignore`。
 
 `moonway generate scaffold` 通过文件中的 marker 注释增量更新注册表：
 
@@ -580,13 +583,18 @@ app.static_files("static")
 
 动态路由始终优先于静态文件。
 
-### 11.2 默认模板首页与前端工作流
+### 11.2 templ 与 Preact islands 工作流
 
 `moonway new` 生成的默认 `/` 页面由 `app/templates/home.templ` 定义，使用
 [moon-templ](https://mooncakes.io/docs/daqing/moon-templ@0.1.0) 在服务端渲染。
 骨架同时包含官方 CLI 生成的 `home_templ.mbt` 和公开的 `pages.mbt` wrapper，因此
-首次编译、运行不需要安装模板 CLI，也不需要构建前端。主程序通过动态路由和
-`ctx.html(...)` 返回该页面；动态路由优先于静态文件。
+首次编译不需要安装模板 CLI。主程序通过动态路由和 `ctx.html(...)` 返回该页面；
+动态路由优先于静态文件。
+
+模板中的 `data-island="counter"` 包含服务端输出的 Counter 按钮，
+`data-island="posts"` 是 Posts 组件挂载点。`app/frontend/src/main.jsx` 扫描所有
+`[data-island]`，通过 Preact `hydrate` 将注册的组件水合到同一页面。Counter 的
+点击计数和 Posts 的数据加载、提交都由对应组件负责，不再使用独立 `/index.html`。
 
 修改 `.templ` 后，需要让 `moon-templ` CLI 位于 `PATH`，重新生成并检查生成的 MoonBit
 文件：
@@ -596,21 +604,19 @@ moon-templ generate app/templates/home.templ
 moon check
 ```
 
-`app/frontend/src/main.jsx` 是可选 Preact 页面的客户端源码，该页面位于
-`/index.html`。只有使用这个页面时才需要 Node.js 和 npm：
+要启用首页 islands，需要 Node.js 和 npm 构建前端：
 
 ```bash
 cd app/frontend
 npm install
-npm run build     # esbuild 将 Preact 应用打包到 ../../static/app.js
+npm run build     # esbuild 将 Preact islands 打包到 ../../static/app.js
 cd ../..
 moon run cmd/hello-moonway
 ```
 
-未构建时不会生成 `static/app.js`，因此 `/index.html` 引用的 `/app.js` 会返回 404，
-但这不影响 templ 默认首页。修改 `app/frontend/` 后需要重新执行 `npm run build`。
-生成的主程序调用 `app.static_files("static")`，为 `/index.html` 和 `/app.js`
-提供静态文件。
+未构建时不会生成 `static/app.js`，服务端 HTML 仍能访问，但 islands 不会交互。
+修改 `app/frontend/` 后需要重新执行 `npm run build`。生成的主程序调用
+`app.static_files("static")` 提供 `/app.js`，不再生成 `static/index.html`。
 
 ---
 

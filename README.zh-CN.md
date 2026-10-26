@@ -30,9 +30,9 @@ MoonBit 快、类型安全，写起来也舒服——但今天想搭一个真正
 - **Admin 管理后台** —— 根据数据模型自动生成的 CRUD 管理界面，零前端工作量。
 - **REPL 控制台** —— 交互式终端，查询数据、调试运行中的应用。
 - **代码生成器** —— 为模型、处理器等生成脚手架代码，告别重复劳动。
-- **templ + Preact 前端** —— 生成应用默认提供由
-  [moon-templ](https://mooncakes.io/docs/daqing/moon-templ@0.1.0) 服务端渲染的首页，
-  并附带位于 `/index.html` 的可选 [Preact](https://preactjs.com) + esbuild 前端。
+- **templ + Preact islands** —— 生成应用将
+  [moon-templ](https://mooncakes.io/docs/daqing/moon-templ@0.1.0) 服务端渲染的 HTML
+  与 [Preact](https://preactjs.com) + esbuild 水合 islands 结合，在同一页面中提供有状态的交互组件。
 
 ## 快速开始
 
