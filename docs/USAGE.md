@@ -37,8 +37,9 @@ moonway 应用。API 名称、行为与示例均以当前代码（`moon.mod` 版
    - **Ubuntu/Debian**：`sudo apt install libsqlite3-dev`。
 3. （可选）Redis 服务，仅在使用响应缓存时需要。Redis 不可用时应用会以降级模式运行，
    不会启动失败。
-4. 使用 `moonway new` 生成的前端时，必须安装 Node.js（`npm`）并构建 `app/frontend/`；
-   没有零构建备用前端。
+4. 默认 templ 首页无需 Node.js；只有使用 `/index.html` 的可选 Preact 页面时，才需要
+   Node.js（`npm`）并构建 `app/frontend/`。修改 `.templ` 后再生成需要 `moon-templ`
+   CLI，初始编译和运行不需要。
 
 > CI（见 `.github/workflows/ci.yml`）会在 ubuntu-latest 上安装
 > `libsqlite3-dev`，然后执行 `moon check` 与 `moon test`。
@@ -83,19 +84,15 @@ moon install daqing/moonway/cmd/moonway
 moonway new hello-moonway
 cd hello-moonway
 moon update
-cd app/frontend
-npm install
-npm run build
-cd ../..
 moon run cmd/hello-moonway
 ```
 
 `moonway new` 会自动完成：
 
-- 生成 `preferred_target = "native"` 的 `moon.mod`，并写入 moonway 依赖；
+- 生成 `preferred_target = "native"` 的 `moon.mod`，并写入 moonway 与 moon-templ 依赖；
 - 生成 `cmd/hello-moonway`、`app/models`、`handlers`、`migrations`、
-  `app/frontend`、`static` 目录；
-- 生成可运行的主程序、Preact 前端源码、HTML 挂载壳，以及 SQLite 链接参数 `-lsqlite3`。
+  `app/frontend`、`app/templates`、`static` 目录；
+- 生成可运行的主程序、templ 默认首页、可选 Preact 前端源码，以及 SQLite 链接参数 `-lsqlite3`。
 
 可选参数 `--dir <dir>` 指定输出父目录：`moonway new myapp --dir apps` 会在
 `apps/myapp` 下生成项目。
@@ -165,14 +162,19 @@ hello-moonway/
 ├── cmd/
 │   └── hello-moonway/
 │       ├── moon.pkg              # 可执行包；声明 -lsqlite3
-│       └── main.mbt              # 程序入口
+│       └── main.mbt              # 程序入口；注册 templ 默认首页
 ├── app/
 │   ├── models/
 │   │   ├── moon.pkg
 │   │   └── models.mbt            # admin_tables() 注册表（带 marker）
-│   └── frontend/                 # 唯一的 Preact + esbuild 前端源码
-│       ├── package.json
-│       └── src/main.jsx
+│   ├── frontend/                 # 可选的 Preact + esbuild 前端源码
+│   │   ├── package.json
+│   │   └── src/main.jsx
+│   └── templates/                # moon-templ 默认首页
+│       ├── moon.pkg              # @rt runtime 与生成文件格式化排除
+│       ├── home.templ            # 模板源文件
+│       ├── home_templ.mbt        # 官方 CLI 生成的 MoonBit 文件
+│       └── pages.mbt             # 对外返回 HTML 的 wrapper
 ├── handlers/
 │   ├── moon.pkg
 │   └── handlers.mbt              # register(app, db)
@@ -180,11 +182,11 @@ hello-moonway/
 │   ├── moon.pkg
 │   └── migrations.mbt            # all() -> Array[Migration]（带 marker）
 └── static/                       # 静态部署目录
-    └── index.html                # 仅挂载 Preact 构建产物
+    └── index.html                # 可选 Preact 页面的挂载壳
 ```
 
-`static/app.js` 由 `npm run build` 生成，并已加入 `.gitignore`；初始项目不包含
-该文件，必须先构建前端才能看到页面。
+`/` 默认由 templ 渲染，无需前端构建。`static/app.js` 由可选的 `npm run build`
+生成，并已加入 `.gitignore`；只有使用 `/index.html` 的 Preact 页面时才需要它。
 
 `moonway generate scaffold` 通过文件中的 marker 注释增量更新注册表：
 
@@ -578,11 +580,24 @@ app.static_files("static")
 
 动态路由始终优先于静态文件。
 
-### 11.2 前端工作流
+### 11.2 默认模板首页与前端工作流
 
-`moonway new` 只生成 Preact 前端。`app/frontend/src/main.jsx` 是唯一的客户端源码，
-`static/index.html` 仅提供 Preact 挂载节点和 `/app.js` 脚本引用，不包含备用 UI。
-首次运行页面前必须构建：
+`moonway new` 生成的默认 `/` 页面由 `app/templates/home.templ` 定义，使用
+[moon-templ](https://mooncakes.io/docs/daqing/moon-templ@0.1.0) 在服务端渲染。
+骨架同时包含官方 CLI 生成的 `home_templ.mbt` 和公开的 `pages.mbt` wrapper，因此
+首次编译、运行不需要安装模板 CLI，也不需要构建前端。主程序通过动态路由和
+`ctx.html(...)` 返回该页面；动态路由优先于静态文件。
+
+修改 `.templ` 后，需要让 `moon-templ` CLI 位于 `PATH`，重新生成并检查生成的 MoonBit
+文件：
+
+```bash
+moon-templ generate app/templates/home.templ
+moon check
+```
+
+`app/frontend/src/main.jsx` 是可选 Preact 页面的客户端源码，该页面位于
+`/index.html`。只有使用这个页面时才需要 Node.js 和 npm：
 
 ```bash
 cd app/frontend
@@ -592,11 +607,10 @@ cd ../..
 moon run cmd/hello-moonway
 ```
 
-未构建时不会生成 `static/app.js`，浏览器请求 `/app.js` 会得到 404，Preact 页面
-不会渲染。修改 `app/frontend/` 后需要重新执行 `npm run build`。
-
-生成的主程序默认调用 `app.static_files("static")`，因此 `/` 返回 HTML 挂载壳，
-`/app.js` 返回构建后的 Preact bundle。
+未构建时不会生成 `static/app.js`，因此 `/index.html` 引用的 `/app.js` 会返回 404，
+但这不影响 templ 默认首页。修改 `app/frontend/` 后需要重新执行 `npm run build`。
+生成的主程序调用 `app.static_files("static")`，为 `/index.html` 和 `/app.js`
+提供静态文件。
 
 ---
 

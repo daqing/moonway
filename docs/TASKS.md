@@ -126,8 +126,9 @@ synchronous dispatch built in T2.
   `@env.args()`; `moon run cmd/moonway -- <args>` passes flags through.
 - [x] **T6.2** `moonway new <name>` — generate an app skeleton: native
   `preferred_target` (per T1.4), `app/models/` `handlers/` `migrations/`
-  `app/frontend/` folders, moonway dependency wired in. Verified hands-on: the
-  generated app passes `moon check` first try and serves on :3000 with its SQLite database
+  `app/frontend/` `app/templates/` folders, moonway and moon-templ dependencies
+  wired in. Verified hands-on: the generated app passes `moon check` first try
+  and serves on :3000 with its SQLite database
   migrated (local verification maps the unpublished moonway via a
   `moon.work` members entry; published users get it from the registry).
 - [x] **T6.3** `moonway generate scaffold <Model> field:type …` — model file,
@@ -235,13 +236,15 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
   — matching the README's REPL example. Verified hands-on with a piped
   session against a seeded database.
 
-## T11 — Preact frontend integration (preact/) `M4 · P2`
+## T11 — templ & Preact frontend integration `M4 · P2`
 
 - [x] **T11.1** Frontend scaffold in generated projects — `moonway new`
-  emits a minimal `static/index.html` mount shell plus an `app/frontend/` Preact +
-  esbuild source tree. `npm install && npm run build` is required to produce
-  `static/app.js`; no vanilla fallback is generated, and the bundle is
-  gitignored. The Node.js prerequisite is documented in the generated README.
+  emits `app/templates/home.templ` with its checked-in `home_templ.mbt`, wired
+  through `daqing/moon-templ/runtime` as the default `/` page. Initial builds
+  need no template CLI or frontend build. The scaffold also emits
+  `static/index.html` and an optional `app/frontend/` Preact + esbuild tree for
+  `/index.html`; its bundle is gitignored and the Node.js prerequisite is
+  documented in the generated README.
 - [x] **T11.2** Static file serving — `app.static_files(dir)` serves
   unmatched GET requests from `dir`: `/` falls back to `index.html`,
   directories to their `index.html`, content types by extension (text
@@ -251,7 +254,8 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
 - [x] **T11.3** Example page wired to the posts API — the Preact source in
   `app/frontend/src/main.jsx` fetches `/posts`, renders the list and submits the
   add-post form. The frontend build emits `static/app.js`, and the generated
-  `main.mbt` mounts `app.static_files("static")` so `/` serves the page.
+  `main.mbt` serves it at `/index.html` through `app.static_files("static")`;
+  the dynamic templ route owns `/`.
 
 > P2: shrinkable per the risk plan — if cut, remove the README feature bullet
 > and say so.

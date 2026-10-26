@@ -47,6 +47,7 @@ fn execute_new(name : String, dir : String) -> Unit {
     ensure_dir(root + "/handlers")
     ensure_dir(root + "/migrations")
     ensure_dir(root + "/app/frontend/src")
+    ensure_dir(root + "/app/templates")
     ensure_dir(root + "/static")
     @fs.write_string_to_file(root + "/moon.mod", moon_mod_t(mod_name))
     @fs.write_string_to_file(root + "/.gitignore", gitignore_t())
@@ -55,7 +56,10 @@ fn execute_new(name : String, dir : String) -> Unit {
       root + "/cmd/\{mod_name}/moon.pkg",
       main_pkg_t(mod_name),
     )
-    @fs.write_string_to_file(root + "/cmd/\{mod_name}/main.mbt", main_src_t())
+    @fs.write_string_to_file(
+      root + "/cmd/\{mod_name}/main.mbt",
+      main_src_t(mod_name),
+    )
     @fs.write_string_to_file(root + "/app/models/moon.pkg", models_pkg_t())
     @fs.write_string_to_file(root + "/app/models/models.mbt", models_src_t())
     @fs.write_string_to_file(
@@ -72,6 +76,16 @@ fn execute_new(name : String, dir : String) -> Unit {
       migrations_src_t(),
     )
     @fs.write_string_to_file(
+      root + "/app/templates/moon.pkg",
+      templates_pkg_t(),
+    )
+    @fs.write_string_to_file(root + "/app/templates/home.templ", home_templ_t())
+    @fs.write_string_to_file(
+      root + "/app/templates/home_templ.mbt",
+      home_templ_generated_t(),
+    )
+    @fs.write_string_to_file(root + "/app/templates/pages.mbt", pages_src_t())
+    @fs.write_string_to_file(
       root + "/static/index.html",
       index_html_t(mod_name),
     )
@@ -87,7 +101,9 @@ fn execute_new(name : String, dir : String) -> Unit {
     println("Next steps:")
     println("  cd \{root}")
     println("  moon update")
+    println("Optional: build the Preact frontend for /index.html")
     println("  cd app/frontend && npm install && npm run build && cd ../..")
+    println("Start the server:")
     println("  moon run cmd/\{mod_name}")
   } catch {
     err =>
@@ -131,6 +147,7 @@ fn moon_mod_t(name : String) -> String {
     "",
     "import {",
     "  \"daqing/moonway@\{dep_version()}\",",
+    "  \"daqing/moon-templ@0.1.0\",",
     "}",
   ])
 }
@@ -151,18 +168,24 @@ fn readme_t(name : String) -> String {
     "",
     "## Run",
     "",
-    "Build the Preact frontend (requires Node.js and npm), then start the server:",
+    "The server-rendered default homepage needs no frontend build:",
     "",
     "```",
     "moon update",
-    "cd app/frontend",
-    "npm install",
-    "npm run build",
-    "cd ../..",
     "moon run cmd/\{name}",
     "```",
     "",
     "Then open <http://localhost:3000>.",
+    "",
+    "## Templates",
+    "",
+    "`app/templates/home.templ` defines `/` with [moon-templ](https://mooncakes.io/docs/daqing/moon-templ@0.1.0).",
+    "The generated `home_templ.mbt` is included, so the initial build needs no template CLI.",
+    "After editing the template, regenerate it with the `moon-templ` CLI on your PATH:",
+    "",
+    "```",
+    "moon-templ generate app/templates/home.templ",
+    "```",
     "",
     "## Scaffold a model",
     "",
@@ -170,11 +193,19 @@ fn readme_t(name : String) -> String {
     "moonway generate scaffold Post title:string body:text published:bool",
     "```",
     "",
-    "## Frontend",
+    "## Optional Preact frontend",
     "",
-    "`app/frontend/src/main.jsx` is the only frontend source. The Preact + esbuild",
-    "build writes `static/app.js`; `static/index.html` only mounts that bundle.",
-    "There is no vanilla JavaScript fallback, so rebuild after frontend changes.",
+    "`app/frontend/src/main.jsx` is the Preact source for `/index.html`.",
+    "Build it only if you want to use that page (requires Node.js and npm):",
+    "",
+    "```",
+    "cd app/frontend",
+    "npm install",
+    "npm run build",
+    "cd ../..",
+    "```",
+    "",
+    "The build writes `static/app.js`; the default `/` page does not depend on it.",
   ])
 }
 
@@ -185,6 +216,7 @@ fn main_pkg_t(name : String) -> String {
     "  \"daqing/moonway\" @moonway,",
     "  \"\{name}/handlers\" @handlers,",
     "  \"\{name}/migrations\" @migrations,",
+    "  \"\{name}/app/templates\" @templates,",
     "}",
     "",
     "supported_targets = \"native\"",
@@ -198,12 +230,21 @@ fn main_pkg_t(name : String) -> String {
 }
 
 ///|
-fn main_src_t() -> String {
+fn main_src_t(name : String) -> String {
   join_lines([
-    "///|", "fn main {", "  let app = @moonway.new()", "  let db = @moonway.sqlite(\"app.db\")",
-    "  if !db.migrate(@migrations.all()) {", "    abort(\"moonway: migrations failed\")",
-    "  }", "  @handlers.register(app, db)", "  // moonway:register-handlers", "  app.static_files(\"static\")",
-    "  println(\"app is listening at http://127.0.0.1:3000\")", "  app.listen(3000)",
+    "///|",
+    "fn main {",
+    "  let app = @moonway.new()",
+    "  let db = @moonway.sqlite(\"app.db\")",
+    "  if !db.migrate(@migrations.all()) {",
+    "    abort(\"moonway: migrations failed\")",
+    "  }",
+    "  @handlers.register(app, db)",
+    "  // moonway:register-handlers",
+    "  app.get(\"/\", ctx => ctx.html(@templates.home_page(\"\{name}\")))",
+    "  app.static_files(\"static\")",
+    "  println(\"app is listening at http://127.0.0.1:3000\")",
+    "  app.listen(3000)",
     "}",
   ])
 }
