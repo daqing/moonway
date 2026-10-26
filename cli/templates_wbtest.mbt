@@ -55,16 +55,22 @@ test "new templates pin native target, link flags and markers" {
 }
 
 ///|
-test "new projects include a Procfile for the server and templ watcher" {
+test "new projects include Procfile development processes" {
   assert_eq(
     procfile_t("blog"),
-    "web: moon run cmd/blog\ntempl: moon-templ generate --watch app/templates/...",
+    "web: moon run cmd/blog\ntempl: moon-templ generate --watch app/templates/...\nfrontend: cd app/frontend && npm install && npm run dev",
+  )
+  assert_true(
+    web_package_json_t().contains(
+      "\"dev\": \"npm run build -- --watch=forever\"",
+    ),
   )
   let readme = readme_t("blog")
   assert_true(readme.contains("foreman start"))
   assert_true(
     readme.contains("regenerates templates whenever `.templ` files change"),
   )
+  assert_true(readme.contains("no manual `npm run build` is needed"))
 }
 
 ///|

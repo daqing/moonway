@@ -98,11 +98,10 @@ fn execute_new(name : String, dir : String) -> Unit {
     println("Next steps:")
     println("  cd \{root}")
     println("  moon update")
-    println("Build the Preact islands:")
-    println("  cd app/frontend && npm install && npm run build && cd ../..")
-    println("Start the server and templ watcher with Foreman:")
+    println("Start all development processes with Foreman:")
     println("  foreman start")
-    println("Or start only the server:")
+    println("Or build the frontend and start only the server:")
+    println("  cd app/frontend && npm install && npm run build && cd ../..")
     println("  moon run cmd/\{mod_name}")
   } catch {
     err =>
@@ -164,6 +163,7 @@ fn procfile_t(name : String) -> String {
   join_lines([
     "web: moon run cmd/\{name}",
     "templ: moon-templ generate --watch app/templates/...",
+    "frontend: cd app/frontend && npm install && npm run dev",
   ])
 }
 
@@ -176,7 +176,7 @@ fn readme_t(name : String) -> String {
     "",
     "## Run",
     "",
-    "Build the Preact islands, then start the server:",
+    "Build the Preact islands to start only the server:",
     "",
     "```",
     "moon update",
@@ -189,13 +189,14 @@ fn readme_t(name : String) -> String {
     "",
     "Then open <http://localhost:3000>.",
     "",
-    "For development, the included `Procfile` runs the web server and templ watcher together. With `moon-templ` and [Foreman](https://github.com/ddollar/foreman) on your PATH:",
+    "For development, the included `Procfile` runs the web server, templ watcher, and frontend watcher together. With `moon-templ`, Node.js, npm, and [Foreman](https://github.com/ddollar/foreman) on your PATH:",
     "",
     "```",
     "foreman start",
     "```",
     "",
-    "The watcher regenerates templates whenever `.templ` files change.",
+    "The templ watcher regenerates templates whenever `.templ` files change.",
+    "The frontend process installs npm dependencies and rebuilds `static/app.js` on changes, so no manual `npm run build` is needed.",
     "",
     "## Templates and Preact islands",
     "",

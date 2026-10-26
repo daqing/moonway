@@ -603,11 +603,13 @@ moon-templ generate app/templates/home.templ
 moon check
 ```
 
-开发时也可以使用骨架根目录的 `Procfile`，通过 Foreman 等 Procfile 工具执行
-`foreman start`，同时启动 Web 服务器和 templ watcher。watcher 会执行
-`moon-templ generate --watch app/templates/...`，在 `.templ` 文件变更后自动重新生成。
+开发时使用骨架根目录的 `Procfile`，通过 Foreman 等 Procfile 工具执行
+`foreman start`，即可同时启动 Web 服务器、templ watcher 和 frontend watcher。
+templ watcher 在 `.templ` 文件变更后自动重新生成；frontend 进程自动安装 npm
+依赖，并通过 watch 模式构建和持续更新 `static/app.js`，无需手动执行
+`npm run build`。
 
-要启用首页 islands，需要 Node.js 和 npm 构建前端：
+如果不使用 Procfile，需要用 Node.js 和 npm 手动构建前端：
 
 ```bash
 cd app/frontend
@@ -617,9 +619,10 @@ cd ../..
 moon run cmd/hello-moonway
 ```
 
-未构建时不会生成 `static/app.js`，服务端 HTML 仍能访问，但 islands 不会交互。
-修改 `app/frontend/` 后需要重新执行 `npm run build`。生成的主程序调用
-`app.static_files("static")` 提供 `/app.js`，不再生成 `static/index.html`。
+未构建时不会生成 `static/app.js`，服务端 HTML 仍能访问，但 `/app.js` 返回 404，
+islands 不会交互。手动模式下修改 `app/frontend/` 后需要重新执行 `npm run build`。
+生成的主程序调用 `app.static_files("static")` 提供 `/app.js`，不再生成
+`static/index.html`。
 
 ---
 

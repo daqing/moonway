@@ -158,8 +158,9 @@ updated  admin registry
 
 > `moonway` CLI 随框架一起提供——通过 `moon install daqing/moonway/cmd/moonway` 安装。
 
-`moonway new` 还会生成包含 `web` 和 `templ` 进程的 `Procfile`。使用 Foreman 等
-Procfile 工具即可同时启动 Web 服务器，并在模板变更时自动重新生成。
+`moonway new` 还会生成包含 `web`、`templ` 和 `frontend` 进程的 `Procfile`。
+使用 Foreman 等 Procfile 工具即可同时启动 Web 服务器、重新生成模板，并在前端
+文件变更时自动重新构建资源。
 
 ### Admin 管理后台
 

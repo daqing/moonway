@@ -2,9 +2,10 @@
 fn web_package_json_t() -> String {
   join_lines([
     "{", "  \"name\": \"web\",", "  \"private\": true,", "  \"type\": \"module\",",
-    "  \"scripts\": {", "    \"build\": \"esbuild src/main.jsx --bundle --outfile=../../static/app.js --jsx=automatic --jsx-import-source=preact\"",
-    "  },", "  \"dependencies\": {", "    \"preact\": \"^10.19.0\"", "  },", "  \"devDependencies\": {",
-    "    \"esbuild\": \"^0.24.0\"", "  }", "}",
+    "  \"scripts\": {", "    \"build\": \"esbuild src/main.jsx --bundle --outfile=../../static/app.js --jsx=automatic --jsx-import-source=preact\",",
+    "    \"dev\": \"npm run build -- --watch=forever\"", "  },", "  \"dependencies\": {",
+    "    \"preact\": \"^10.19.0\"", "  },", "  \"devDependencies\": {", "    \"esbuild\": \"^0.24.0\"",
+    "  }", "}",
   ])
 }
 

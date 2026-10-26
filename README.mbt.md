@@ -167,9 +167,9 @@ updated  admin registry
 > The `moonway` CLI ships with the framework — install it with
 > `moon install daqing/moonway/cmd/moonway`.
 
-`moonway new` also generates a `Procfile` with `web` and `templ` processes. Use
-a Procfile runner such as Foreman to start the web server and regenerate
-templates automatically when they change.
+`moonway new` also generates a `Procfile` with `web`, `templ`, and `frontend`
+processes. Use a Procfile runner such as Foreman to start the server, regenerate
+templates, and build frontend assets automatically when they change.
 
 ### Admin dashboard
 
