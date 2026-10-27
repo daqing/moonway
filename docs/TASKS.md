@@ -114,6 +114,10 @@ synchronous dispatch built in T2.
   `where` filters, `count`.
 - [x] **T5.5** Tests — query API and migrations against a temporary SQLite
   database file.
+- [x] **T5.6** SQL adapter and Repo — composable builders with SQLite/MySQL/PG
+  dialects, named-argument compilation, typed/map CRUD, transactions, explicit
+  relations, and batch preloading. Real execution uses SQLite; the other
+  dialects currently support SQL generation and Preview only.
 
 > **Done when**: the database calls in the README Post example work as
 > written.

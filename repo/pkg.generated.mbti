@@ -1,0 +1,267 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "daqing/moonway/repo"
+
+import {
+  "daqing/moonway/db",
+  "daqing/moonway/sql",
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+}
+
+// Values
+pub fn belongs_to(@db.Table, String, primary_key? : String, name? : String) -> Relation
+
+pub fn compile_named_query(String, Map[String, @sql.Value]) -> Prepared raise RepoError
+
+pub fn[S : @sql.Stmt] count(DB, S) -> Int64 raise
+
+pub fn count_every(DB, @db.Table) -> Int64 raise
+
+pub fn count_where(DB, @db.Table, Map[String, @sql.Expr]) -> Int64 raise
+
+pub fn[S : @sql.Stmt] count_with(Executor, S) -> Int64 raise
+
+pub fn[T : @json.FromJson, S : @sql.Stmt] create(DB, @db.Table, S) -> T? raise
+
+pub fn[T : @json.FromJson] create_from(DB, @db.Table, Map[String, @sql.Expr]) -> T? raise
+
+pub fn[T : @json.FromJson] create_from_current(@db.Table, Map[String, @sql.Expr]) -> T? raise
+
+pub fn[T : @json.FromJson, S : @sql.Stmt] create_with(Executor, @db.Table, S) -> T? raise
+
+pub fn current_db() -> DB raise RepoError
+
+pub fn current_db_ok() -> DB?
+
+pub fn[S : @sql.Stmt] delete(DB, S) -> Unit raise
+
+pub fn[S : @sql.Stmt] delete_affected(DB, S) -> Int64 raise
+
+pub fn[S : @sql.Stmt] delete_affected_with(Executor, S) -> Int64 raise
+
+pub fn delete_by_id(DB, @db.Table, Int64) -> Unit raise
+
+pub fn delete_every(DB, @db.Table) -> Unit raise
+
+pub fn delete_where(DB, @db.Table, Map[String, @sql.Expr]) -> Unit raise
+
+pub fn[S : @sql.Stmt] delete_with(Executor, S) -> Unit raise
+
+pub fn detect_driver_from_dsn(String) -> Driver?
+
+pub fn[S : @sql.Stmt] exists(DB, S) -> Bool raise
+
+pub fn exists_where(DB, @db.Table, Map[String, @sql.Expr]) -> Bool raise
+
+pub fn[S : @sql.Stmt] exists_with(Executor, S) -> Bool raise
+
+pub fn[T : @json.FromJson, S : @sql.Stmt] find(DB, @db.Table, S) -> Array[T] raise
+
+pub fn[T : @json.FromJson] find_all(DB, @db.Table) -> Array[T] raise
+
+pub fn[T : @json.FromJson] find_all_current(@db.Table) -> Array[T] raise
+
+pub fn[T : @json.FromJson] find_by(DB, @db.Table, Map[String, @sql.Expr]) -> Array[T] raise
+
+pub fn[T : @json.FromJson] find_by_current(@db.Table, Map[String, @sql.Expr]) -> Array[T] raise
+
+pub fn[T : @json.FromJson] find_by_id(DB, @db.Table, Int64) -> T? raise
+
+pub fn[S : @sql.Stmt] find_maps(DB, S) -> Array[Map[String, @sql.Value]] raise
+
+pub fn[S : @sql.Stmt] find_maps_with(Executor, S) -> Array[Map[String, @sql.Value]] raise
+
+pub fn[T : @json.FromJson, S : @sql.Stmt] find_one(DB, @db.Table, S) -> T? raise
+
+pub fn[T : @json.FromJson] find_one_by(DB, @db.Table, Map[String, @sql.Expr]) -> T? raise
+
+pub fn[S : @sql.Stmt] find_one_map(DB, S) -> Map[String, @sql.Value]? raise
+
+pub fn[S : @sql.Stmt] find_one_map_with(Executor, S) -> Map[String, @sql.Value]? raise
+
+pub fn[T : @json.FromJson, S : @sql.Stmt] find_one_with(Executor, @db.Table, S) -> T? raise
+
+pub fn[T : @json.FromJson, S : @sql.Stmt] find_with(Executor, @db.Table, S) -> Array[T] raise
+
+pub fn has_many(@db.Table, String, primary_key? : String, name? : String) -> Relation
+
+pub fn has_one(@db.Table, String, primary_key? : String, name? : String) -> Relation
+
+pub fn[T : @json.FromJson, S : @sql.Stmt] insert(DB, @db.Table, S) -> T? raise
+
+pub fn[S : @sql.Stmt] insert_map(DB, S) -> Map[String, @sql.Value]? raise
+
+pub fn[S : @sql.Stmt] insert_map_with(Executor, S) -> Map[String, @sql.Value]? raise
+
+pub fn[T : @json.FromJson, S : @sql.Stmt] insert_with(Executor, @db.Table, S) -> T? raise
+
+pub fn join(@db.Table) -> JoinQuery raise RepoError
+
+pub fn new_db(String) -> DB raise RepoError
+
+pub fn new_db_with_driver(String, String) -> DB raise RepoError
+
+pub fn normalize_driver(String) -> Driver? raise RepoError
+
+pub fn normalize_dsn(Driver, String) -> String
+
+pub fn preload(Array[Relation]) -> Preloader raise RepoError
+
+pub fn[S : @sql.Stmt] prepare_builder(Driver, S) -> Prepared raise
+
+pub fn[S : @sql.Stmt] prepare_insert_builder(Driver, S) -> Prepared raise
+
+pub fn prepare_query(Driver, String, Map[String, @sql.Value]) -> Prepared raise RepoError
+
+pub fn[S : @sql.Stmt] preview(DB, S) -> Prepared raise
+
+pub fn[S : @sql.Stmt] preview_with(Executor, S) -> Prepared raise
+
+pub fn[S : @sql.Stmt] preview_with_driver(Driver, S) -> Prepared raise
+
+pub fn record_to_json(Map[String, @sql.Value]) -> Json
+
+pub fn resolve_driver(String, String) -> (Driver, String) raise RepoError
+
+pub fn setup(String) -> DB raise RepoError
+
+pub fn setup_with_driver(String, String) -> DB raise RepoError
+
+pub fn strip_returning_clause(String) -> String
+
+pub fn transform_query_for_driver(Driver, String) -> String raise RepoError
+
+pub fn[S : @sql.Stmt] update(DB, S) -> Unit raise
+
+pub fn[S : @sql.Stmt] update_affected(DB, S) -> Int64 raise
+
+pub fn[S : @sql.Stmt] update_affected_with(Executor, S) -> Int64 raise
+
+pub fn update_by_id(DB, @db.Table, Int64, Map[String, @sql.Expr]) -> Unit raise
+
+pub fn update_every(DB, @db.Table, Map[String, @sql.Expr]) -> Unit raise
+
+pub fn update_where(DB, @db.Table, Map[String, @sql.Expr], @sql.Cond) -> Unit raise
+
+pub fn[S : @sql.Stmt] update_with(Executor, S) -> Unit raise
+
+pub fn value_as_int64(@sql.Value) -> Int64?
+
+pub fn value_to_json(@sql.Value) -> Json
+
+pub fn with_tx(DB, (Tx) -> Unit raise) -> Unit raise
+
+// Errors
+pub(all) suberror RepoError {
+  EmptyDsn
+  CannotInferDriver(String)
+  UnsupportedDriver(String)
+  UnsupportedFeature(String)
+  MissingNamedArg(String)
+  NotSetup
+  OpenFailed(String)
+  PrepareFailed(String)
+  ExecuteFailed(String)
+  QueryFailed(String)
+  DecodeFailed(String)
+  CountNotMatch
+  MissingDestination(String)
+  RelationNotFound(String)
+  InvalidRecord(String)
+} derive(@debug.Debug)
+
+// Types and methods
+pub struct DB {
+  // private fields
+}
+pub fn DB::close(Self) -> Unit
+pub fn DB::driver(Self) -> Driver
+pub fn DB::executor(Self) -> Executor
+pub fn DB::from_database(@db.Database, driver? : Driver) -> Self
+pub fn DB::join(Self, @db.Table) -> JoinQuery
+pub fn DB::preload(Self, Array[Relation]) -> Preloader
+pub fn DB::preload_cond(Self, Relation, @sql.Cond) -> Preloader
+pub fn DB::raw(Self) -> @db.Database
+
+pub(all) enum Driver {
+  Postgres
+  MySQL
+  SQLite
+} derive(Eq, @debug.Debug)
+pub fn Driver::rebind(Self, String) -> String
+
+pub struct Executor {
+  // private fields
+}
+pub fn Executor::exec_sql(Self, String) -> Int64 raise RepoError
+pub fn[S : @sql.Stmt] Executor::execute(Self, S) -> Int64 raise
+pub fn Executor::execute_prepared(Self, Prepared) -> Int64 raise RepoError
+pub fn[S : @sql.Stmt] Executor::preview(Self, S) -> Prepared raise
+
+pub struct JoinQuery {
+  // private fields
+}
+pub fn JoinQuery::build(Self) -> @sql.Builder
+pub fn JoinQuery::count(Self) -> Int64 raise
+pub fn JoinQuery::cross_joins(Self, Relation) -> Self
+pub fn JoinQuery::find(Self) -> JoinResultSet raise
+pub fn[T : @json.FromJson] JoinQuery::find_into(Self) -> Array[T] raise
+pub fn JoinQuery::full_joins(Self, Relation, condition? : @sql.Cond) -> Self
+pub fn JoinQuery::joins(Self, Relation, condition? : @sql.Cond) -> Self
+pub fn JoinQuery::left_joins(Self, Relation, condition? : @sql.Cond) -> Self
+pub fn JoinQuery::limit(Self, Int32) -> Self
+pub fn JoinQuery::offset(Self, Int32) -> Self
+pub fn JoinQuery::order_by(Self, String) -> Self
+pub fn JoinQuery::page(Self, Int32, Int32) -> Self
+pub fn JoinQuery::right_joins(Self, Relation, condition? : @sql.Cond) -> Self
+pub fn JoinQuery::where_(Self, @sql.Cond) -> Self
+
+pub struct JoinResultSet {
+  // private fields
+}
+pub fn JoinResultSet::is_empty(Self) -> Bool
+pub fn JoinResultSet::len(Self) -> Int32
+pub fn JoinResultSet::records(Self) -> Array[Map[String, @sql.Value]]
+
+pub struct Preloader {
+  // private fields
+}
+pub fn Preloader::exec(Self, Array[Map[String, @sql.Value]]) -> Unit raise
+pub fn Preloader::then_preload(Self, Array[Relation]) -> Self
+pub fn Preloader::then_preload_cond(Self, Relation, @sql.Cond) -> Self
+
+pub(all) struct Prepared {
+  query : String
+  args : Array[@sql.Value]
+} derive(Eq, @debug.Debug)
+
+pub(all) struct Relation {
+  kind : RelationType
+  name : String
+  table : @db.Table
+  foreign_key : String
+  primary_key : String
+}
+
+pub(all) enum RelationType {
+  HasOne
+  HasMany
+  BelongsTo
+} derive(Eq, @debug.Debug)
+
+pub struct Tx {
+  // private fields
+}
+pub fn[S : @sql.Stmt] Tx::count(Self, S) -> Int64 raise
+pub fn[S : @sql.Stmt] Tx::delete(Self, S) -> Unit raise
+pub fn[S : @sql.Stmt] Tx::delete_affected(Self, S) -> Int64 raise
+pub fn Tx::executor(Self) -> Executor
+pub fn[S : @sql.Stmt] Tx::exists(Self, S) -> Bool raise
+pub fn Tx::raw(Self) -> @db.Database
+pub fn[S : @sql.Stmt] Tx::update(Self, S) -> Unit raise
+pub fn[S : @sql.Stmt] Tx::update_affected(Self, S) -> Int64 raise
+
+// Type aliases
+pub type Record = Map[String, @sql.Value]
+
+// Traits

@@ -95,6 +95,9 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 - [x] **T5.4** 查询 API——`db.insert`、`db.all(Model)`、`db.find(Model, id)`、
   `where` 过滤、`count`。
 - [x] **T5.5** 测试——对临时 SQLite 数据库文件跑查询 API 与迁移测试。
+- [x] **T5.6** SQL adapter 与 Repo——可组合 Builder、SQLite/MySQL/PG 方言、
+  命名参数编译、typed/map CRUD、事务、显式关联和批量预加载。真实执行使用
+  SQLite；其他方言当前仅支持 SQL 生成和 Preview。
 
 > **完成标准**：README Post 示例中的数据库调用与文档行为一致。
 

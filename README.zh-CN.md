@@ -141,6 +141,63 @@ fn main {
 }
 ```
 
+## SQL Builder 与 Repo
+
+`sql` 和 `repo` 包在简洁的 `db` helper 之外，提供一套可组合的数据库 API：
+
+- `daqing/moonway/sql` 用类型化标识符、嵌套条件、表达式、JOIN、CTE、upsert
+  和命名参数构建 SELECT/INSERT/UPDATE/DELETE；`sql/sqlite`、`sql/mysql`、
+  `sql/pg` 提供对应的方言 facade。
+- `daqing/moonway/repo` 按出现顺序编译命名参数，应用各驱动的 SQL 转换，
+  执行语句，扫描类型化模型或动态记录，并管理事务与批量关联预加载。
+
+SQLite 沿用项目现有的 native 驱动，可直接执行。PostgreSQL 和 MySQL 当前支持
+SQL 生成与 `Preview`；本包尚未内置连接这两种服务器并执行语句的网络客户端。
+
+模型仍使用显式 `db.Table` schema 与 `ToJson`/`FromJson`，不依赖运行时反射，
+也没有隐藏的命名约定：
+
+```moonbit nocheck
+struct Todo {
+  id : Int
+  title : String
+  completed : Bool
+} derive(ToJson, FromJson)
+
+///|
+let todos : @db.Table = @db.table("todos", [
+  @db.column("id", @db.IntT, primary=true),
+  @db.column("title", @db.TextT),
+  @db.column("completed", @db.BoolT),
+])
+
+///|
+fn query_todos(database : @repo.DB) -> Unit raise {
+  let table = @sql.table_of("todos")
+  let inserted : Todo? = @repo.insert(
+    database,
+    todos,
+    @sql.insert(@sql.h([
+      ("title", @sql.val("write more MoonBit")),
+      ("completed", @sql.val(false)),
+    ])).into_table(table),
+  )
+  let open_items : Array[Todo] = @repo.find(
+    database,
+    todos,
+    @sql.select_fields([table.all_fields()])
+    .from_table(table)
+    .where_(@sql.field_eq(table.field("completed"), @sql.val(false)))
+    .order_by(table.field("id").asc()),
+  )
+  ignore((inserted, open_items))
+}
+```
+
+当查询结果不对应单个模型时，`find_maps` 返回动态
+`Map[String, @sql.Value]` 记录。显式声明的 `has_one`、`has_many` 和
+`belongs_to` 关联可用于 `JoinQuery` 或批量 `Preloader`。
+
 ## 生成应用：模板、islands 与 Procfile
 
 如果既需要服务端渲染，又需要局部交互，请使用应用生成器，而不是上面最小的
