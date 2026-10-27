@@ -130,8 +130,9 @@ synchronous dispatch built in T2.
   `@env.args()`; `moon run cmd/moonway -- <args>` passes flags through.
 - [x] **T6.2** `moonway new <name>` — generate an app skeleton: native
   `preferred_target` (per T1.4), `app/models/` `handlers/` `migrations/`
-  `app/frontend/` `app/templates/` folders, moonway and moon-templ dependencies
-  wired in. Verified hands-on: the generated app passes `moon check` first try
+  `app/frontend/` `app/templates/` folders, plus `data/` for SQLite files
+  (default `data/app.db`); moonway and moon-templ dependencies wired in.
+  Verified hands-on: the generated app passes `moon check` first try
   and serves on :3000 with its SQLite database
   migrated (local verification maps the unpublished moonway via a
   `moon.work` members entry; published users get it from the registry).

@@ -95,8 +95,9 @@ moon run cmd/hello-moonway
 
 - 生成 `preferred_target = "native"` 的 `moon.mod`，并写入 moonway 与 moon-templ 依赖；
 - 生成 `cmd/hello-moonway`、`app/models`、`handlers`、`migrations`、
-  `app/frontend`、`app/templates`、`static` 目录；
-- 生成可运行的主程序、带 Preact islands 的 templ 默认首页，以及 SQLite 链接参数 `-lsqlite3`。
+  `app/frontend`、`app/templates`、`static`、`data` 目录；
+- 生成可运行的主程序、带 Preact islands 的 templ 默认首页，以及 SQLite 链接参数 `-lsqlite3`；
+  默认数据库文件为 `data/app.db`。
 
 可选参数 `--dir <dir>` 指定输出父目录：`moonway new myapp --dir apps` 会在
 `apps/myapp` 下生成项目。
@@ -185,7 +186,8 @@ hello-moonway/
 ├── migrations/
 │   ├── moon.pkg
 │   └── migrations.mbt            # all() -> Array[Migration]（带 marker）
-└── static/                       # Preact bundle 静态目录；不再生成 index.html
+├── static/                       # Preact bundle 静态目录；不再生成 index.html
+└── data/                         # SQLite 数据库文件（默认 data/app.db）
 ```
 
 `/` 的服务端 templ HTML 无需前端构建即可访问；`npm run build` 生成

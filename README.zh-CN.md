@@ -224,6 +224,7 @@ hello-moonway/
 │       ├── home_templ.mbt        # 生成的 MoonBit 代码：请勿手改
 │       └── pages.mbt             # 向应用返回渲染后的 HTML
 ├── static/                       # 前端构建产物目录
+├── data/                         # SQLite 数据库文件（默认 data/app.db）
 ├── cmd/hello-moonway/main.mbt    # 首页路由与静态文件服务
 └── Procfile                      # 开发进程配置
 ```

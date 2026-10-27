@@ -239,6 +239,7 @@ hello-moonway/
 │       ├── home_templ.mbt        # Generated MoonBit code: do not edit
 │       └── pages.mbt             # Returns rendered HTML to the application
 ├── static/                       # Frontend build output
+├── data/                         # SQLite database files (default: data/app.db)
 ├── cmd/hello-moonway/main.mbt    # Homepage route and static file serving
 └── Procfile                      # Development processes
 ```

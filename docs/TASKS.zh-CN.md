@@ -109,7 +109,8 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
   `moon run cmd/moonway -- <args>` 透传参数。
 - [x] **T6.2** `moonway new <name>`——生成应用骨架：native `preferred_target`
   （按 T1.4 的决策）、`app/models/` `handlers/` `migrations/` `app/frontend/`
-  `app/templates/` 目录、预先接好 moonway 与 moon-templ 依赖。已实测：生成的项目
+  `app/templates/` 目录，以及保存 SQLite 文件的 `data/`（默认 `data/app.db`）；
+  预先接好 moonway 与 moon-templ 依赖。已实测：生成的项目
   第一次 `moon check` 即通过，运行即在 :3000 提供服务且 SQLite 已迁移（moonway 未发布前的本地验证用
   `moon.work` members 映射；发布后的用户从 registry 拉取）。
 - [x] **T6.3** `moonway generate scaffold <Model> field:type …`——生成模型
