@@ -58,7 +58,7 @@ test "new templates pin native target, link flags and markers" {
 test "new projects include Procfile development processes" {
   assert_eq(
     procfile_t("blog"),
-    "web: moon run cmd/blog\ntempl: moon-templ generate --watch app/templates/...\nfrontend: cd app/frontend && npm install && npm run dev",
+    "web: watchexec --restart --exts mbt --project-origin . -- moon run cmd/blog\ntempl: moon-templ generate --watch app/templates/...\nfrontend: cd app/frontend && npm install && npm run dev",
   )
   assert_true(
     web_package_json_t().contains(
@@ -141,6 +141,11 @@ test "new projects document templ and Preact islands" {
   assert_true(readme.contains("data-island"))
   assert_true(readme.contains("hydrates"))
   assert_true(readme.contains("moon-templ generate app/templates/home.templ"))
+  assert_true(readme.contains("brew install watchexec"))
+  assert_true(readme.contains("cargo install watchexec-cli --locked"))
+  assert_true(readme.contains("sudo apt install watchexec"))
+  assert_true(readme.contains("sudo dnf install watchexec"))
+  assert_true(readme.contains("sudo pacman -S watchexec"))
   assert_true(readme.contains("npm install"))
   assert_true(readme.contains("npm run build"))
   assert_true(readme.contains("moon run cmd/blog"))

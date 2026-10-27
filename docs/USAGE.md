@@ -603,11 +603,13 @@ moon-templ generate app/templates/home.templ
 moon check
 ```
 
-开发时使用骨架根目录的 `Procfile`，通过 Foreman 等 Procfile 工具执行
+开发时使用骨架根目录的 `Procfile`，确保 `moon-templ`、
+[watchexec](https://github.com/watchexec/watchexec) 和 Foreman 位于 `PATH`，再执行
 `foreman start`，即可同时启动 Web 服务器、templ watcher 和 frontend watcher。
-templ watcher 在 `.templ` 文件变更后自动重新生成；frontend 进程自动安装 npm
-依赖，并通过 watch 模式构建和持续更新 `static/app.js`，无需手动执行
-`npm run build`。
+templ watcher 在 `.templ` 文件变更后自动重新生成；Web 进程监听 `.mbt` 文件，
+在生成代码变更后自动重新编译并重启服务器，刷新浏览器即可看到模板更新。
+frontend 进程自动安装 npm 依赖，并通过 watch 模式构建和持续更新 `static/app.js`，
+无需手动执行 `npm run build`。
 
 如果不使用 Procfile，需要用 Node.js 和 npm 手动构建前端：
 

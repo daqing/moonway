@@ -239,20 +239,52 @@ for (const element of document.querySelectorAll("[data-island]")) {
 The generated `Procfile` is a development process manifest:
 
 ```procfile
-web: moon run cmd/hello-moonway
+web: watchexec --restart --exts mbt --project-origin . -- moon run cmd/hello-moonway
 templ: moon-templ generate --watch app/templates/...
 frontend: cd app/frontend && npm install && npm run dev
 ```
 
-With `moon-templ`, Node.js, npm, and
-[Foreman](https://github.com/ddollar/foreman) on your `PATH`, run this from the
-project root:
+On macOS, install `watchexec` with Homebrew:
+
+```bash
+brew install watchexec
+```
+
+On Linux, install it with Cargo:
+
+```bash
+cargo install watchexec-cli --locked
+watchexec --version
+```
+
+Make sure `~/.cargo/bin` is on your `PATH`. Some distributions also provide a
+package:
+
+```bash
+# Debian / Ubuntu (when available in the distribution repositories)
+sudo apt install watchexec
+
+# Fedora
+sudo dnf install watchexec
+
+# Arch Linux
+sudo pacman -S watchexec
+```
+
+If your distribution does not provide the package, use Cargo or download a
+prebuilt Linux binary from
+[watchexec releases](https://github.com/watchexec/watchexec/releases).
+
+With `moon-templ`, [watchexec](https://github.com/watchexec/watchexec), Node.js,
+npm, and [Foreman](https://github.com/ddollar/foreman) on your `PATH`, run this
+from the project root:
 
 ```bash
 foreman start
 ```
 
-- `web` starts the MoonBit server.
+- `web` watches `.mbt` files, recompiles and restarts the MoonBit server after
+  generated code changes. Refresh the browser to see template updates.
 - `templ` watches `app/templates` and regenerates MoonBit code when `.templ`
   files change.
 - `frontend` installs npm dependencies and runs esbuild in watch mode, updating

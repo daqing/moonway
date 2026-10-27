@@ -227,19 +227,50 @@ for (const element of document.querySelectorAll("[data-island]")) {
 生成的 `Procfile` 是一份开发进程配置：
 
 ```procfile
-web: moon run cmd/hello-moonway
+web: watchexec --restart --exts mbt --project-origin . -- moon run cmd/hello-moonway
 templ: moon-templ generate --watch app/templates/...
 frontend: cd app/frontend && npm install && npm run dev
 ```
 
-确保 `moon-templ`、Node.js、npm 和
-[Foreman](https://github.com/ddollar/foreman) 均位于 `PATH`，然后在项目根目录运行：
+在 macOS 上，使用 Homebrew 安装 `watchexec`：
+
+```bash
+brew install watchexec
+```
+
+在 Linux 上，可以通过 Cargo 安装：
+
+```bash
+cargo install watchexec-cli --locked
+watchexec --version
+```
+
+确保 `~/.cargo/bin` 已加入 `PATH`。部分发行版也可以直接安装：
+
+```bash
+# Debian / Ubuntu（发行版软件源需提供该包）
+sudo apt install watchexec
+
+# Fedora
+sudo dnf install watchexec
+
+# Arch Linux
+sudo pacman -S watchexec
+```
+
+如果发行版软件源找不到该包，推荐使用 Cargo，或从
+[watchexec Releases](https://github.com/watchexec/watchexec/releases)
+下载对应的 Linux 预编译版本。
+
+确保 `moon-templ`、[watchexec](https://github.com/watchexec/watchexec)、Node.js、
+npm 和 [Foreman](https://github.com/ddollar/foreman) 均位于 `PATH`，然后在项目根目录运行：
 
 ```bash
 foreman start
 ```
 
-- `web` 启动 MoonBit 服务端。
+- `web` 监听 `.mbt` 文件，在生成代码变更后重新编译并重启 MoonBit 服务端；
+  刷新浏览器即可看到模板更新。
 - `templ` 监听 `app/templates`，在 `.templ` 文件变更时重新生成 MoonBit 代码。
 - `frontend` 安装 npm 依赖，并以 watch 模式运行 esbuild；前端源码变更时持续
   更新 `static/app.js`。
