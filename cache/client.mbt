@@ -96,7 +96,7 @@ pub async fn RedisClient::set_ex(
   self : RedisClient,
   key : String,
   value : String,
-  ttl_seconds : Int,
+  ttl_seconds : Int32,
 ) -> Bool {
   match self.command(["SET", key, value, "EX", "\{ttl_seconds}"]) {
     Simple("OK") => true
@@ -106,7 +106,7 @@ pub async fn RedisClient::set_ex(
 
 ///|
 /// DEL a key; returns the number of keys removed.
-pub async fn RedisClient::del(self : RedisClient, key : String) -> Int {
+pub async fn RedisClient::del(self : RedisClient, key : String) -> Int32 {
   match self.command(["DEL", key]) {
     Integer(n) => n.to_int()
     _ => raise Failure::Failure("redis: DEL returned a non-integer reply")
@@ -118,7 +118,7 @@ pub async fn RedisClient::del(self : RedisClient, key : String) -> Int {
 pub async fn RedisClient::expire(
   self : RedisClient,
   key : String,
-  ttl_seconds : Int,
+  ttl_seconds : Int32,
 ) -> Bool {
   match self.command(["EXPIRE", key, "\{ttl_seconds}"]) {
     Integer(n) => n == 1L

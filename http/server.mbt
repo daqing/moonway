@@ -1,14 +1,15 @@
 ///|
 /// Core serving loop. Must run inside the async runtime (an async fn main,
-/// or a task spawned within one). Binds 127.0.0.1:`port`; raises on bind
+/// or a task spawned within one). Binds `host`:`port` (default host `127.0.0.1`); raises on bind
 /// failure. GET requests matching a WebSocket route are upgraded instead of
 /// dispatched.
 pub async fn serve_async(
-  port : Int,
+  port : Int32,
   handler : (Request) -> Response,
-  ws_routes? : Array[WsRoute] = [],
+  ws_routes~ : Array[WsRoute] = [],
+  host~ : String = "127.0.0.1",
 ) -> Unit {
-  let addr = @async_socket.Addr::parse("127.0.0.1:\{port}")
+  let addr = @async_socket.Addr::parse("\{host}:\{port}")
   let server = @async_http.Server(addr, reuse_addr=true)
   server.run_forever(
     async fn(request, body, conn) {
@@ -29,11 +30,12 @@ pub async fn serve_async(
 /// policy's TTL (`X-Cache: MISS`). Cache failures degrade to plain dispatch.
 pub async fn[S : CacheStore] serve_cached_async(
   policy : CachePolicy[S],
-  port : Int,
+  port : Int32,
   handler : (Request) -> Response,
-  ws_routes? : Array[WsRoute] = [],
+  ws_routes~ : Array[WsRoute] = [],
+  host~ : String = "127.0.0.1",
 ) -> Unit {
-  let addr = @async_socket.Addr::parse("127.0.0.1:\{port}")
+  let addr = @async_socket.Addr::parse("\{host}:\{port}")
   let server = @async_http.Server(addr, reuse_addr=true)
   server.run_forever(
     async fn(request, body, conn) {
@@ -54,6 +56,17 @@ pub async fn[S : CacheStore] serve_cached_async(
 }
 
 ///|
+/// Controls the stderr warnings emitted when the cache backend fails
+/// (`cache unavailable, ...`). Enabled by default; disable to run quietly,
+/// e.g. in tests that exercise cache degradation.
+pub fn set_cache_warnings(enabled : Bool) -> Unit {
+  cache_warnings.val = enabled
+}
+
+///|
+let cache_warnings : Ref[Bool] = Ref(true)
+
+///|
 /// Cache lookup or dispatch-plus-store for one GET request. Any cache
 /// failure degrades to a plain dispatch.
 async fn[S : CacheStore] serve_one(
@@ -63,7 +76,9 @@ async fn[S : CacheStore] serve_one(
 ) -> Response {
   let cached = policy.lookup(req.path) catch {
     err => {
-      eprintln("moonway: cache unavailable, serving without cache: \{err}")
+      if cache_warnings.val {
+        eprintln("moonway: cache unavailable, serving without cache: \{err}")
+      }
       None
     }
   }
@@ -86,7 +101,11 @@ async fn[S : CacheStore] serve_one(
           true
         } catch {
           err => {
-            eprintln("moonway: cache unavailable, response not cached: \{err}")
+            if cache_warnings.val {
+              eprintln(
+                "moonway: cache unavailable, response not cached: \{err}",
+              )
+            }
             false
           }
         }
@@ -100,7 +119,7 @@ async fn[S : CacheStore] serve_one(
 }
 
 ///|
-/// Serve HTTP/1.1 on 127.0.0.1:`port` from synchronous code: drives the
+/// Serve HTTP/1.1 on `host`:`port` (default host `127.0.0.1`) from synchronous code: drives the
 /// async runtime's event loop until the process is interrupted.
 ///
 /// Error behavior: request parsing happens inside the runtime before user
@@ -111,14 +130,15 @@ async fn[S : CacheStore] serve_one(
 /// connection (`allow_failure=true`) and the server keeps serving.
 /// `Response::internal_error()` is available for explicit 500 responses.
 pub fn serve(
-  port : Int,
+  port : Int32,
   handler : (Request) -> Response,
-  ws_routes? : Array[WsRoute] = [],
+  ws_routes~ : Array[WsRoute] = [],
+  host~ : String = "127.0.0.1",
 ) -> Unit {
   @async.run_async_main(async fn() {
-    serve_async(port, handler, ws_routes~) catch {
+    serve_async(port, handler, ws_routes~, host~) catch {
       err =>
-        eprintln("moonway: failed to start server on 127.0.0.1:\{port}: \{err}")
+        eprintln("moonway: failed to start server on \{host}:\{port}: \{err}")
     }
   })
 }
@@ -127,14 +147,15 @@ pub fn serve(
 /// Like `serve`, with response caching bound to a concrete cache store.
 pub fn[S : CacheStore] serve_cached(
   policy : CachePolicy[S],
-  port : Int,
+  port : Int32,
   handler : (Request) -> Response,
-  ws_routes? : Array[WsRoute] = [],
+  ws_routes~ : Array[WsRoute] = [],
+  host~ : String = "127.0.0.1",
 ) -> Unit {
   @async.run_async_main(async fn() {
-    serve_cached_async(policy, port, handler, ws_routes~) catch {
+    serve_cached_async(policy, port, handler, ws_routes~, host~) catch {
       err =>
-        eprintln("moonway: failed to start server on 127.0.0.1:\{port}: \{err}")
+        eprintln("moonway: failed to start server on \{host}:\{port}: \{err}")
     }
   })
 }

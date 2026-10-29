@@ -49,7 +49,7 @@ pub fn table(name : String, columns : Array[Column]) -> Table {
 pub fn column(
   name : String,
   col_type : ColumnType,
-  primary? : Bool = false,
+  primary~ : Bool = false,
 ) -> Column {
   { name, col_type, primary, }
 }

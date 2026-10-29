@@ -17,8 +17,8 @@ pub fn App::admin(
   self : App,
   db : @db.Database,
   tables : Array[@db.Table],
-  prefix? : String = "/admin",
-  token? : String = "",
+  prefix~ : String = "/admin",
+  token~ : String = "",
 ) -> Unit {
   let config : AdminConfig = { db, tables, prefix, token, }
   self.get(prefix, admin_index_handler(config))
@@ -216,7 +216,7 @@ fn admin_see_other(ctx : Context, location : String) -> Context {
 }
 
 ///|
-fn admin_page_number(ctx : Context) -> Int {
+fn admin_page_number(ctx : Context) -> Int32 {
   match ctx.query_param("page") {
     Some(raw) =>
       match admin_parse_int(raw) {
@@ -228,7 +228,7 @@ fn admin_page_number(ctx : Context) -> Int {
 }
 
 ///|
-fn admin_parse_id(ctx : Context) -> Int? {
+fn admin_parse_id(ctx : Context) -> Int32? {
   match ctx.param("id") {
     Some(raw) => admin_parse_int(raw)
     None => None
@@ -236,7 +236,7 @@ fn admin_parse_id(ctx : Context) -> Int? {
 }
 
 ///|
-fn admin_parse_int(raw : String) -> Int? {
+fn admin_parse_int(raw : String) -> Int32? {
   let mut value = 0
   let mut negative = false
   let mut digits = 0

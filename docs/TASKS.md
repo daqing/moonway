@@ -114,6 +114,10 @@ synchronous dispatch built in T2.
   `where` filters, `count`.
 - [x] **T5.5** Tests — query API and migrations against a temporary SQLite
   database file.
+- [x] **T5.6** SQL adapter and Repo — composable builders with SQLite/MySQL/PG
+  dialects, named-argument compilation, typed/map CRUD, transactions, explicit
+  relations, and batch preloading. Real execution uses SQLite; the other
+  dialects currently support SQL generation and Preview only.
 
 > **Done when**: the database calls in the README Post example work as
 > written.
@@ -121,13 +125,15 @@ synchronous dispatch built in T2.
 ## T6 — CLI & code generator (cli/) `M2 · P0`
 
 - [x] **T6.1** `moonway` CLI skeleton — argument parsing, `--help`; the binary
-  is distributed via `moon install daqing/moonway`. Lives in `cli/`
+  is distributed via `moon install daqing/moonway/cmd/moonway`. Lives in `cli/`
   (pure `parse` → `Command`) with a thin `cmd/moonway` wrapper reading
   `@env.args()`; `moon run cmd/moonway -- <args>` passes flags through.
 - [x] **T6.2** `moonway new <name>` — generate an app skeleton: native
-  `preferred_target` (per T1.4), `models/` `handlers/` `migrations/` `web/`
-  folders, moonway dependency wired in. Verified hands-on: the generated app
-  passes `moon check` first try and serves on :3000 with its SQLite database
+  `preferred_target` (per T1.4), `app/models/` `handlers/` `migrations/`
+  `app/frontend/` `app/templates/` folders, plus `data/` for SQLite files
+  (default `data/app.db`); moonway and moon-templ dependencies wired in.
+  Verified hands-on: the generated app passes `moon check` first try
+  and serves on :3000 with its SQLite database
   migrated (local verification maps the unpublished moonway via a
   `moon.work` members entry; published users get it from the registry).
 - [x] **T6.3** `moonway generate scaffold <Model> field:type …` — model file,
@@ -235,27 +241,24 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
   — matching the README's REPL example. Verified hands-on with a piped
   session against a seeded database.
 
-## T11 — Preact frontend integration (preact/) `M4 · P2`
+## T11 — templ & Preact islands `M4 · P2`
 
 - [x] **T11.1** Frontend scaffold in generated projects — `moonway new`
-  emits `static/index.html` + `static/app.js` (vanilla, zero-build, wired
-  to the posts API) plus a `web/` Preact + esbuild scaffold whose
-  `npm run build` regenerates `static/app.js`. Node.js prerequisite
-  documented in the generated README; verified with a real
-  `npm install && npm run build` (15.9 kB Preact bundle).
+  emits `app/templates/home.templ` with its checked-in `home_templ.mbt`, wired
+  through `daqing/moon-templ/runtime` as the default `/` page. The template
+  includes a Counter `data-island` mount point plus `/app.js`; no separate
+  `static/index.html` is generated. Server-rendered HTML works without
+  a frontend build, while the Preact build enables island interactivity.
 - [x] **T11.2** Static file serving — `app.static_files(dir)` serves
   unmatched GET requests from `dir`: `/` falls back to `index.html`,
   directories to their `index.html`, content types by extension (text
   types through the string body, binaries like images through a new bytes
   body), and `..` traversal attempts are rejected before any filesystem
   access. Dynamic routes always win. Integration-tested.
-- [x] **T11.3** Example page wired to the posts API — the generated
-  `static/app.js` fetches `/posts`, renders the list and submits the form;
-  the generated `main.mbt` mounts `app.static_files("static")` so `/`
-  serves the page. Verified in a real browser: page + `/app.js` served,
-  existing post rendered from the API; the equivalent POST verified with
-  curl (201). The in-browser form submit needs one manual click to confirm
-  (IAB automation could not reproduce it).
+- [x] **T11.3** Preact islands on the templ homepage — the Preact source in
+  `app/frontend/src/main.jsx` hydrates registered components into
+  `[data-island]` elements. Counter adds stateful clicks to the templ-rendered
+  button on `/`. The frontend build emits `static/app.js`.
 
 > P2: shrinkable per the risk plan — if cut, remove the README feature bullet
 > and say so.
@@ -264,8 +267,8 @@ Based on the `moonbitlang/async` websocket package — the handshake and RFC
 
 - [x] **T12.1** Publish `daqing/moonway` to mooncakes.io — done: 0.11.3 and
   0.11.5 published (Server 200 OK); `moon add daqing/moonway` verified from
-  a clean project (acceptance pulled 0.11.5 from the registry). `moon install daqing/moonway/cmd/main` verified too — it installs the
-  CLI binary as `main` (the install path must point at the subpackage
+  a clean project (acceptance pulled 0.11.5 from the registry). `moon install daqing/moonway/cmd/moonway` verified too — it installs the
+  CLI binary as `moonway` (the install path must point at the subpackage
   that defines the executable; the bare module path fails because the
   root package is a library).
 - [x] **T12.2** `examples/blog` — the reference app covering models, routes,

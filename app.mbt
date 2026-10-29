@@ -34,8 +34,8 @@ pub fn App::static_files(self : App, dir : String) -> Unit {
 pub fn App::cache(
   self : App,
   client : @cache.RedisClient,
-  ttl? : Int = 60,
-  prefix? : String = "moonway",
+  ttl~ : Int32 = 60,
+  prefix~ : String = "moonway",
 ) -> Unit {
   self.cache_policy = Some({ store: client, prefix, ttl, })
 }

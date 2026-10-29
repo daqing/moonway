@@ -1,6 +1,6 @@
 ///|
 pub(all) struct Migration {
-  version : Int
+  version : Int32
   name : String
   statements : Array[String]
 }
@@ -9,7 +9,7 @@ pub(all) struct Migration {
 /// Declare a forward-only migration: its version, a human-readable name and
 /// the SQL statements to apply, in order.
 pub fn migration(
-  version : Int,
+  version : Int32,
   name : String,
   statements : Array[String],
 ) -> Migration {
@@ -48,7 +48,7 @@ pub fn Database::migrate(
 
 ///|
 /// Versions recorded as applied, ascending.
-fn Database::applied_versions(self : Database) -> Array[Int] {
+fn Database::applied_versions(self : Database) -> Array[Int32] {
   let versions = []
   let queried = self.inner.query(
     "SELECT \"version\" FROM \"\{migrations_table}\" ORDER BY \"version\"",
@@ -69,7 +69,7 @@ fn Database::applied_versions(self : Database) -> Array[Int] {
 /// Migrations not yet applied, ascending by version.
 fn sorted_pending(
   migrations : Array[Migration],
-  applied : Array[Int],
+  applied : Array[Int32],
 ) -> Array[Migration] {
   let pending = []
   for m in migrations {

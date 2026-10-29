@@ -1,8 +1,8 @@
 ///|
-let ws_conn_counter : Ref[Int] = Ref(0)
+let ws_conn_counter : Ref[Int32] = Ref(0)
 
 ///|
-fn fresh_ws_id() -> Int {
+fn fresh_ws_id() -> Int32 {
   ws_conn_counter.val = ws_conn_counter.val + 1
   ws_conn_counter.val
 }
@@ -11,7 +11,7 @@ fn fresh_ws_id() -> Int {
 /// A WebSocket connection handed to user handlers.
 pub struct WsConn {
   conn : @async_websocket.Conn
-  id : Int
+  id : Int32
 }
 
 ///|

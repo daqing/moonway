@@ -1,6 +1,6 @@
 ///|
 struct ProbePost {
-  id : Int
+  id : Int32
   title : String
   published : Bool
   score : Double
@@ -15,7 +15,7 @@ let probe_table : Table = table("probe_posts", [
 ])
 
 ///|
-fn as_int(v : @sqlite.SqlValue?) -> Int? {
+fn as_int(v : @sqlite.SqlValue?) -> Int32? {
   match v {
     Some(@sqlite.Int(i)) => Some(i)
     _ => None

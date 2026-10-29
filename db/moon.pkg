@@ -1,5 +1,5 @@
 import {
-  "mizchi/sqlite",
+  "daqing/moon-sqlite3" @sqlite,
   "moonbitlang/x/encoding",
   "moonbitlang/core/json",
   "moonbitlang/core/debug",

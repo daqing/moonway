@@ -16,7 +16,7 @@ pub fn encode_command(Array[String]) -> Bytes
 
 // Types and methods
 pub(all) enum Decoded {
-  Complete(RespValue, Int)
+  Complete(RespValue, Int32)
   Incomplete
   Malformed(String)
 } derive(Eq, @debug.Debug)
@@ -29,16 +29,16 @@ pub struct RedisClient {
   mut buffer : Bytes
 }
 pub async fn RedisClient::cache_get(Self, String) -> String?
-pub async fn RedisClient::cache_set_ex(Self, String, String, Int) -> Bool
+pub async fn RedisClient::cache_set_ex(Self, String, String, Int32) -> Bool
 pub fn RedisClient::close(Self) -> Unit
 pub async fn RedisClient::command(Self, Array[String]) -> RespValue
 pub async fn RedisClient::connect(String) -> Self
-pub async fn RedisClient::del(Self, String) -> Int
-pub async fn RedisClient::expire(Self, String, Int) -> Bool
+pub async fn RedisClient::del(Self, String) -> Int32
+pub async fn RedisClient::expire(Self, String, Int32) -> Bool
 pub async fn RedisClient::get(Self, String) -> String?
 pub async fn RedisClient::ping(Self) -> Bool
 pub async fn RedisClient::set(Self, String, String) -> Bool
-pub async fn RedisClient::set_ex(Self, String, String, Int) -> Bool
+pub async fn RedisClient::set_ex(Self, String, String, Int32) -> Bool
 pub impl @http.CacheStore for RedisClient
 
 pub(all) enum RespValue {

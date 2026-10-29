@@ -1,10 +1,14 @@
 ///|
-pub fn App::listen(self : App, port : Int) -> Unit {
+pub fn App::listen(
+  self : App,
+  port : Int32,
+  host~ : String = "127.0.0.1",
+) -> Unit {
   let handler = fn(request) { self.dispatch(request) }
   match self.cache_policy {
     Some(policy) =>
-      @http.serve_cached(policy, port, handler, ws_routes=self.ws_routes)
-    None => @http.serve(port, handler, ws_routes=self.ws_routes)
+      @http.serve_cached(policy, port, handler, ws_routes=self.ws_routes, host~)
+    None => @http.serve(port, handler, ws_routes=self.ws_routes, host~)
   }
 }
 
@@ -18,7 +22,7 @@ pub fn App::handle(
   self : App,
   verb : String,
   path : String,
-  body? : String = "",
+  body~ : String = "",
 ) -> @http.Response {
   self.dispatch(@http.Request::new(verb, path).with_body(body))
 }

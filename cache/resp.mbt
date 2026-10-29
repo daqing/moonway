@@ -25,7 +25,7 @@ pub fn encode_command(args : Array[String]) -> Bytes {
 }
 
 ///|
-fn byte_length(s : String) -> Int {
+fn byte_length(s : String) -> Int32 {
   @encoding.encode(UTF8, s).length()
 }
 
@@ -48,7 +48,7 @@ fn bytes_to_string(b : BytesView) -> String {
 /// Outcome of trying to decode one reply from a buffer.
 pub(all) enum Decoded {
   /// A complete reply and the number of bytes it consumed.
-  Complete(RespValue, Int)
+  Complete(RespValue, Int32)
   /// The buffer does not yet hold a full reply.
   Incomplete
   /// The buffer starts with a syntactically invalid reply.
@@ -97,7 +97,7 @@ pub fn decode(buf : Bytes) -> Decoded {
 /// The text of a line reply (after the type byte, before CRLF) and the
 /// total number of bytes from `start`... consumed from the buffer start
 /// including the CRLF.
-fn line_text(buf : Bytes, start : Int) -> (String, Int)? {
+fn line_text(buf : Bytes, start : Int32) -> (String, Int32)? {
   match find_crlf(buf, start) {
     Some(at) => Some((bytes_to_string(buf[start:at]), at + 2))
     None => None
@@ -153,8 +153,8 @@ fn decode_array(buf : Bytes) -> Decoded {
 ///|
 fn decode_array_items(
   buf : Bytes,
-  offset : Int,
-  remaining : Int,
+  offset : Int32,
+  remaining : Int32,
   collected : Array[RespValue],
 ) -> Decoded {
   if remaining == 0 {
@@ -172,7 +172,7 @@ fn decode_array_items(
 }
 
 ///|
-fn find_crlf(buf : Bytes, from : Int) -> Int? {
+fn find_crlf(buf : Bytes, from : Int32) -> Int32? {
   let mut i = from
   while i + 1 < buf.length() {
     if buf[i] == 13 && buf[i + 1] == 10 {

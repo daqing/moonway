@@ -45,7 +45,7 @@ pub fn Command::to_repr(Self) -> @debug.Repr
 pub(all) enum ConsoleCommand {
   TableAll(String)
   TableCount(String)
-  TableFind(String, Int)
+  TableFind(String, Int32)
   TableInsert(String, Json)
   DotHelp
   DotTables

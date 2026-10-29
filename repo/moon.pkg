@@ -1,0 +1,15 @@
+import {
+  "daqing/moonway/sql",
+  "daqing/moonway/db",
+  "daqing/moon-sqlite3" @sqlite,
+  "moonbitlang/x/encoding",
+  "moonbitlang/core/json",
+}
+
+supported_targets = "native"
+
+warnings = "-35-79"
+
+options(
+  link: { "native": { "cc-link-flags": "-lsqlite3" } },
+)

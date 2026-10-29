@@ -40,8 +40,10 @@ The name is the mission: **moon + way — the road to the moon.**
   running app.
 - **Code generator** — scaffolding for models, handlers, and more, so
   boilerplate never slows you down.
-- **Frontend included** — an integrated [Preact](https://preactjs.com) workflow
-  for the client side of your app.
+- **templ + Preact islands** — generated apps combine server-rendered
+  [moon-templ](https://mooncakes.io/docs/daqing/moon-templ@0.1.0) HTML with
+  hydrated [Preact](https://preactjs.com) + esbuild islands, including stateful
+  components on the same page.
 
 ## Quick start
 
@@ -76,6 +78,9 @@ moon run cmd/main
 
 Open <http://localhost:3000>. You're on the road. 🌙
 
+`app.listen` binds to `127.0.0.1` by default. To accept connections from
+other machines, explicitly use `app.listen(3000, host="0.0.0.0")`.
+
 ## The full stack, in one file
 
 Replace `cmd/main/moon.pkg` with (the link flags are required — `moon add`
@@ -103,7 +108,7 @@ Then replace `cmd/main/main.mbt` with:
 ```moonbit nocheck
 ///|
 struct Post {
-  id : Int
+  id : Int32
   title : String
   body : String
 } derive(ToJson, FromJson)
@@ -144,6 +149,228 @@ fn main {
 }
 ```
 
+## SQL builder and repository
+
+The `sql` and `repo` packages provide a second, composable database API alongside
+the simple `db` helpers:
+
+- `daqing/moonway/sql` builds SELECT/INSERT/UPDATE/DELETE statements with typed
+  identifiers, nested conditions, expressions, joins, CTEs, upserts, and named
+  arguments. The `sql/sqlite`, `sql/mysql`, and `sql/pg` packages expose the
+  corresponding dialect facades.
+- `daqing/moonway/repo` compiles named arguments in occurrence order, applies
+  driver-specific SQL transformations, executes statements, scans typed or
+  dynamic records, and manages transactions and batch relation preloading.
+
+SQLite execution works out of the box through the existing native driver.
+PostgreSQL and MySQL support SQL generation and `Preview`; this package does not
+currently include network clients for executing statements on those servers.
+
+Models continue to use an explicit `db.Table` schema plus `ToJson`/`FromJson`.
+There is no runtime reflection or hidden naming convention:
+
+```moonbit nocheck
+///|
+struct Todo {
+  id : Int32
+  title : String
+  completed : Bool
+} derive(ToJson, FromJson)
+
+///|
+let todos : @db.Table = @db.table("todos", [
+  @db.column("id", @db.IntT, primary=true),
+  @db.column("title", @db.TextT),
+  @db.column("completed", @db.BoolT),
+])
+
+///|
+fn query_todos(database : @repo.DB) -> Unit raise {
+  let table = @sql.table_of("todos")
+  let inserted : Todo? = @repo.insert(
+    database,
+    todos,
+    @sql.insert(
+      @sql.h([
+        ("title", @sql.val("write more MoonBit")),
+        ("completed", @sql.val(false)),
+      ]),
+    ).into_table(table),
+  )
+  let open_items : Array[Todo] = @repo.find(
+    database,
+    todos,
+    @sql.select_fields([table.all_fields()])
+    .from_table(table)
+    .where_(@sql.field_eq(table.field("completed"), @sql.val(false)))
+    .order_by(table.field("id").asc()),
+  )
+  ignore((inserted, open_items))
+}
+```
+
+For queries that do not map to one model, `find_maps` returns dynamic
+`Map[String, @sql.Value]` records. Explicit `has_one`, `has_many`, and
+`belongs_to` relations can be used with `JoinQuery` or batch `Preloader`.
+
+## Generated apps: templates, islands, and Procfile
+
+For the complete server-rendered and interactive setup, generate an app instead
+of starting from the minimal `moon new` example above:
+
+```bash
+moon install daqing/moonway/cmd/moonway
+moonway new hello-moonway
+cd hello-moonway
+moon update
+```
+
+The frontend-related files in the generated project are:
+
+```text
+hello-moonway/
+├── app/
+│   ├── frontend/
+│   │   ├── package.json          # Preact, esbuild, and build/dev scripts
+│   │   └── src/main.jsx          # Components, island registry, and hydration
+│   └── templates/
+│       ├── moon.pkg              # Imports the moon-templ runtime
+│       ├── home.templ            # Template source: edit this file
+│       ├── home_templ.mbt        # Generated MoonBit code: do not edit
+│       └── pages.mbt             # Returns rendered HTML to the application
+├── static/                       # Frontend build output
+├── data/                         # SQLite database files (default: data/app.db)
+├── cmd/hello-moonway/main.mbt    # Homepage route and static file serving
+└── Procfile                      # Development processes
+```
+
+### `app/templates`: server-rendered pages
+
+Templates use [moon-templ](https://mooncakes.io/docs/daqing/moon-templ@0.1.0)
+to render HTML on the server. Edit `home.templ`; the `moon-templ` CLI generates
+`home_templ.mbt`, while `pages.mbt` exposes the rendered page as `home_page`.
+The generated entry point connects the homepage and frontend assets like this:
+
+```moonbit nocheck
+app.get("/", ctx => ctx.html(@templates.home_page("hello-moonway")))
+app.static_files("static")
+```
+
+The scaffold already includes `home_templ.mbt`, so the first build does not
+require the template CLI. After changing a `.templ` file, put `moon-templ` on
+your `PATH` and regenerate it:
+
+```bash
+moon-templ generate app/templates/home.templ
+```
+
+The `templ` process in the Procfile below automates this step during
+development.
+
+### `app/frontend` and Preact islands
+
+`app/frontend` is a small Node.js package using [Preact](https://preactjs.com)
+for stateful components and esbuild for bundling. It does not turn the whole
+page into a single-page app: the server renders the page, then Preact hydrates
+only the elements marked with `data-island`.
+
+The default template provides both the island mount point and its initial
+server-rendered markup:
+
+```templ
+<div data-island="counter">
+  <button type="button" class="counter">Clicked 0 times</button>
+</div>
+<script src="/app.js"></script>
+```
+
+`app/frontend/src/main.jsx` maps island names to components and hydrates every
+match. To add your own island, define a component, register it under the same
+name used by the template, and make its initial render match the server HTML:
+
+```jsx
+const islands = { counter: Counter };
+
+for (const element of document.querySelectorAll("[data-island]")) {
+  const Component = islands[element.dataset.island];
+  if (Component) {
+    hydrate(<Component />, element);
+  }
+}
+```
+
+### `Procfile`: run the development processes together
+
+The generated `Procfile` is a development process manifest:
+
+```procfile
+web: watchexec --restart --exts mbt --project-origin . -- moon run cmd/hello-moonway
+templ: moon-templ generate --watch app/templates/...
+frontend: cd app/frontend && npm install && npm run dev
+```
+
+On macOS, install `watchexec` with Homebrew:
+
+```bash
+brew install watchexec
+```
+
+On Linux, install it with Cargo:
+
+```bash
+cargo install watchexec-cli --locked
+watchexec --version
+```
+
+Make sure `~/.cargo/bin` is on your `PATH`. Some distributions also provide a
+package:
+
+```bash
+# Debian / Ubuntu (when available in the distribution repositories)
+sudo apt install watchexec
+
+# Fedora
+sudo dnf install watchexec
+
+# Arch Linux
+sudo pacman -S watchexec
+```
+
+If your distribution does not provide the package, use Cargo or download a
+prebuilt Linux binary from
+[watchexec releases](https://github.com/watchexec/watchexec/releases).
+
+With `moon-templ`, [watchexec](https://github.com/watchexec/watchexec), Node.js,
+npm, and [Foreman](https://github.com/ddollar/foreman) on your `PATH`, run this
+from the project root:
+
+```bash
+foreman start
+```
+
+- `web` watches `.mbt` files, recompiles and restarts the MoonBit server after
+  generated code changes. Refresh the browser to see template updates.
+- `templ` watches `app/templates` and regenerates MoonBit code when `.templ`
+  files change.
+- `frontend` installs npm dependencies and runs esbuild in watch mode, updating
+  `static/app.js` whenever the frontend source changes.
+
+You can also build and run everything manually without a Procfile runner:
+
+```bash
+cd app/frontend
+npm install
+npm run build
+cd ../..
+moon run cmd/hello-moonway
+```
+
+`npm run build` writes `static/app.js`, which `app.static_files("static")`
+serves as `/app.js`; this generated bundle is ignored by Git. After a manual
+build, rerun `npm run build` when frontend files change. Without the bundle,
+the server-rendered HTML still works, but `/app.js` returns 404 and the islands
+are not interactive.
+
 ## The toolkit
 
 ### Generator
@@ -153,14 +380,11 @@ moonway generate scaffold Post title:string body:string
 ```
 
 ```console
-created  models/post.mbt
+created  app/models/post.mbt
 created  handlers/posts.mbt
 created  migrations/001_create_posts.mbt
 updated  admin registry
 ```
-
-> The `moonway` CLI ships with the framework — install it with
-> `moon install daqing/moonway`.
 
 ### Admin dashboard
 
@@ -174,8 +398,8 @@ frontend code.
 
 ```console
 $ moonway console
-moonway 0.1.0 · connected to sqlite://app.db
-moonway> Post.count()
+moonway 0.11.7 · connected to sqlite://app.db
+> Posts.count()
 42
 ```
 

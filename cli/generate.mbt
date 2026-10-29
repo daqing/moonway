@@ -29,15 +29,15 @@ fn execute_scaffold(model : String, field_tokens : Array[String]) -> Unit {
   }
   let snake = to_lower_snake(model)
   let plural = snake + "s"
-  if @fs.path_exists("models/\{snake}.mbt") {
-    eprintln("moonway: models/\{snake}.mbt already exists")
+  if @fs.path_exists("app/models/\{snake}.mbt") {
+    eprintln("moonway: app/models/\{snake}.mbt already exists")
     return
   }
   let version = next_migration_version()
   let version_name = pad3(version)
   try {
     @fs.write_string_to_file(
-      "models/\{snake}.mbt",
+      "app/models/\{snake}.mbt",
       model_src_t(model, plural, fields),
     )
     @fs.write_string_to_file(
@@ -57,7 +57,7 @@ fn execute_scaffold(model : String, field_tokens : Array[String]) -> Unit {
     }
   }
   update_registry(
-    "models/models.mbt",
+    "app/models/models.mbt",
     "// moonway:admin-tables",
     "    \{plural},",
   )
@@ -66,16 +66,23 @@ fn execute_scaffold(model : String, field_tokens : Array[String]) -> Unit {
     "// moonway:migrations",
     "    create_\{plural}(),",
   )
-  update_registry(
-    "cmd/main/main.mbt",
-    "// moonway:register-handlers",
-    "  @handlers.register_\{plural}(app, db)",
-  )
-  println("created  models/\{snake}.mbt")
+  match find_main_src() {
+    Some(path) =>
+      update_registry(
+        path,
+        "// moonway:register-handlers",
+        "  @handlers.register_\{plural}(app, db)",
+      )
+    None =>
+      eprintln(
+        "moonway: warning: cmd/main/main.mbt not found (skipped handler registration)",
+      )
+  }
+  println("created  app/models/\{snake}.mbt")
   println("created  handlers/\{plural}.mbt")
   println("created  migrations/\{version_name}_create_\{plural}.mbt")
   println(
-    "updated  models/models.mbt, migrations/migrations.mbt, cmd/main/main.mbt",
+    "updated  app/models/models.mbt, migrations/migrations.mbt, cmd/*/main.mbt",
   )
 }
 
@@ -130,7 +137,7 @@ fn to_lower_snake(model : String) -> String {
 }
 
 ///|
-fn next_migration_version() -> Int {
+fn next_migration_version() -> Int32 {
   let mut count = 0
   let listed = @fs.read_dir("migrations") catch { _err => [] }
   for entry in listed {
@@ -142,7 +149,7 @@ fn next_migration_version() -> Int {
 }
 
 ///|
-fn pad3(n : Int) -> String {
+fn pad3(n : Int32) -> String {
   if n < 10 {
     "00\{n}"
   } else if n < 100 {
@@ -150,6 +157,27 @@ fn pad3(n : Int) -> String {
   } else {
     "\{n}"
   }
+}
+
+///|
+/// Locate the executable's main.mbt: the conventional cmd/main/main.mbt, or
+/// the only cmd/*/main.mbt when the package was renamed.
+fn find_main_src() -> String? {
+  if @fs.path_exists("cmd/main/main.mbt") {
+    return Some("cmd/main/main.mbt")
+  }
+  let entries = @fs.read_dir("cmd") catch { _ => return None }
+  let mut found : String? = None
+  for entry in entries {
+    let candidate = "cmd/\{entry}/main.mbt"
+    if @fs.path_exists(candidate) {
+      if found is Some(_) {
+        return None
+      }
+      found = Some(candidate)
+    }
+  }
+  found
 }
 
 ///|

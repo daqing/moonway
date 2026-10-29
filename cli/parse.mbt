@@ -30,7 +30,7 @@ pub fn parse(argv : Array[String]) -> Command {
   }
   if command == "new" {
     if argv.length() < 3 {
-      return Invalid("usage: moonway new <name> [--dir <dir>]")
+      return Invalid("usage: moonway new <name|path> [--dir <dir>]")
     }
     let name = argv[2]
     let mut dir : String? = None
@@ -42,7 +42,7 @@ pub fn parse(argv : Array[String]) -> Command {
     return New(name, dir)
   }
   if command == "console" {
-    if argv.length() == 3 {
+    if argv.length() == 2 {
       return Console("app.db")
     }
     if argv.length() == 4 && argv[2] == "--db" {

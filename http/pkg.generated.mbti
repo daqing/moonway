@@ -14,17 +14,19 @@ pub fn query_param(String, String) -> String?
 
 pub fn resolve_static(String, String) -> String? raise
 
-pub fn serve(Int, (Request) -> Response, ws_routes? : Array[WsRoute]) -> Unit
+pub fn serve(Int32, (Request) -> Response, ws_routes? : Array[WsRoute], host? : String) -> Unit
 
-pub async fn serve_async(Int, (Request) -> Response, ws_routes? : Array[WsRoute]) -> Unit
+pub async fn serve_async(Int32, (Request) -> Response, ws_routes? : Array[WsRoute], host? : String) -> Unit
 
-pub fn[S : CacheStore] serve_cached(CachePolicy[S], Int, (Request) -> Response, ws_routes? : Array[WsRoute]) -> Unit
+pub fn[S : CacheStore] serve_cached(CachePolicy[S], Int32, (Request) -> Response, ws_routes? : Array[WsRoute], host? : String) -> Unit
 
-pub async fn[S : CacheStore] serve_cached_async(CachePolicy[S], Int, (Request) -> Response, ws_routes? : Array[WsRoute]) -> Unit
+pub async fn[S : CacheStore] serve_cached_async(CachePolicy[S], Int32, (Request) -> Response, ws_routes? : Array[WsRoute], host? : String) -> Unit
 
 pub fn serve_static_file(String, String) -> Response?
 
 pub async fn serve_websocket(Array[WsRoute], @moonbitlang/async/http.Request, @moonbitlang/async/http.ServerConnection) -> Bool
+
+pub fn set_cache_warnings(Bool) -> Unit
 
 // Errors
 
@@ -32,7 +34,7 @@ pub async fn serve_websocket(Array[WsRoute], @moonbitlang/async/http.Request, @m
 pub(all) struct CachePolicy[S] {
   store : S
   prefix : String
-  ttl : Int
+  ttl : Int32
 }
 pub fn[S] CachePolicy::key(Self[S], String) -> String
 pub async fn[S : CacheStore] CachePolicy::lookup(Self[S], String) -> CachedResponse?
@@ -56,7 +58,7 @@ pub fn Request::query_param(Self, String) -> String?
 pub fn Request::with_body(Self, String) -> Self
 
 pub struct Response {
-  mut status_code : Int
+  mut status_code : Int32
   resp_headers : Array[(String, String)]
   mut resp_body : String
   mut resp_bytes : Bytes?
@@ -70,8 +72,8 @@ pub fn Response::new() -> Self
 pub fn Response::set_body(Self, String) -> Unit
 pub fn Response::set_body_bytes(Self, Bytes) -> Unit
 pub fn Response::set_header(Self, String, String) -> Unit
-pub fn Response::set_status(Self, Int) -> Unit
-pub fn Response::status(Self) -> Int
+pub fn Response::set_status(Self, Int32) -> Unit
+pub fn Response::status(Self) -> Int32
 
 pub(all) struct WsRoute {
   path : String
@@ -83,5 +85,5 @@ pub(all) struct WsRoute {
 // Traits
 pub(open) trait CacheStore {
   async fn cache_get(Self, String) -> String?
-  async fn cache_set_ex(Self, String, String, Int) -> Bool
+  async fn cache_set_ex(Self, String, String, Int32) -> Bool
 }

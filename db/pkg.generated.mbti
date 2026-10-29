@@ -2,7 +2,7 @@
 package "daqing/moonway/db"
 
 import {
-  "mizchi/sqlite",
+  "daqing/moon-sqlite3",
   "moonbitlang/core/debug",
   "moonbitlang/core/json",
 }
@@ -10,13 +10,13 @@ import {
 // Values
 pub fn column(String, ColumnType, primary? : Bool) -> Column
 
-pub fn json_to_sql(Json, ColumnType) -> @sqlite.SqlValue?
+pub fn json_to_sql(Json, ColumnType) -> @moon-sqlite3.SqlValue?
 
-pub fn migration(Int, String, Array[String]) -> Migration
+pub fn migration(Int32, String, Array[String]) -> Migration
 
 pub fn open(String) -> Database?
 
-pub fn sql_to_json(@sqlite.SqlValue, ColumnType) -> Json
+pub fn sql_to_json(@moon-sqlite3.SqlValue, ColumnType) -> Json
 
 pub fn table(String, Array[Column]) -> Table
 
@@ -40,28 +40,28 @@ pub fn ColumnType::not_equal(Self, Self) -> Bool
 pub fn ColumnType::to_repr(Self) -> @debug.Repr
 
 pub struct Database {
-  inner : @sqlite.Database
+  inner : @moon-sqlite3.Database
 }
 pub fn[T : @json.FromJson] Database::all(Self, Table) -> Array[T]
-pub fn Database::changes(Self) -> Int
+pub fn Database::changes(Self) -> Int32
 pub fn Database::close(Self) -> Unit
-pub fn Database::count(Self, Table) -> Int
-pub fn Database::delete_raw(Self, Table, Int) -> Bool
+pub fn Database::count(Self, Table) -> Int32
+pub fn Database::delete_raw(Self, Table, Int32) -> Bool
 pub fn Database::exec(Self, String) -> Bool
-pub fn[T : @json.FromJson] Database::find(Self, Table, Int) -> T?
-pub fn Database::find_raw(Self, Table, Int) -> Json?
+pub fn[T : @json.FromJson] Database::find(Self, Table, Int32) -> T?
+pub fn Database::find_raw(Self, Table, Int32) -> Json?
 pub fn[T : ToJson] Database::insert(Self, Table, T) -> Bool
 pub fn Database::insert_raw(Self, Table, Map[String, Json]) -> Bool
 pub fn Database::last_insert_rowid(Self) -> Int64
 pub fn Database::list_tables(Self) -> Array[String]
 pub fn Database::migrate(Self, Array[Migration]) -> Bool
-pub fn[T : @json.FromJson] Database::query(Self, Table, String, Array[@sqlite.SqlValue]) -> Array[T]
-pub fn Database::select_raw(Self, Table, String, Array[@sqlite.SqlValue], limit? : Int, offset? : Int) -> Array[Json]
+pub fn[T : @json.FromJson] Database::query(Self, Table, String, Array[@moon-sqlite3.SqlValue]) -> Array[T]
+pub fn Database::select_raw(Self, Table, String, Array[@moon-sqlite3.SqlValue], limit? : Int32, offset? : Int32) -> Array[Json]
 pub fn Database::table_schema(Self, String) -> Table?
-pub fn Database::update_raw(Self, Table, Int, Map[String, Json]) -> Bool
+pub fn Database::update_raw(Self, Table, Int32, Map[String, Json]) -> Bool
 
 pub(all) struct Migration {
-  version : Int
+  version : Int32
   name : String
   statements : Array[String]
 }

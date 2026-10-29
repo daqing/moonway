@@ -21,8 +21,8 @@ pub fn Database::select_raw(
   t : Table,
   where_clause : String,
   args : Array[@sqlite.SqlValue],
-  limit? : Int = 50,
-  offset? : Int = 0,
+  limit~ : Int32 = 50,
+  offset~ : Int32 = 0,
 ) -> Array[Json] {
   let results = []
   let sql = "SELECT " +
@@ -48,7 +48,7 @@ pub fn Database::select_raw(
 
 ///|
 /// The first row whose primary key equals `id`, as a raw JSON object.
-pub fn Database::find_raw(self : Database, t : Table, id : Int) -> Json? {
+pub fn Database::find_raw(self : Database, t : Table, id : Int32) -> Json? {
   match primary_column(t) {
     Some(pk) => {
       let rows = self.select_raw(
@@ -101,7 +101,7 @@ pub fn Database::insert_raw(
 pub fn Database::update_raw(
   self : Database,
   t : Table,
-  id : Int,
+  id : Int32,
   row : Map[String, Json],
 ) -> Bool {
   match primary_column(t) {
@@ -152,7 +152,7 @@ pub fn Database::update_raw(
 
 ///|
 /// Delete the row with primary key `id`. Returns false on failure.
-pub fn Database::delete_raw(self : Database, t : Table, id : Int) -> Bool {
+pub fn Database::delete_raw(self : Database, t : Table, id : Int32) -> Bool {
   match primary_column(t) {
     Some(pk) => {
       let prepared = self.inner.prepare(

@@ -95,19 +95,23 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 - [x] **T5.4** 查询 API——`db.insert`、`db.all(Model)`、`db.find(Model, id)`、
   `where` 过滤、`count`。
 - [x] **T5.5** 测试——对临时 SQLite 数据库文件跑查询 API 与迁移测试。
+- [x] **T5.6** SQL adapter 与 Repo——可组合 Builder、SQLite/MySQL/PG 方言、
+  命名参数编译、typed/map CRUD、事务、显式关联和批量预加载。真实执行使用
+  SQLite；其他方言当前仅支持 SQL 生成和 Preview。
 
 > **完成标准**：README Post 示例中的数据库调用与文档行为一致。
 
 ## T6 — CLI 与代码生成器（cli/） `M2 · P0`
 
 - [x] **T6.1** `moonway` CLI 骨架——参数解析、`--help`；二进制通过
-  `moon install daqing/moonway` 分发。解析逻辑在 `cli/` 包（纯函数
+  `moon install daqing/moonway/cmd/moonway` 分发。解析逻辑在 `cli/` 包（纯函数
   `parse` → `Command`），`cmd/moonway` 是读 `@env.args()` 的薄入口；
   `moon run cmd/moonway -- <args>` 透传参数。
 - [x] **T6.2** `moonway new <name>`——生成应用骨架：native `preferred_target`
-  （按 T1.4 的决策）、`models/` `handlers/` `migrations/` `web/` 目录、
-  预先接好 moonway 依赖。已实测：生成的项目第一次 `moon check` 即通过，
-  运行即在 :3000 提供服务且 SQLite 已迁移（moonway 未发布前的本地验证用
+  （按 T1.4 的决策）、`app/models/` `handlers/` `migrations/` `app/frontend/`
+  `app/templates/` 目录，以及保存 SQLite 文件的 `data/`（默认 `data/app.db`）；
+  预先接好 moonway 与 moon-templ 依赖。已实测：生成的项目
+  第一次 `moon check` 即通过，运行即在 :3000 提供服务且 SQLite 已迁移（moonway 未发布前的本地验证用
   `moon.work` members 映射；发布后的用户从 registry 拉取）。
 - [x] **T6.3** `moonway generate scaffold <Model> field:type …`——生成模型
   文件、handlers（GET 列表/详情、POST 含 400/500 路径）、带时间戳版本的
@@ -198,23 +202,22 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
   `moonway <version> · connected to sqlite://<path>`——与 README 的 REPL
   示例一致。已用种入数据的管道会话实测验证。
 
-## T11 — Preact 前端集成（preact/） `M4 · P2`
+## T11 — templ 与 Preact islands `M4 · P2`
 
-- [x] **T11.1** 生成项目中的前端脚手架——`moonway new` 产出
-  `static/index.html` + `static/app.js`（vanilla、零构建、已接 posts API）
-  以及 `web/` 的 Preact + esbuild 脚手架，`npm run build` 会重新生成
-  `static/app.js`。Node.js 前置条件写在生成的 README 里；已用真实
-  `npm install && npm run build` 验证（15.9 kB Preact 包）。
+- [x] **T11.1** 生成项目中的前端脚手架——`moonway new` 生成
+  `app/templates/home.templ` 及随骨架提交的 `home_templ.mbt`，通过
+  `daqing/moon-templ/runtime` 将其作为默认 `/` 页面。模板包含 Counter 的
+  `data-island` 挂载点以及 `/app.js` 引用，不再生成独立的
+  `static/index.html`。服务端 HTML 无需前端构建即可访问，Preact 构建则启用
+  island 交互。
 - [x] **T11.2** 静态文件服务——`app.static_files(dir)` 为未匹配的 GET 请求
   提供 `dir` 下的文件：`/` 回退到 `index.html`、目录回退到其 `index.html`、
   按扩展名给出 Content-Type（文本类型走字符串 body，图片等二进制走新增的
   bytes body），`..` 穿越在触碰文件系统前即被拒绝。动态路由永远优先。
   已有集成测试。
-- [x] **T11.3** 接入 posts API 的示例页面——生成的 `static/app.js` 会
-  fetch `/posts`、渲染列表并提交表单；生成的 `main.mbt` 挂载
-  `app.static_files("static")` 使 `/` 服务该页面。真浏览器验证：页面与
-  `/app.js` 正常送达、已有帖子从 API 渲染；等价 POST 经 curl 验证
-  （201）。浏览器内表单提交尚需人工点击确认一次（IAB 自动化未能复现）。
+- [x] **T11.3** templ 首页中的 Preact islands——`app/frontend/src/main.jsx`
+  将注册的组件水合到 `[data-island]` 元素。Counter 让 templ 输出的按钮具备
+  点击计数状态；前端构建生成 `static/app.js`。
 
 > P2：按风险预案可收缩——若收缩，删除 README 中对应功能条目并如实说明。
 
@@ -223,8 +226,8 @@ M4：10 月 22–28 日 · M5：10 月 29–31 日（最终提交：**2026 年 1
 - [x] **T12.1** 发布 `daqing/moonway` 到 mooncakes.io——已完成：0.11.3 与
   0.11.5 两个版本（`moon publish`，Server 200 OK）；`moon add
   daqing/moonway` 已在干净项目验证（验收运行从 registry 拉取 0.11.5）。
-  `moon install daqing/moonway/cmd/main` 也已验证——会将 CLI 二进制以
-  `main` 为名安装（install 路径须指到定义 executable 的子包；仅写模块
+  `moon install daqing/moonway/cmd/moonway` 也已验证——会将 CLI 二进制以
+  `moonway` 为名安装（install 路径须指到定义 executable 的子包；仅写模块
   路径会失败，因为根包是库）。
 - [x] **T12.2** `examples/blog`——参考应用，覆盖模型、路由、缓存、WebSocket
   聊天与 admin。

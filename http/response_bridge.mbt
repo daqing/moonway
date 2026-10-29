@@ -20,7 +20,7 @@ async fn Response::write_to(
 }
 
 ///|
-fn reason_of(code : Int) -> String {
+fn reason_of(code : Int32) -> String {
   match code {
     200 => "OK"
     201 => "Created"

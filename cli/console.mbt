@@ -5,7 +5,7 @@
 pub(all) enum ConsoleCommand {
   TableAll(String)
   TableCount(String)
-  TableFind(String, Int)
+  TableFind(String, Int32)
   TableInsert(String, Json)
   DotHelp
   DotTables
@@ -111,7 +111,7 @@ fn console_trim(line : String) -> String {
 }
 
 ///|
-fn console_parse_int(raw : String) -> Int? {
+fn console_parse_int(raw : String) -> Int32? {
   if raw.length() == 0 {
     return None
   }
@@ -233,8 +233,13 @@ pub fn run_console(db_path : String) -> Unit {
 }
 
 ///|
+fn console_should_quit(command : ConsoleCommand) -> Bool {
+  command is DotQuit
+}
+
+///|
 async fn console_loop(db : @db.Database, db_path : String) -> Unit {
-  println("moonway \{cli_version} · connected to sqlite://\{db_path}")
+  println("moonway \{cli_version()} · connected to sqlite://\{db_path}")
   println("Type .help for help, .quit to exit.")
   while true {
     @stdio.stdout.write("> ")
@@ -245,7 +250,11 @@ async fn console_loop(db : @db.Database, db_path : String) -> Unit {
         break
       }
       Some(text) => {
-        let out = execute_console(db, parse_console_line(text), db_path)
+        let command = parse_console_line(text)
+        if console_should_quit(command) {
+          break
+        }
+        let out = execute_console(db, command, db_path)
         if out != "" {
           println(out)
         }

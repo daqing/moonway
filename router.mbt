@@ -51,7 +51,7 @@ fn Route::try_match(
 ///|
 /// Number of literal (non-parameter) segments — the more of them a route
 /// has, the more specific it is.
-fn Route::specificity(self : Route) -> Int {
+fn Route::specificity(self : Route) -> Int32 {
   let mut count = 0
   for segment in split_path(self.path) {
     if !segment.has_prefix(":") {

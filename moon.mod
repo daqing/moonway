@@ -11,7 +11,7 @@
 
 name = "daqing/moonway"
 
-version = "0.11.6"
+version = "0.11.9"
 
 readme = "README.mbt.md"
 
@@ -27,6 +27,7 @@ description = "A full-stack web framework for MoonBit"
 
 import {
   "moonbitlang/async@0.22.4",
-  "mizchi/sqlite@0.3.1",
+  "daqing/moon-sqlite3@0.4.2",
   "moonbitlang/x@0.5.5",
+  "daqing/parse-version@0.1.0",
 }
