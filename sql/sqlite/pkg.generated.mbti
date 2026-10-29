@@ -1,0 +1,248 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "daqing/moonway/sql/sqlite"
+
+import {
+  "daqing/moonway/sql",
+}
+
+// Values
+pub fn[T : @sql.Table] all(T) -> Builder
+
+pub fn all_of(Array[@sql.Cond]) -> @sql.Cond
+
+pub fn any_of(Array[@sql.Cond]) -> @sql.Cond
+
+pub fn between(@sql.Expr, @sql.Expr, @sql.Expr) -> @sql.Cond
+
+pub fn cast(@sql.Expr, String) -> @sql.Expr
+
+pub fn col(String) -> @sql.ColumnRef
+
+pub fn column(String) -> @sql.Expr
+
+pub fn compare(@sql.Expr, String, @sql.Expr) -> @sql.Cond
+
+pub fn condition(String, String, @sql.Expr) -> @sql.Cond
+
+pub fn[T : @sql.Table] create(T, Map[String, @sql.Expr]) -> Builder
+
+pub fn default() -> @sql.Expr
+
+pub fn delete() -> Builder
+
+pub fn[T : @sql.Table] delete_by_id(T, Int64) -> Builder
+
+pub fn delete_from(@sql.TableRef) -> Builder
+
+pub fn empty_cond() -> @sql.Cond
+
+pub fn eq(String, @sql.Expr) -> @sql.Cond
+
+pub fn eq_ref(@sql.ColumnRef, @sql.Expr) -> @sql.Cond
+
+pub fn excluded(String) -> @sql.Expr
+
+pub fn[T : @sql.Table] exists(T, Map[String, @sql.Expr]) -> Builder
+
+pub fn exists_query(Builder) -> @sql.Cond
+
+pub fn expr(String) -> @sql.Expr
+
+pub fn expr_named(String, Map[String, @sql.Value]) -> @sql.Expr
+
+pub fn field(String) -> @sql.ColumnRef
+
+pub fn field_eq(@sql.ColumnRef, @sql.Expr) -> @sql.Cond
+
+pub fn[T : @sql.Table] field_for(T, String) -> @sql.ColumnRef
+
+pub fn field_gt(@sql.ColumnRef, @sql.Expr) -> @sql.Cond
+
+pub fn field_gte(@sql.ColumnRef, @sql.Expr) -> @sql.Cond
+
+pub fn field_like(@sql.ColumnRef, @sql.Expr) -> @sql.Cond
+
+pub fn field_lt(@sql.ColumnRef, @sql.Expr) -> @sql.Cond
+
+pub fn field_lte(@sql.ColumnRef, @sql.Expr) -> @sql.Cond
+
+pub fn field_not_eq(@sql.ColumnRef, @sql.Expr) -> @sql.Cond
+
+pub fn[T : @sql.Table] find_by(T, Map[String, @sql.Expr]) -> Builder
+
+pub fn[T : @sql.Table] find_by_cond(T, @sql.Cond) -> Builder
+
+pub fn func(String, Array[@sql.Expr]) -> @sql.Expr
+
+pub fn gt(String, @sql.Expr) -> @sql.Cond
+
+pub fn gte(String, @sql.Expr) -> @sql.Cond
+
+pub fn h(Array[(String, @sql.Expr)]) -> Map[String, @sql.Expr]
+
+pub fn h_cond(Map[String, @sql.Expr]) -> @sql.Cond
+
+pub fn h_cond_ref(@sql.TableRef, Map[String, @sql.Expr]) -> @sql.Cond
+
+pub fn ident(Array[String]) -> @sql.Identifier
+
+pub fn in_cond(@sql.Expr, Array[@sql.Expr]) -> @sql.Cond
+
+pub fn insert(Map[String, @sql.Expr]) -> Builder
+
+pub fn insert_rows(Array[Map[String, @sql.Expr]]) -> Builder
+
+pub fn is_not_null(@sql.Expr) -> @sql.Cond
+
+pub fn is_null(@sql.Expr) -> @sql.Cond
+
+pub fn like(String, @sql.Expr) -> @sql.Cond
+
+pub fn lt(String, @sql.Expr) -> @sql.Cond
+
+pub fn lte(String, @sql.Expr) -> @sql.Cond
+
+pub fn match_fields(@sql.TableRef, Map[String, @sql.Expr]) -> @sql.Cond
+
+pub fn named_args(Array[(String, @sql.Value)]) -> Map[String, @sql.Value]
+
+pub fn not(@sql.Cond) -> @sql.Cond
+
+pub fn not_between(@sql.Expr, @sql.Expr, @sql.Expr) -> @sql.Cond
+
+pub fn not_eq(String, @sql.Expr) -> @sql.Cond
+
+pub fn not_exists_query(Builder) -> @sql.Cond
+
+pub fn not_in_cond(@sql.Expr, Array[@sql.Expr]) -> @sql.Cond
+
+pub fn not_like(String, @sql.Expr) -> @sql.Cond
+
+pub fn null() -> @sql.Expr
+
+pub fn op(@sql.Expr, String, @sql.Expr) -> @sql.Expr
+
+pub fn quote_identifier(String) -> String
+
+pub fn raw(String) -> @sql.Expr
+
+pub fn raw_condition(String, Map[String, @sql.Value]) -> @sql.Cond
+
+pub fn ref(String) -> @sql.TableRef
+
+pub fn ref_as(String, String) -> @sql.TableRef
+
+pub fn select(String) -> Builder
+
+pub fn select_columns(Array[String]) -> Builder
+
+pub fn select_fields(Array[@sql.ColumnRef]) -> Builder
+
+pub fn select_refs(Array[@sql.ColumnRef]) -> Builder
+
+pub fn sub_query(Builder) -> @sql.Expr
+
+pub fn table_alias(String, String) -> @sql.TableRef
+
+pub fn[T : @sql.Table] table_for(T) -> @sql.TableRef
+
+pub fn table_of(String) -> @sql.TableRef
+
+pub fn table_of_parts(Array[String]) -> @sql.TableRef
+
+pub fn update(String) -> Builder
+
+pub fn[T : @sql.Table] update_all(T, Map[String, @sql.Expr]) -> Builder
+
+pub fn update_table(@sql.TableRef) -> Builder
+
+pub fn[T : @sql.ToExpr] val(T) -> @sql.Expr
+
+// Errors
+
+// Types and methods
+pub struct Builder {
+  // private fields
+}
+pub fn Builder::columns(Self, Array[String]) -> Self
+pub fn Builder::cross_join(Self, String) -> Self
+pub fn Builder::cross_join_table(Self, @sql.TableRef) -> Self
+pub fn Builder::delete_key(Self, String) -> Self
+pub fn Builder::delete_key_field(Self, @sql.ColumnRef) -> Self
+pub fn Builder::distinct(Self) -> Self
+pub fn Builder::except(Self, Self) -> Self
+pub fn Builder::except_all(Self, Self) -> Self
+pub fn Builder::fields(Self, Array[@sql.ColumnRef]) -> Self
+pub fn Builder::from(Self, String) -> Self
+pub fn Builder::from_expr(Self, @sql.Expr) -> Self
+pub fn Builder::from_select(Self, Self, Array[String]) -> Self
+pub fn Builder::from_sub_query(Self, Self, String) -> Self
+pub fn Builder::from_table(Self, @sql.TableRef) -> Self
+pub fn Builder::full_join(Self, String, @sql.Cond) -> Self
+pub fn Builder::full_join_table(Self, @sql.TableRef, @sql.Cond) -> Self
+pub fn Builder::group_by(Self, Array[String]) -> Self
+pub fn Builder::group_by_fields(Self, Array[@sql.ColumnRef]) -> Self
+pub fn Builder::having(Self, @sql.Cond) -> Self
+pub fn Builder::insert_columns(Self, Array[String]) -> Self
+pub fn Builder::intersect(Self, Self) -> Self
+pub fn Builder::intersect_all(Self, Self) -> Self
+pub fn Builder::into(Self, String) -> Self
+pub fn Builder::into_table(Self, @sql.TableRef) -> Self
+pub fn Builder::join(Self, String, @sql.Cond) -> Self
+pub fn Builder::join_expr(Self, @sql.Expr, @sql.Cond) -> Self
+pub fn Builder::join_table(Self, @sql.TableRef, @sql.Cond) -> Self
+pub fn Builder::left_join(Self, String, @sql.Cond) -> Self
+pub fn Builder::left_join_table(Self, @sql.TableRef, @sql.Cond) -> Self
+pub fn Builder::limit(Self, Int32) -> Self
+pub fn Builder::offset(Self, Int32) -> Self
+pub fn Builder::on_conflict_do_nothing(Self, Array[String]) -> Self
+pub fn Builder::on_conflict_do_update(Self, Array[String], Map[String, @sql.Expr]) -> Self
+pub fn Builder::order_by(Self, String) -> Self
+pub fn Builder::order_bys(Self, Array[String]) -> Self
+pub fn Builder::page(Self, Int32, Int32) -> Self
+pub fn Builder::returning(Self, Array[String]) -> Self
+pub fn Builder::returning_all(Self) -> Self
+pub fn Builder::returning_fields(Self, Array[@sql.ColumnRef]) -> Self
+pub fn Builder::right_join(Self, String, @sql.Cond) -> Self
+pub fn Builder::right_join_table(Self, @sql.TableRef, @sql.Cond) -> Self
+pub fn Builder::set(Self, Map[String, @sql.Expr]) -> Self
+pub fn Builder::to_sql(Self) -> (String, Map[String, @sql.Value]) raise @sql.SqlError
+pub fn Builder::union(Self, Self) -> Self
+pub fn Builder::union_all(Self, Self) -> Self
+pub fn Builder::values(Self, Array[Map[String, @sql.Expr]]) -> Self
+pub fn Builder::where_(Self, @sql.Cond) -> Self
+pub fn Builder::window(Self, Array[String]) -> Self
+pub fn Builder::with_cte(Self, String, Self) -> Self
+pub fn Builder::with_recursive(Self, String, Self) -> Self
+pub fn Builder::without_delete_subquery(Self) -> Self
+pub fn Builder::without_locking(Self) -> Self
+pub impl @sql.Stmt for Builder
+
+// Type aliases
+pub using @sql {type ColumnRef}
+
+pub using @sql {type Cond}
+
+pub using @sql {type Expr}
+
+pub using @sql {type ColumnRef as FieldName}
+
+pub type H = Map[String, @sql.Expr]
+
+pub using @sql {type Identifier}
+
+pub type NamedArgs = Map[String, @sql.Value]
+
+pub using @sql {type SqlError}
+
+pub using @sql {type StatementKind}
+
+pub using @sql {type TableRef as TableName}
+
+pub using @sql {type TableRef}
+
+pub using @sql {type Value}
+
+pub using @sql {trait Table}
+
+// Traits

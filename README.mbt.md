@@ -149,6 +149,70 @@ fn main {
 }
 ```
 
+## SQL builder and repository
+
+The `sql` and `repo` packages provide a second, composable database API alongside
+the simple `db` helpers:
+
+- `daqing/moonway/sql` builds SELECT/INSERT/UPDATE/DELETE statements with typed
+  identifiers, nested conditions, expressions, joins, CTEs, upserts, and named
+  arguments. The `sql/sqlite`, `sql/mysql`, and `sql/pg` packages expose the
+  corresponding dialect facades.
+- `daqing/moonway/repo` compiles named arguments in occurrence order, applies
+  driver-specific SQL transformations, executes statements, scans typed or
+  dynamic records, and manages transactions and batch relation preloading.
+
+SQLite execution works out of the box through the existing native driver.
+PostgreSQL and MySQL support SQL generation and `Preview`; this package does not
+currently include network clients for executing statements on those servers.
+
+Models continue to use an explicit `db.Table` schema plus `ToJson`/`FromJson`.
+There is no runtime reflection or hidden naming convention:
+
+```moonbit nocheck
+///|
+struct Todo {
+  id : Int32
+  title : String
+  completed : Bool
+} derive(ToJson, FromJson)
+
+///|
+let todos : @db.Table = @db.table("todos", [
+  @db.column("id", @db.IntT, primary=true),
+  @db.column("title", @db.TextT),
+  @db.column("completed", @db.BoolT),
+])
+
+///|
+fn query_todos(database : @repo.DB) -> Unit raise {
+  let table = @sql.table_of("todos")
+  let inserted : Todo? = @repo.insert(
+    database,
+    todos,
+    @sql.insert(
+      @sql.h([
+        ("title", @sql.val("write more MoonBit")),
+        ("completed", @sql.val(false)),
+      ]),
+    ).into_table(table),
+  )
+  let open_items : Array[Todo] = @repo.find(
+    database,
+    todos,
+    @sql.select_fields([table.all_fields()])
+    .from_table(table)
+    .where_(@sql.field_eq(table.field("completed"), @sql.val(false)))
+    .order_by(table.field("id").asc()),
+  )
+  ignore((inserted, open_items))
+}
+```
+
+For queries that do not map to one model, `find_maps` returns dynamic
+`Map[String, @sql.Value]` records. Explicit `has_one`, `has_many`, and
+`belongs_to` relations can be used with `JoinQuery` or batch `Preloader`.
+
 ## Generated apps: templates, islands, and Procfile
 
 For the complete server-rendered and interactive setup, generate an app instead
@@ -175,6 +239,7 @@ hello-moonway/
 │       ├── home_templ.mbt        # Generated MoonBit code: do not edit
 │       └── pages.mbt             # Returns rendered HTML to the application
 ├── static/                       # Frontend build output
+├── data/                         # SQLite database files (default: data/app.db)
 ├── cmd/hello-moonway/main.mbt    # Homepage route and static file serving
 └── Procfile                      # Development processes
 ```

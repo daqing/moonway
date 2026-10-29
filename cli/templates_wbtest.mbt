@@ -55,6 +55,13 @@ test "new templates pin native target, link flags and markers" {
 }
 
 ///|
+test "new projects store SQLite databases in the data directory" {
+  assert_true(main_src_t("blog").contains("@moonway.sqlite(\"data/app.db\")"))
+  assert_true(readme_t("blog").contains("`data/app.db`"))
+  assert_true(readme_t("blog").contains("creates the `data/` directory"))
+}
+
+///|
 test "new projects include Procfile development processes" {
   assert_eq(
     procfile_t("blog"),

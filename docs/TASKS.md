@@ -114,6 +114,10 @@ synchronous dispatch built in T2.
   `where` filters, `count`.
 - [x] **T5.5** Tests — query API and migrations against a temporary SQLite
   database file.
+- [x] **T5.6** SQL adapter and Repo — composable builders with SQLite/MySQL/PG
+  dialects, named-argument compilation, typed/map CRUD, transactions, explicit
+  relations, and batch preloading. Real execution uses SQLite; the other
+  dialects currently support SQL generation and Preview only.
 
 > **Done when**: the database calls in the README Post example work as
 > written.
@@ -126,8 +130,9 @@ synchronous dispatch built in T2.
   `@env.args()`; `moon run cmd/moonway -- <args>` passes flags through.
 - [x] **T6.2** `moonway new <name>` — generate an app skeleton: native
   `preferred_target` (per T1.4), `app/models/` `handlers/` `migrations/`
-  `app/frontend/` `app/templates/` folders, moonway and moon-templ dependencies
-  wired in. Verified hands-on: the generated app passes `moon check` first try
+  `app/frontend/` `app/templates/` folders, plus `data/` for SQLite files
+  (default `data/app.db`); moonway and moon-templ dependencies wired in.
+  Verified hands-on: the generated app passes `moon check` first try
   and serves on :3000 with its SQLite database
   migrated (local verification maps the unpublished moonway via a
   `moon.work` members entry; published users get it from the registry).

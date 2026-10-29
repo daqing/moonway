@@ -49,6 +49,7 @@ fn execute_new(name : String, dir : String) -> Unit {
     ensure_dir(root + "/app/frontend/src")
     ensure_dir(root + "/app/templates")
     ensure_dir(root + "/static")
+    ensure_dir(root + "/data")
     @fs.write_string_to_file(root + "/moon.mod", moon_mod_t(mod_name))
     @fs.write_string_to_file(root + "/.gitignore", gitignore_t())
     @fs.write_string_to_file(root + "/Procfile", procfile_t(mod_name))
@@ -189,6 +190,8 @@ fn readme_t(name : String) -> String {
     "",
     "Then open <http://localhost:3000>.",
     "",
+    "The SQLite database is stored at `data/app.db`; `moonway new` creates the `data/` directory.",
+    "",
     "On macOS, install `watchexec` with Homebrew:",
     "",
     "```",
@@ -276,7 +279,7 @@ fn main_src_t(name : String) -> String {
     "///|",
     "fn main {",
     "  let app = @moonway.new()",
-    "  let db = @moonway.sqlite(\"app.db\")",
+    "  let db = @moonway.sqlite(\"data/app.db\")",
     "  if !db.migrate(@migrations.all()) {",
     "    abort(\"moonway: migrations failed\")",
     "  }",

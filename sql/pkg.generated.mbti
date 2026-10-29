@@ -1,0 +1,402 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "daqing/moonway/sql"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn[T : Table] all(T) -> Builder
+
+pub fn all_expr(Expr) -> Expr
+
+pub fn all_of(Array[Cond]) -> Cond
+
+pub fn any(Expr) -> Expr
+
+pub fn any_of(Array[Cond]) -> Cond
+
+pub fn array(Array[Expr]) -> Expr
+
+pub fn array_contained_by(Expr, Expr) -> Cond
+
+pub fn array_contains(Expr, Expr) -> Cond
+
+pub fn array_overlap(Expr, Expr) -> Cond
+
+pub fn between(Expr, Expr, Expr) -> Cond
+
+pub fn cast(Expr, String) -> Expr
+
+pub fn col(String) -> ColumnRef
+
+pub fn column(String) -> Expr
+
+pub fn compare(Expr, String, Expr) -> Cond
+
+pub fn condition(String, String, Expr) -> Cond
+
+pub fn[T : Table] create(T, Map[String, Expr]) -> Builder
+
+pub fn default() -> Expr
+
+pub fn delete() -> Builder
+
+pub fn[T : Table] delete_by_id(T, Int64) -> Builder
+
+pub fn delete_from(TableRef) -> Builder
+
+pub fn empty_cond() -> Cond
+
+pub fn eq(String, Expr) -> Cond
+
+pub fn eq_ref(ColumnRef, Expr) -> Cond
+
+pub fn excluded(String) -> Expr
+
+pub fn[T : Table] exists(T, Map[String, Expr]) -> Builder
+
+pub fn exists_query(Builder) -> Cond
+
+pub fn expr(String) -> Expr
+
+pub fn expr_named(String, Map[String, Value]) -> Expr
+
+pub fn field(String) -> ColumnRef
+
+pub fn field_eq(ColumnRef, Expr) -> Cond
+
+pub fn[T : Table] field_for(T, String) -> ColumnRef
+
+pub fn field_gt(ColumnRef, Expr) -> Cond
+
+pub fn field_gte(ColumnRef, Expr) -> Cond
+
+pub fn field_ilike(ColumnRef, Expr) -> Cond
+
+pub fn field_like(ColumnRef, Expr) -> Cond
+
+pub fn field_lt(ColumnRef, Expr) -> Cond
+
+pub fn field_lte(ColumnRef, Expr) -> Cond
+
+pub fn field_not_eq(ColumnRef, Expr) -> Cond
+
+pub fn[T : Table] find_by(T, Map[String, Expr]) -> Builder
+
+pub fn[T : Table] find_by_cond(T, Cond) -> Builder
+
+pub fn func(String, Array[Expr]) -> Expr
+
+pub fn gt(String, Expr) -> Cond
+
+pub fn gte(String, Expr) -> Cond
+
+pub fn h(Array[(String, Expr)]) -> Map[String, Expr]
+
+pub fn h_cond(Map[String, Expr]) -> Cond
+
+pub fn h_cond_ref(TableRef, Map[String, Expr]) -> Cond
+
+pub fn ident(Array[String]) -> Identifier
+
+pub fn ilike(String, Expr) -> Cond
+
+pub fn in_cond(Expr, Array[Expr]) -> Cond
+
+pub fn insert(Map[String, Expr]) -> Builder
+
+pub fn insert_rows(Array[Map[String, Expr]]) -> Builder
+
+pub fn is_not_null(Expr) -> Cond
+
+pub fn is_null(Expr) -> Cond
+
+pub fn json_contained_by(Expr, Expr) -> Cond
+
+pub fn json_contains(Expr, Expr) -> Cond
+
+pub fn json_get(Expr, Expr) -> Expr
+
+pub fn json_get_text(Expr, Expr) -> Expr
+
+pub fn json_has_all_keys(Expr, Array[String]) -> Cond
+
+pub fn json_has_any_keys(Expr, Array[String]) -> Cond
+
+pub fn json_has_key(Expr, String) -> Cond
+
+pub fn json_path(Expr, Array[String]) -> Expr
+
+pub fn json_path_text(Expr, Array[String]) -> Expr
+
+pub fn like(String, Expr) -> Cond
+
+pub fn lt(String, Expr) -> Cond
+
+pub fn lte(String, Expr) -> Cond
+
+pub fn match_fields(TableRef, Map[String, Expr]) -> Cond
+
+pub fn named_args(Array[(String, Value)]) -> Map[String, Value]
+
+pub fn not(Cond) -> Cond
+
+pub fn not_between(Expr, Expr, Expr) -> Cond
+
+pub fn not_eq(String, Expr) -> Cond
+
+pub fn not_exists_query(Builder) -> Cond
+
+pub fn not_ilike(String, Expr) -> Cond
+
+pub fn not_in_cond(Expr, Array[Expr]) -> Cond
+
+pub fn not_like(String, Expr) -> Cond
+
+pub fn null() -> Expr
+
+pub fn op(Expr, String, Expr) -> Expr
+
+pub fn quote_identifier(String) -> String
+
+pub fn raw(String) -> Expr
+
+pub fn raw_condition(String, Map[String, Value]) -> Cond
+
+pub fn ref(String) -> TableRef
+
+pub fn ref_as(String, String) -> TableRef
+
+pub fn select(String) -> Builder
+
+pub fn select_columns(Array[String]) -> Builder
+
+pub fn select_fields(Array[ColumnRef]) -> Builder
+
+pub fn select_refs(Array[ColumnRef]) -> Builder
+
+pub fn sub_query(Builder) -> Expr
+
+pub fn table_alias(String, String) -> TableRef
+
+pub fn[T : Table] table_for(T) -> TableRef
+
+pub fn table_of(String) -> TableRef
+
+pub fn table_of_parts(Array[String]) -> TableRef
+
+pub fn update(String) -> Builder
+
+pub fn[T : Table] update_all(T, Map[String, Expr]) -> Builder
+
+pub fn update_table(TableRef) -> Builder
+
+pub fn[T : ToExpr] val(T) -> Expr
+
+// Errors
+pub(all) suberror SqlError {
+  NoValuesToInsert
+  InsertColumnMismatch(row~ : Int32, column~ : String)
+  NoInsertColumns
+  NoValuesToUpdate
+  NoConflictValues
+  MissingNamedArg(String)
+} derive(Eq, @debug.Debug)
+
+// Types and methods
+pub struct Builder {
+  // private fields
+}
+pub fn Builder::columns(Self, Array[String]) -> Self
+pub fn Builder::conflict_target(Self) -> Array[String]
+pub fn Builder::cross_join(Self, String) -> Self
+pub fn Builder::cross_join_table(Self, TableRef) -> Self
+pub fn Builder::delete_key(Self, String) -> Self
+pub fn Builder::delete_key_field(Self, ColumnRef) -> Self
+pub fn Builder::distinct(Self) -> Self
+pub fn Builder::distinct_on(Self, Array[String]) -> Self
+pub fn Builder::except(Self, Self) -> Self
+pub fn Builder::except_all(Self, Self) -> Self
+pub fn Builder::fields(Self, Array[ColumnRef]) -> Self
+pub fn Builder::for_clause(Self, String) -> Self
+pub fn Builder::for_share(Self) -> Self
+pub fn Builder::for_share_skip_locked(Self) -> Self
+pub fn Builder::for_update(Self) -> Self
+pub fn Builder::for_update_skip_locked(Self) -> Self
+pub fn Builder::from(Self, String) -> Self
+pub fn Builder::from_expr(Self, Expr) -> Self
+pub fn Builder::from_select(Self, Self, Array[String]) -> Self
+pub fn Builder::from_sub_query(Self, Self, String) -> Self
+pub fn Builder::from_table(Self, TableRef) -> Self
+pub fn Builder::full_join(Self, String, Cond) -> Self
+pub fn Builder::full_join_table(Self, TableRef, Cond) -> Self
+pub fn Builder::group_by(Self, Array[String]) -> Self
+pub fn Builder::group_by_fields(Self, Array[ColumnRef]) -> Self
+pub fn Builder::having(Self, Cond) -> Self
+pub fn Builder::insert_columns(Self, Array[String]) -> Self
+pub fn Builder::insert_rows(Self) -> Array[Map[String, Expr]]
+pub fn Builder::insert_values(Self) -> Map[String, Expr]
+pub fn Builder::intersect(Self, Self) -> Self
+pub fn Builder::intersect_all(Self, Self) -> Self
+pub fn Builder::into(Self, String) -> Self
+pub fn Builder::into_table(Self, TableRef) -> Self
+pub fn Builder::join(Self, String, Cond) -> Self
+pub fn Builder::join_expr(Self, Expr, Cond) -> Self
+pub fn Builder::join_lateral(Self, Self, String, Cond) -> Self
+pub fn Builder::join_table(Self, TableRef, Cond) -> Self
+pub fn Builder::kind(Self) -> StatementKind
+pub fn Builder::left_join(Self, String, Cond) -> Self
+pub fn Builder::left_join_lateral(Self, Self, String, Cond) -> Self
+pub fn Builder::left_join_table(Self, TableRef, Cond) -> Self
+pub fn Builder::limit(Self, Int32) -> Self
+pub fn Builder::offset(Self, Int32) -> Self
+pub fn Builder::on_conflict_do_nothing(Self, Array[String]) -> Self
+pub fn Builder::on_conflict_do_update(Self, Array[String], Map[String, Expr]) -> Self
+pub fn Builder::on_conflict_on_constraint_do_nothing(Self, String) -> Self
+pub fn Builder::on_conflict_on_constraint_do_update(Self, String, Map[String, Expr]) -> Self
+pub fn Builder::order_by(Self, String) -> Self
+pub fn Builder::order_bys(Self, Array[String]) -> Self
+pub fn Builder::page(Self, Int32, Int32) -> Self
+pub fn Builder::returning(Self, Array[String]) -> Self
+pub fn Builder::returning_all(Self) -> Self
+pub fn Builder::returning_fields(Self, Array[ColumnRef]) -> Self
+pub fn Builder::right_join(Self, String, Cond) -> Self
+pub fn Builder::right_join_table(Self, TableRef, Cond) -> Self
+pub fn Builder::set(Self, Map[String, Expr]) -> Self
+pub fn Builder::table_name(Self) -> String
+pub fn Builder::to_sql(Self) -> (String, Map[String, Value]) raise SqlError
+pub fn Builder::union(Self, Self) -> Self
+pub fn Builder::union_all(Self, Self) -> Self
+pub fn Builder::update_from(Self, Array[String]) -> Self
+pub fn Builder::using_tables(Self, Array[String]) -> Self
+pub fn Builder::values(Self, Array[Map[String, Expr]]) -> Self
+pub fn Builder::where_(Self, Cond) -> Self
+pub fn Builder::window(Self, Array[String]) -> Self
+pub fn Builder::with_cte(Self, String, Self) -> Self
+pub fn Builder::with_recursive(Self, String, Self) -> Self
+pub fn Builder::without_delete_subquery(Self) -> Self
+pub fn Builder::without_locking(Self) -> Self
+pub impl Stmt for Builder
+
+#alias(FieldName)
+pub(all) struct ColumnRef {
+  qualifier : Identifier
+  name : String
+  alias : String
+  star : Bool
+}
+pub fn ColumnRef::as_alias(Self, String) -> Self
+pub fn ColumnRef::asc(Self) -> String
+pub fn ColumnRef::desc(Self) -> String
+pub fn ColumnRef::ref(Self) -> Self
+pub fn ColumnRef::to_expr(Self) -> Expr
+pub fn ColumnRef::to_string(Self) -> String
+pub fn ColumnRef::without_alias(Self) -> Self
+pub impl ToExpr for ColumnRef
+pub impl Show for ColumnRef
+
+pub(all) enum Cond {
+  Empty
+  Condition(String, String, Expr)
+  Compare(Expr, String, Expr)
+  And(Array[Cond])
+  Or(Array[Cond])
+  FlatAnd(Array[Cond])
+  Not(Cond)
+  In(Expr, Array[Expr], Bool)
+  Between(Expr, Expr, Expr, Bool)
+  Null(Expr, Bool)
+  Exists(Builder, Bool)
+  Raw(String, Map[String, Value])
+}
+pub fn Cond::to_sql(Self) -> (String, Map[String, Value]) raise SqlError
+
+pub(all) enum Expr {
+  Literal(Value)
+  Raw(String, Map[String, Value])
+  Static(String)
+  Function(String, Array[Expr])
+  Binary(Expr, String, Expr)
+  Wrapper(String, Expr, String)
+  ArrayExpr(Array[Expr])
+  SubQuery(Builder)
+}
+pub impl ToExpr for Expr
+
+pub(all) struct Identifier {
+  parts : Array[String]
+}
+pub fn Identifier::to_expr(Self) -> Expr
+pub fn Identifier::to_string(Self) -> String
+pub impl ToExpr for Identifier
+pub impl Show for Identifier
+
+pub(all) enum StatementKind {
+  Select
+  Insert
+  Update
+  Delete
+} derive(Eq, @debug.Debug)
+
+#alias(TableName)
+pub(all) struct TableRef {
+  name : Identifier
+  alias : String
+}
+pub fn TableRef::all(Self) -> ColumnRef
+pub fn TableRef::all_fields(Self) -> ColumnRef
+pub fn TableRef::as_alias(Self, String) -> Self
+pub fn TableRef::col(Self, String) -> ColumnRef
+pub fn TableRef::field(Self, String) -> ColumnRef
+pub fn TableRef::star(Self) -> ColumnRef
+pub fn TableRef::to_expr(Self) -> Expr
+pub fn TableRef::to_string(Self) -> String
+pub impl ToExpr for TableRef
+pub impl Show for TableRef
+
+pub(all) enum Value {
+  Null
+  Int(Int32)
+  Int64(Int64)
+  Real(Double)
+  Text(String)
+  Bool(Bool)
+  Blob(Bytes)
+  Json(Json)
+  Array(Array[Value])
+  Object(Map[String, Value])
+} derive(Eq, @debug.Debug)
+pub impl ToExpr for Value
+
+// Type aliases
+pub type H = Map[String, Expr]
+
+pub type NamedArgs = Map[String, Value]
+
+// Traits
+pub(open) trait Stmt {
+  fn to_sql(Self) -> (String, Map[String, Value]) raise SqlError
+  fn kind(Self) -> StatementKind
+  fn table_name(Self) -> String
+  fn insert_values(Self) -> Map[String, Expr]
+  fn insert_rows(Self) -> Array[Map[String, Expr]]
+  fn conflict_target(Self) -> Array[String]
+  fn without_locking(Self) -> Self
+  fn without_delete_subquery(Self) -> Self
+}
+
+pub(open) trait Table {
+  fn table_name(Self) -> String
+}
+
+pub(open) trait ToExpr {
+  fn to_expr(Self) -> Expr
+}
+pub impl ToExpr for Bool
+pub impl ToExpr for Int32
+pub impl ToExpr for Int64
+pub impl ToExpr for Double
+pub impl ToExpr for String
+pub impl ToExpr for Bytes
+pub impl ToExpr for Json

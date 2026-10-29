@@ -1,0 +1,5 @@
+import {
+  "daqing/moonway/sql",
+}
+
+warnings = "-35-79"
